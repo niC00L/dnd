@@ -8,13 +8,14 @@
     color-scheme: light;
     --board-width-ratio: 0.914951158;
     --reference-unit: 0.030294cqw;
-    --earth: #603900;
+    --earth: #ead9bd;
     --gold: #c9b24f;
     --paper: #f8f4e7;
     --black: #111111;
     --green: #49ed00;
     --blue: #096584;
     --red: #e40026;
+    --dark-brown: #754900;
 }
 
 * {
@@ -37,27 +38,30 @@ body {
 }
 
 .page {
-    position: relative;
+    display: grid;
     width: min(297mm, 100vw);
     aspect-ratio: 297 / 210;
     overflow: hidden;
+    place-items: center;
     background: #fff;
     container-type: inline-size;
 }
 
 .board {
-    position: absolute;
-    top: 50%;
-    left: 50%;
+    display: grid;
     width: calc(var(--board-width-ratio) * 100%);
     aspect-ratio: 3301 / 2551;
     overflow: hidden;
-    transform: translate(-50%, -50%);
+    grid-template-columns:
+        calc(var(--reference-unit) * 695)
+        calc(var(--reference-unit) * 1645)
+        minmax(0, 1fr);
+    grid-template-rows: minmax(0, 1fr) auto;
+    column-gap: calc(var(--reference-unit) * 15);
+    padding: 0 calc(var(--reference-unit) * 15) 0 calc(var(--reference-unit) * 30);
     container-type: inline-size;
     color: var(--black);
-    background-color: var(--earth);
-    background-image: url("paladin-board-assets/board-texture.jpg");
-    background-size: calc(var(--reference-unit) * 256) calc(var(--reference-unit) * 256);
+    background: var(--paper);
     font-size: calc(var(--reference-unit) * 30);
     line-height: 1.22;
 }
@@ -79,53 +83,41 @@ body {
 }
 
 .masthead {
-    position: absolute;
-    inset: 0 auto auto 0;
-    width: calc(var(--reference-unit) * 1150);
-    height: calc(var(--reference-unit) * 420);
-    color: #fffdf3;
+    display: flex;
+    min-height: calc(var(--reference-unit) * 300);
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: calc(var(--reference-unit) * 18);
+    width: 100%;
+    padding: calc(var(--reference-unit) * 80) calc(var(--reference-unit) * 14) calc(var(--reference-unit) * 20);
+    color: var(--dark-brown);
     border-bottom: calc(var(--reference-unit) * 4) solid #b59a36;
 }
 
-.crest {
-    position: absolute;
-    inset: 0 auto auto 0;
-    width: calc(var(--reference-unit) * 370);
-    height: calc(var(--reference-unit) * 390);
-}
-
-.level {
-    position: absolute;
-    top: calc(var(--reference-unit) * 72);
-    left: calc(var(--reference-unit) * 400);
-    font-size: calc(var(--reference-unit) * 34);
-    font-weight: 700;
-}
-
 .masthead h1 {
-    position: absolute;
-    top: calc(var(--reference-unit) * 112);
-    left: calc(var(--reference-unit) * 395);
-    font-family: Georgia, "DejaVu Serif", serif;
-    font-size: calc(var(--reference-unit) * 220);
+    font-family: fantasy;
+    font-size: calc(var(--reference-unit) * 150);
+    width: 100%;
+    text-align: right;
     font-weight: 700;
     line-height: 1;
     white-space: nowrap;
-    transform: scaleX(0.555);
-    transform-origin: left center;
+    transform: scaleX(.7);
+    transform-origin: right center;
 }
 
 .motto {
-    position: absolute;
-    top: calc(var(--reference-unit) * 370);
-    left: calc(var(--reference-unit) * 400);
-    font-size: calc(var(--reference-unit) * 29);
+    width: 100%;
     font-weight: 700;
+    text-align: left;
+    font-size: calc(var(--reference-unit) * 70);
+    background: white;
+
 }
 
 /* Left ability reference panel */
 .panel {
-    position: absolute;
     overflow: hidden;
     border: calc(var(--reference-unit) * 9) solid var(--gold);
     border-radius: calc(var(--reference-unit) * 45);
@@ -133,23 +125,19 @@ body {
 }
 
 .abilities {
-    top: calc(var(--reference-unit) * 435);
-    left: calc(var(--reference-unit) * 30);
-    width: calc(var(--reference-unit) * 695);
-    height: calc(var(--reference-unit) * 1708);
-    padding: calc(var(--reference-unit) * 178) calc(var(--reference-unit) * 24) 0;
+    display: flex;
+    width: 100%;
+    flex-direction: column;
+    padding: 0 calc(var(--reference-unit) * 24);
 }
 
 .abilities > h2 {
-    position: absolute;
-    top: 0;
-    left: 0;
     display: grid;
     width: 100%;
+    flex: none;
     height: calc(var(--reference-unit) * 150);
     place-content: center;
-    color: white;
-    background: #784b00;
+    color: #784b00;
     font-size: calc(var(--reference-unit) * 37);
     line-height: 1.35;
     text-align: center;
@@ -157,7 +145,8 @@ body {
 
 .ability-columns {
     display: grid;
-    height: 100%;
+    min-height: 0;
+    flex: 1;
     grid-template-columns: 1fr 1fr;
 }
 
@@ -186,13 +175,18 @@ body {
     text-align: center;
 }
 
+.modifier-row {
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    margin: 0 0 2mm;
+}
+
 p.modifier {
-    position: relative;
     display: grid;
     width: calc(var(--reference-unit) * 158);
     height: calc(var(--reference-unit) * 158);
-    margin: 0 calc(var(--reference-unit) * 20) calc(var(--reference-unit) * 10);
-    margin-bottom: 2mm !important;
+    margin: 0;
     place-items: center;
     background: white;
     border: calc(var(--reference-unit) * 9) solid var(--gold);
@@ -206,16 +200,14 @@ p.modifier.proficiency {
     margin: calc(var(--reference-unit) * 10) auto 0;
 }
 
-.modifier:not(.proficiency)::after {
-    position: absolute;
-    right: calc(var(--reference-unit) * -90);
-    bottom: 0;
+.modifier-small {
+    display: block;
     width: calc(var(--reference-unit) * 65);
     height: calc(var(--reference-unit) * 65);
+    flex: none;
     border: calc(var(--reference-unit) * 8) solid var(--gold);
     border-radius: 50%;
     background: white;
-    content: "";
 }
 
 .save {
@@ -235,7 +227,7 @@ p.modifier.proficiency {
 }
 
 .inspiration {
-    margin-top: calc(var(--reference-unit) * 23);
+    margin-bottom: calc(var(--reference-unit) * 23);
     padding: calc(var(--reference-unit) * 8);
     background: #e6e1bf;
     text-align: center;
@@ -259,10 +251,7 @@ p.modifier.proficiency {
 }
 
 .play-needs {
-    position: absolute;
-    top: calc(var(--reference-unit) * 2230);
-    left: calc(var(--reference-unit) * 30);
-    width: calc(var(--reference-unit) * 695);
+    width: 100%;
     height: calc(var(--reference-unit) * 260);
     overflow: hidden;
     padding: calc(var(--reference-unit) * 8) calc(var(--reference-unit) * 20);
@@ -286,9 +275,6 @@ p.modifier.proficiency {
 
 /* Center equipment and spell panels */
 .hit-points {
-    top: calc(var(--reference-unit) * 438);
-    left: calc(var(--reference-unit) * 740);
-    width: calc(var(--reference-unit) * 815);
     height: calc(var(--reference-unit) * 736);
     padding: calc(var(--reference-unit) * 30) calc(var(--reference-unit) * 38);
     border-radius: calc(var(--reference-unit) * 48);
@@ -331,10 +317,9 @@ p.modifier.proficiency {
 }
 
 .armor {
-    top: calc(var(--reference-unit) * 60);
-    left: calc(var(--reference-unit) * 1570);
-    width: calc(var(--reference-unit) * 816);
+    display: flex;
     height: calc(var(--reference-unit) * 1112);
+    flex-direction: column;
     padding: calc(var(--reference-unit) * 112) calc(var(--reference-unit) * 55) 0;
     border: calc(var(--reference-unit) * 9) solid var(--green);
     border-radius: calc(var(--reference-unit) * 48);
@@ -384,12 +369,10 @@ p.modifier.proficiency {
 }
 
 .ribbon {
-    position: absolute;
-    right: 0;
-    bottom: 0;
-    left: 0;
     display: grid;
+    width: 100%;
     height: calc(var(--reference-unit) * 115);
+    flex: none;
     place-items: center;
     color: white;
     font-size: calc(var(--reference-unit) * 44);
@@ -398,23 +381,20 @@ p.modifier.proficiency {
 }
 
 .equipment-ribbon {
+    margin-top: auto;
     background: var(--green);
 }
 
 .weapons,
 .concentration {
-    top: calc(var(--reference-unit) * 1217);
-    width: calc(var(--reference-unit) * 815);
+    display: flex;
     height: calc(var(--reference-unit) * 1290);
-    padding: calc(var(--reference-unit) * 100) calc(var(--reference-unit) * 90);
+    flex-direction: column;
+    padding: calc(var(--reference-unit) * 100) calc(var(--reference-unit) * 90) 0;
     border-color: var(--green);
     border-radius: calc(var(--reference-unit) * 48);
     background: #f4f7fb;
     text-align: center;
-}
-
-.weapons {
-    left: calc(var(--reference-unit) * 740);
 }
 
 .weapons > p,
@@ -428,19 +408,12 @@ p.modifier.proficiency {
     margin-top: calc(var(--reference-unit) * 64);
 }
 
-.weapons .ribbon,
-.concentration .ribbon {
-    bottom: calc(var(--reference-unit) * 162);
-}
-
 .weapons .attack-ribbon,
 .concentration .attack-ribbon {
-    position: absolute;
-    right: 0;
-    bottom: 0;
-    left: 0;
     display: flex;
+    width: 100%;
     height: calc(var(--reference-unit) * 162);
+    flex: none;
     flex-direction: column;
     align-items: center;
     justify-content: center;
@@ -471,7 +444,6 @@ p.modifier.proficiency {
 }
 
 .concentration {
-    left: calc(var(--reference-unit) * 1570);
     border-color: var(--blue);
     padding-right: calc(var(--reference-unit) * 38);
     padding-left: calc(var(--reference-unit) * 38);
@@ -495,9 +467,6 @@ p.modifier.proficiency {
 
 /* Right-hand class text, rests, and card tabs */
 .class-features {
-    top: calc(var(--reference-unit) * 65);
-    left: calc(var(--reference-unit) * 2403);
-    width: calc(var(--reference-unit) * 790);
     height: calc(var(--reference-unit) * 1050);
     border-radius: calc(var(--reference-unit) * 12);
     background: var(--paper);
@@ -544,10 +513,6 @@ p.modifier.proficiency {
 }
 
 .playing-tips {
-    position: absolute;
-    top: calc(var(--reference-unit) * 1120);
-    left: calc(var(--reference-unit) * 2403);
-    width: calc(var(--reference-unit) * 790);
     height: calc(var(--reference-unit) * 1090);
     padding: calc(var(--reference-unit) * 18) calc(var(--reference-unit) * 28);
     background: #f0e3d4;
@@ -568,10 +533,6 @@ p.modifier.proficiency {
 }
 
 .rest-reminders {
-    position: absolute;
-    top: calc(var(--reference-unit) * 2230);
-    left: calc(var(--reference-unit) * 2403);
-    width: calc(var(--reference-unit) * 790);
     height: calc(var(--reference-unit) * 300);
     padding: calc(var(--reference-unit) * 22) calc(var(--reference-unit) * 30);
     border: calc(var(--reference-unit) * 9) solid var(--gold);
@@ -589,57 +550,17 @@ p.modifier.proficiency {
     list-style-type: square;
 }
 
-.side-tabs p {
-    position: absolute;
-    right: 0;
-    display: grid;
-    width: calc(var(--reference-unit) * 90);
-    place-items: center;
-    color: white;
-    font-size: calc(var(--reference-unit) * 36);
-    font-weight: 700;
-    letter-spacing: calc(var(--reference-unit) * 3);
-    writing-mode: vertical-rl;
-    transform: rotate(180deg);
-}
-
-.side-tabs p:first-child {
-    top: calc(var(--reference-unit) * 110);
-    height: calc(var(--reference-unit) * 1125);
-    border-radius: calc(var(--reference-unit) * 50) 0 0 calc(var(--reference-unit) * 50);
-    background: #ee9900;
-}
-
-.side-tabs p:last-child {
-    top: calc(var(--reference-unit) * 1340);
-    height: calc(var(--reference-unit) * 1110);
-    border-radius: calc(var(--reference-unit) * 50) 0 0 calc(var(--reference-unit) * 50);
-    background: #87006c;
-}
-
 .legal {
-    position: absolute;
-    right: calc(var(--reference-unit) * 95);
-    bottom: calc(var(--reference-unit) * 8);
-    left: calc(var(--reference-unit) * 30);
+    grid-column: 1 / -1;
+    align-self: end;
+    margin: 0 calc(var(--reference-unit) * 95) calc(var(--reference-unit) * 8) calc(var(--reference-unit) * 30);
     color: #9d8952;
     font-size: calc(var(--reference-unit) * 20);
     white-space: nowrap;
 }
 
 /* Three-column board layout */
-.board {
-    display: grid;
-    grid-template-columns:
-        calc(var(--reference-unit) * 695)
-        calc(var(--reference-unit) * 1645)
-        minmax(0, 1fr);
-    column-gap: calc(var(--reference-unit) * 15);
-    padding: 0 calc(var(--reference-unit) * 15) 0 calc(var(--reference-unit) * 30);
-}
-
 .board-column {
-    position: relative;
     min-width: 0;
 }
 
@@ -647,26 +568,8 @@ p.modifier.proficiency {
     padding-top: 0;
 }
 
-.identity-column .masthead,
-.identity-column .abilities {
-    position: relative;
-    top: auto;
-    left: auto;
-}
-
 .identity-column .masthead {
     width: 100%;
-    flex: none;
-}
-
-.identity-column .masthead h1 {
-    left: calc(var(--reference-unit) * 340);
-    transform: scaleX(0.37);
-}
-
-.identity-column .motto {
-    left: calc(var(--reference-unit) * 340);
-    font-size: calc(var(--reference-unit) * 15);
 }
 
 .identity-column .abilities {
@@ -686,9 +589,6 @@ p.modifier.proficiency {
 }
 
 .combat-column > .panel {
-    position: relative;
-    top: auto;
-    left: auto;
     width: 100%;
     margin: 0;
 }
@@ -721,9 +621,6 @@ p.modifier.proficiency {
 .class-column > .panel,
 .class-column > .playing-tips,
 .class-column > .rest-reminders {
-    position: relative;
-    top: auto;
-    left: auto;
     width: 100%;
     height: auto;
     margin: 0;
@@ -755,10 +652,6 @@ p.modifier.proficiency {
     margin-bottom: calc(var(--reference-unit) * 7);
     font-size: calc(var(--reference-unit) * 27);
     line-height: 1.25;
-}
-
-.legal {
-    z-index: 2;
 }
 
 @media print {
