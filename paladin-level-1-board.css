@@ -7,15 +7,14 @@
 :root {
     color-scheme: light;
     --board-width-ratio: 0.914951158;
-    --reference-unit: 0.030294cqw;
-    --earth: #ead9bd;
+    --reference-unit: 0.02772cqw;
+    --earth: #603900;
     --gold: #c9b24f;
     --paper: #f8f4e7;
     --black: #111111;
     --green: #49ed00;
     --blue: #096584;
     --red: #e40026;
-    --dark-brown: #754900;
 }
 
 * {
@@ -54,14 +53,17 @@ body {
     overflow: hidden;
     grid-template-columns:
         calc(var(--reference-unit) * 695)
-        calc(var(--reference-unit) * 1645)
-        minmax(0, 1fr);
-    grid-template-rows: minmax(0, 1fr) auto;
+        calc(var(--reference-unit) * 875)
+        calc(var(--reference-unit) * 875)
+        calc(var(--reference-unit) * 766);
+    grid-template-rows: auto auto;
     column-gap: calc(var(--reference-unit) * 15);
     padding: 0 calc(var(--reference-unit) * 15) 0 calc(var(--reference-unit) * 30);
     container-type: inline-size;
     color: var(--black);
-    background: var(--paper);
+    background-color: var(--earth);
+    background-image: url("paladin-board-assets/board-texture.jpg");
+    background-size: calc(var(--reference-unit) * 256) calc(var(--reference-unit) * 256);
     font-size: calc(var(--reference-unit) * 30);
     line-height: 1.22;
 }
@@ -74,10 +76,10 @@ body {
     margin: 0;
 }
 
+.board p,
 .board h1,
 .board h2,
 .board h3,
-.board p,
 .board li {
     overflow-wrap: normal;
 }
@@ -90,44 +92,86 @@ body {
     justify-content: center;
     gap: calc(var(--reference-unit) * 18);
     width: 100%;
-    padding: calc(var(--reference-unit) * 80) calc(var(--reference-unit) * 14) calc(var(--reference-unit) * 20);
-    color: var(--dark-brown);
-    border-bottom: calc(var(--reference-unit) * 4) solid #b59a36;
+    /* padding: calc(var(--reference-unit) * 80) calc(var(--reference-unit) * 14) calc(var(--reference-unit) * 20); */
+    color: #fffdf3;
 }
 
-.masthead h1 {
+.masthead-title {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: calc(var(--reference-unit) * 20);
+    width: 100%;
+}
+
+.masthead-title h1 {
     font-family: fantasy;
     font-size: calc(var(--reference-unit) * 150);
-    width: 100%;
-    text-align: right;
     font-weight: 700;
     line-height: 1;
     white-space: nowrap;
-    transform: scaleX(.7);
-    transform-origin: right center;
+    transform: scaleX(0.7);
+    width: 70%;
+    transform-origin: center left;
+}
+
+.masthead-title .crest {
+    display: block;
+    width: calc(var(--reference-unit) * 280);
+    /* height: calc(var(--reference-unit) * 158); */
+    flex: none;
+    object-fit: contain;
+}
+
+.crest-mark {
+    position: relative;
+    display: flex;
+    flex: none;
+    align-items: center;
+}
+
+.crest-mark::after {
+    position: absolute;
+    top: 86%;
+    left: 100%;
+    width: calc(var(--reference-unit) * 500);
+    border-top: calc(var(--reference-unit) * 5) solid #b59a36;
+    content: "";
+    pointer-events: none;
+}
+
+.crest-mark::before {
+    position: absolute;
+    top: 91%;
+    left: 100%;
+    width: calc(var(--reference-unit) * 400);
+    border-top: calc(var(--reference-unit) * 1) solid #b59a36;
+    opacity: 0.7;
+    content: "";
+    pointer-events: none;
+}
+
+.masthead-title h1 {
+    position: relative;
+    z-index: 1;
 }
 
 .motto {
-    width: 100%;
     font-weight: 700;
     text-align: left;
     font-size: calc(var(--reference-unit) * 70);
-    background: white;
-
 }
 
 /* Left ability reference panel */
 .panel {
-    overflow: hidden;
+    overflow: visible;
     border: calc(var(--reference-unit) * 9) solid var(--gold);
     border-radius: calc(var(--reference-unit) * 45);
     background: var(--paper);
 }
 
 .abilities {
-    display: flex;
-    width: 100%;
-    flex-direction: column;
+    height: auto;
     padding: 0 calc(var(--reference-unit) * 24);
 }
 
@@ -145,8 +189,8 @@ body {
 
 .ability-columns {
     display: grid;
-    min-height: 0;
-    flex: 1;
+    min-height: auto;
+    flex: none;
     grid-template-columns: 1fr 1fr;
 }
 
@@ -275,23 +319,27 @@ p.modifier.proficiency {
 
 /* Center equipment and spell panels */
 .hit-points {
-    height: calc(var(--reference-unit) * 736);
     padding: calc(var(--reference-unit) * 30) calc(var(--reference-unit) * 38);
     border-radius: calc(var(--reference-unit) * 48);
     text-align: center;
 }
 
 .combat-stats {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
+    display: flex;
     gap: calc(var(--reference-unit) * 20);
 }
 
 .combat-stats h2,
 .hp-label {
-    background: #e6e1bf;
     font-size: calc(var(--reference-unit) * 40);
-    line-height: 1.4;
+    line-height: 1.1;
+}
+
+.combat-stats div {
+    flex: 1;
+    background: white;
+    padding: calc(var(--reference-unit) * 8) calc(var(--reference-unit) * 12);
+    border-radius: calc(var(--reference-unit) * 12);
 }
 
 .combat-stats p,
@@ -318,7 +366,7 @@ p.modifier.proficiency {
 
 .armor {
     display: flex;
-    height: calc(var(--reference-unit) * 1112);
+    height: auto;
     flex-direction: column;
     padding: calc(var(--reference-unit) * 112) calc(var(--reference-unit) * 55) 0;
     border: calc(var(--reference-unit) * 9) solid var(--green);
@@ -388,7 +436,7 @@ p.modifier.proficiency {
 .weapons,
 .concentration {
     display: flex;
-    height: calc(var(--reference-unit) * 1290);
+    height: auto;
     flex-direction: column;
     padding: calc(var(--reference-unit) * 100) calc(var(--reference-unit) * 90) 0;
     border-color: var(--green);
@@ -467,7 +515,7 @@ p.modifier.proficiency {
 
 /* Right-hand class text, rests, and card tabs */
 .class-features {
-    height: calc(var(--reference-unit) * 1050);
+    height: auto;
     border-radius: calc(var(--reference-unit) * 12);
     background: var(--paper);
 }
@@ -513,7 +561,7 @@ p.modifier.proficiency {
 }
 
 .playing-tips {
-    height: calc(var(--reference-unit) * 1090);
+    height: auto;
     padding: calc(var(--reference-unit) * 18) calc(var(--reference-unit) * 28);
     background: #f0e3d4;
     border-top: calc(var(--reference-unit) * 5) solid #111;
@@ -533,7 +581,7 @@ p.modifier.proficiency {
 }
 
 .rest-reminders {
-    height: calc(var(--reference-unit) * 300);
+    height: auto;
     padding: calc(var(--reference-unit) * 22) calc(var(--reference-unit) * 30);
     border: calc(var(--reference-unit) * 9) solid var(--gold);
     background: var(--paper);
@@ -565,6 +613,9 @@ p.modifier.proficiency {
 }
 
 .identity-column {
+    display: flex;
+    flex-direction: column;
+    align-content: start;
     padding-top: 0;
 }
 
@@ -574,48 +625,108 @@ p.modifier.proficiency {
 
 .identity-column .abilities {
     width: 100%;
+    min-height: 0;
     margin-top: calc(var(--reference-unit) * 15);
 }
 
-.combat-column {
+.stats-column {
     display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    grid-template-rows:
-        calc(var(--reference-unit) * 1112)
-        calc(var(--reference-unit) * 1290);
+    grid-column: 2;
+    grid-template-rows: auto auto;
     align-content: start;
-    gap: calc(var(--reference-unit) * 45) calc(var(--reference-unit) * 15);
+    gap: calc(var(--reference-unit) * 20);
     padding-top: calc(var(--reference-unit) * 60);
 }
 
-.combat-column > .panel {
+.stats-column > .panel {
     width: 100%;
     margin: 0;
 }
 
-.combat-column .hit-points {
-    height: calc(var(--reference-unit) * 736);
-    align-self: center;
+.stats-column .hit-points {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: calc(var(--reference-unit) * 20);
 }
 
-.combat-column .armor {
-    height: calc(var(--reference-unit) * 1112);
+.stats-column .combat-stats {
+    gap: calc(var(--reference-unit) * 8);
 }
 
-.combat-column .weapons,
-.combat-column .concentration {
-    height: calc(var(--reference-unit) * 1290);
+.stats-column .combat-stats div {
+    min-width: 0;
+    padding: calc(var(--reference-unit) * 8) calc(var(--reference-unit) * 5);
+}
+
+.stats-column .combat-stats h2 {
+    font-size: calc(var(--reference-unit) * 32);
+}
+
+.stats-column .combat-stats p {
+    margin-bottom: 0;
+}
+
+.cards-column {
+    display: grid;
+    grid-column: 3;
+    grid-template-rows: auto auto auto;
+    align-content: start;
+    gap: calc(var(--reference-unit) * 15);
+    padding-top: calc(var(--reference-unit) * 25);
+}
+
+.cards-column > .panel {
+    width: 100%;
+    height: auto;
+    margin: 0;
+}
+
+.cards-column .armor,
+.cards-column .weapons,
+.cards-column .concentration {
+    padding: calc(var(--reference-unit) * 28) calc(var(--reference-unit) * 34) 0;
+}
+
+.cards-column .armor-class {
+    width: min(100%, calc(var(--reference-unit) * 300));
+    margin-bottom: calc(var(--reference-unit) * 22);
+}
+
+.cards-column .armor > p,
+.cards-column .weapons > p,
+.cards-column .concentration > p {
+    margin-bottom: calc(var(--reference-unit) * 10);
+    font-size: calc(var(--reference-unit) * 26);
+    line-height: 1.2;
+}
+
+.cards-column .starting-card {
+    margin-top: calc(var(--reference-unit) * 14);
+}
+
+.cards-column .attack-ribbon {
+    width: calc(100% + var(--reference-unit) * 68);
+    margin-right: calc(var(--reference-unit) * -34);
+    margin-left: calc(var(--reference-unit) * -34);
+    font-size: calc(var(--reference-unit) * 31);
+}
+
+.cards-column .ribbon {
+    margin-top: auto;
+}
+
+.cards-column .attack-ribbon {
+    margin-top: 0;
 }
 
 .class-column {
     display: grid;
-    grid-template-rows:
-        calc(var(--reference-unit) * 1050)
-        calc(var(--reference-unit) * 1090)
-        calc(var(--reference-unit) * 300);
+    grid-column: 4;
+    grid-template-rows: auto auto auto;
     align-content: start;
     gap: calc(var(--reference-unit) * 5);
-    padding-top: calc(var(--reference-unit) * 65);
+    padding-top: calc(var(--reference-unit) * 25);
 }
 
 .class-column > .panel,
