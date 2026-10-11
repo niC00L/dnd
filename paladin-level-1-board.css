@@ -1,13 +1,13 @@
-/* A4 landscape page and proportional reference board */
+/* A5 portrait page containing the retained left half of the board */
 @page {
-    size: A4 landscape;
+    size: A5 portrait;
     margin: 0;
 }
 
 :root {
     color-scheme: light;
     --board-width-ratio: 0.914951158;
-    --reference-unit: 0.02772cqw;
+    --reference-unit: 0.05564cqw;
     --earth: #603900;
     --gold: #c9b24f;
     --paper: #f8f4e7;
@@ -38,8 +38,8 @@ body {
 
 .page {
     display: grid;
-    width: min(297mm, 100vw);
-    aspect-ratio: 297 / 210;
+    width: min(148mm, 100vw);
+    aspect-ratio: 148 / 210;
     overflow: hidden;
     place-items: center;
     background: #fff;
@@ -48,17 +48,16 @@ body {
 
 .board {
     display: grid;
-    width: calc(var(--board-width-ratio) * 100%);
-    aspect-ratio: 3301 / 2551;
+    width: 100%;
+    height: 100%;
     overflow: hidden;
     grid-template-columns:
-        calc(var(--reference-unit) * 695)
-        calc(var(--reference-unit) * 875)
-        calc(var(--reference-unit) * 875)
-        calc(var(--reference-unit) * 766);
+        calc(var(--reference-unit) * 735)
+        calc(var(--reference-unit) * 926);
     grid-template-rows: auto auto;
-    column-gap: calc(var(--reference-unit) * 15);
-    padding: 0 calc(var(--reference-unit) * 15) 0 calc(var(--reference-unit) * 30);
+    column-gap: calc(var(--reference-unit) * 30);
+    justify-content: center;
+    padding: 0 calc(var(--reference-unit) * 35) 0 calc(var(--reference-unit) * 30);
     container-type: inline-size;
     color: var(--black);
     background-color: var(--earth);
@@ -604,7 +603,8 @@ p.modifier.proficiency {
     margin: 0 calc(var(--reference-unit) * 95) calc(var(--reference-unit) * 8) calc(var(--reference-unit) * 30);
     color: #9d8952;
     font-size: calc(var(--reference-unit) * 20);
-    white-space: nowrap;
+    white-space: normal;
+    overflow-wrap: anywhere;
 }
 
 /* Three-column board layout */
@@ -768,7 +768,7 @@ p.modifier.proficiency {
 @media print {
     html,
     body {
-        width: 297mm;
+        width: 148mm;
         height: 210mm;
         min-height: 0;
         overflow: hidden;
@@ -776,9 +776,9 @@ p.modifier.proficiency {
     }
 
     .page {
-        width: 297mm;
+        width: 148mm;
         height: 210mm;
-        min-width: 297mm;
+        min-width: 148mm;
         aspect-ratio: auto;
         overflow: hidden;
         break-after: avoid;
