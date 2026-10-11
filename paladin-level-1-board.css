@@ -143,9 +143,9 @@ body {
 .abilities > h2 {
     position: absolute;
     top: 0;
-    left: calc(var(--reference-unit) * 20);
+    left: 0;
     display: grid;
-    width: calc(var(--reference-unit) * 648);
+    width: 100%;
     height: calc(var(--reference-unit) * 150);
     place-content: center;
     color: white;
@@ -162,11 +162,12 @@ body {
 }
 
 .ability-column {
-    padding: 0 calc(var(--reference-unit) * 20);
+    padding: 0 calc(var(--reference-unit) * 30) 0 0;
 }
 
 .ability-column + .ability-column {
     border-left: calc(var(--reference-unit) * 5) solid var(--gold);
+    padding: 0 0 0 calc(var(--reference-unit) * 30);
 }
 
 .ability {
@@ -185,18 +186,36 @@ body {
     text-align: center;
 }
 
-.modifier {
+p.modifier {
+    position: relative;
     display: grid;
     width: calc(var(--reference-unit) * 158);
     height: calc(var(--reference-unit) * 158);
-    margin: 0 auto calc(var(--reference-unit) * 10);
+    margin: 0 calc(var(--reference-unit) * 20) calc(var(--reference-unit) * 10);
+    margin-bottom: 2mm !important;
     place-items: center;
+    background: white;
     border: calc(var(--reference-unit) * 9) solid var(--gold);
     border-radius: 50%;
     font-family: "DejaVu Sans", sans-serif;
     font-size: calc(var(--reference-unit) * 72);
     font-weight: 700;
     line-height: 1;
+}
+p.modifier.proficiency {
+    margin: calc(var(--reference-unit) * 10) auto 0;
+}
+
+.modifier:not(.proficiency)::after {
+    position: absolute;
+    right: calc(var(--reference-unit) * -90);
+    bottom: 0;
+    width: calc(var(--reference-unit) * 65);
+    height: calc(var(--reference-unit) * 65);
+    border: calc(var(--reference-unit) * 8) solid var(--gold);
+    border-radius: 50%;
+    background: white;
+    content: "";
 }
 
 .save {
@@ -211,6 +230,7 @@ body {
 .ability li b,
 .ability .save b {
     display: inline-block;
+    background: white;
     min-width: calc(var(--reference-unit) * 54);
 }
 
@@ -605,6 +625,140 @@ body {
     color: #9d8952;
     font-size: calc(var(--reference-unit) * 20);
     white-space: nowrap;
+}
+
+/* Three-column board layout */
+.board {
+    display: grid;
+    grid-template-columns:
+        calc(var(--reference-unit) * 695)
+        calc(var(--reference-unit) * 1645)
+        minmax(0, 1fr);
+    column-gap: calc(var(--reference-unit) * 15);
+    padding: 0 calc(var(--reference-unit) * 15) 0 calc(var(--reference-unit) * 30);
+}
+
+.board-column {
+    position: relative;
+    min-width: 0;
+}
+
+.identity-column {
+    padding-top: 0;
+}
+
+.identity-column .masthead,
+.identity-column .abilities {
+    position: relative;
+    top: auto;
+    left: auto;
+}
+
+.identity-column .masthead {
+    width: 100%;
+    flex: none;
+}
+
+.identity-column .masthead h1 {
+    left: calc(var(--reference-unit) * 340);
+    transform: scaleX(0.37);
+}
+
+.identity-column .motto {
+    left: calc(var(--reference-unit) * 340);
+    font-size: calc(var(--reference-unit) * 15);
+}
+
+.identity-column .abilities {
+    width: 100%;
+    margin-top: calc(var(--reference-unit) * 15);
+}
+
+.combat-column {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-rows:
+        calc(var(--reference-unit) * 1112)
+        calc(var(--reference-unit) * 1290);
+    align-content: start;
+    gap: calc(var(--reference-unit) * 45) calc(var(--reference-unit) * 15);
+    padding-top: calc(var(--reference-unit) * 60);
+}
+
+.combat-column > .panel {
+    position: relative;
+    top: auto;
+    left: auto;
+    width: 100%;
+    margin: 0;
+}
+
+.combat-column .hit-points {
+    height: calc(var(--reference-unit) * 736);
+    align-self: center;
+}
+
+.combat-column .armor {
+    height: calc(var(--reference-unit) * 1112);
+}
+
+.combat-column .weapons,
+.combat-column .concentration {
+    height: calc(var(--reference-unit) * 1290);
+}
+
+.class-column {
+    display: grid;
+    grid-template-rows:
+        calc(var(--reference-unit) * 1050)
+        calc(var(--reference-unit) * 1090)
+        calc(var(--reference-unit) * 300);
+    align-content: start;
+    gap: calc(var(--reference-unit) * 5);
+    padding-top: calc(var(--reference-unit) * 65);
+}
+
+.class-column > .panel,
+.class-column > .playing-tips,
+.class-column > .rest-reminders {
+    position: relative;
+    top: auto;
+    left: auto;
+    width: 100%;
+    height: auto;
+    margin: 0;
+}
+
+.class-column .class-features section {
+    padding: calc(var(--reference-unit) * 12) calc(var(--reference-unit) * 18) 0;
+}
+
+.class-column .class-features h3 {
+    margin-bottom: calc(var(--reference-unit) * 8);
+    font-size: calc(var(--reference-unit) * 34);
+}
+
+.class-column .class-features p {
+    font-size: calc(var(--reference-unit) * 27);
+    line-height: 1.25;
+}
+
+.class-column .class-features section + section {
+    margin-top: calc(var(--reference-unit) * 16);
+}
+
+.class-column .playing-tips {
+    padding: calc(var(--reference-unit) * 14) calc(var(--reference-unit) * 20);
+}
+
+.class-column .playing-tips p {
+    margin-bottom: calc(var(--reference-unit) * 7);
+    font-size: calc(var(--reference-unit) * 27);
+    line-height: 1.25;
+}
+
+.legal {
+    z-index: 2;
 }
 
 @media print {
