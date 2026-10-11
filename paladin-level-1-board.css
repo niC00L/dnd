@@ -52,8 +52,8 @@ body {
     height: 100%;
     overflow: hidden;
     grid-template-columns:
-        calc(var(--reference-unit) * 735)
-        calc(var(--reference-unit) * 926);
+        calc(var(--reference-unit) * 830.5)
+        calc(var(--reference-unit) * 830.5);
     grid-template-rows: auto auto;
     column-gap: calc(var(--reference-unit) * 30);
     justify-content: center;
@@ -264,9 +264,29 @@ p.modifier.proficiency {
 
 .ability li b,
 .ability .save b {
+    position: relative;
     display: inline-block;
+    width: calc(var(--reference-unit) * 45);
+    height: calc(var(--reference-unit) * 45);
+    margin-left: calc(var(--reference-unit) * 40);
     background: white;
-    min-width: calc(var(--reference-unit) * 54);
+    border-bottom: 1px solid var(--black);
+    vertical-align: text-bottom;
+}
+
+.ability li b::before,
+.ability .save b::before {
+    position: absolute;
+    top: 54%;
+    left: calc(var(--reference-unit) * -40);
+    width: calc(var(--reference-unit) * 20);
+    width: calc(var(--reference-unit) * 20);
+    aspect-ratio: 1;
+    border: 1px solid var(--black);
+    border-radius: 50%;
+    background: white;
+    content: "";
+    transform: translateY(-50%);
 }
 
 .inspiration {
