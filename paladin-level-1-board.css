@@ -1,13 +1,13 @@
-/* A5 portrait page containing the retained left half of the board */
+/* A4 landscape page containing the complete board */
 @page {
-    size: A5 portrait;
+    size: A4 landscape;
     margin: 0;
 }
 
 :root {
     color-scheme: light;
     --board-width-ratio: 0.914951158;
-    --reference-unit: 0.05564cqw;
+    --reference-unit: 0.0303cqw;
     --earth: #603900;
     --gold: #c9b24f;
     --paper: #f8f4e7;
@@ -19,6 +19,10 @@
 
 * {
     box-sizing: border-box;
+}
+
+.small-text {
+    text-align: left;
 }
 
 html,
@@ -38,28 +42,26 @@ body {
 
 .page {
     display: grid;
-    width: min(148mm, 100vw);
-    aspect-ratio: 148 / 210;
+    width: min(297mm, 100vw);
+    aspect-ratio: 297 / 210;
     overflow: hidden;
     place-items: center;
     background: #fff;
     container-type: inline-size;
+    color: var(--black);
 }
 
 .board {
     display: grid;
-    width: 100%;
+    width: calc(100% * var(--board-width-ratio));
     height: 100%;
     overflow: hidden;
-    grid-template-columns:
-        calc(var(--reference-unit) * 830.5)
-        calc(var(--reference-unit) * 830.5);
-    grid-template-rows: auto auto;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    grid-template-rows: minmax(0, 1fr) auto;
     column-gap: calc(var(--reference-unit) * 30);
     justify-content: center;
     padding: 0 calc(var(--reference-unit) * 35) 0 calc(var(--reference-unit) * 30);
     container-type: inline-size;
-    color: var(--black);
     background-color: var(--earth);
     background-image: url("paladin-board-assets/board-texture.jpg");
     background-size: calc(var(--reference-unit) * 256) calc(var(--reference-unit) * 256);
@@ -167,6 +169,10 @@ body {
     border: calc(var(--reference-unit) * 9) solid var(--gold);
     border-radius: calc(var(--reference-unit) * 45);
     background: var(--paper);
+}
+
+.panel.text-only {
+    padding: calc(var(--reference-unit)*20) calc(var(--reference-unit)*25);
 }
 
 .abilities {
@@ -287,6 +293,11 @@ p.modifier.proficiency {
     background: white;
     content: "";
     transform: translateY(-50%);
+}
+
+.ability li.selected b::before,
+.ability .save.selected b::before {
+    background: var(--earth);
 }
 
 .inspiration {
@@ -687,6 +698,34 @@ p.modifier.proficiency {
     margin-bottom: 0;
 }
 
+.spell-progression {
+    width: 100%;
+    border-collapse: collapse;
+    table-layout: fixed;
+    font-size: calc(var(--reference-unit) * 20);
+    line-height: 1;
+}
+
+.spell-progression caption {
+    padding: calc(var(--reference-unit) * 5);
+    font-weight: 700;
+}
+
+.spell-progression th,
+.spell-progression td {
+    padding: calc(var(--reference-unit) * 1) calc(var(--reference-unit) * 2);
+    border: 1px solid currentColor;
+    text-align: center;
+}
+
+.spell-progression th:first-child {
+    width: 18%;
+}
+
+.spell-progression th:nth-child(2) {
+    width: 20%;
+}
+
 .cards-column {
     display: grid;
     grid-column: 3;
@@ -788,7 +827,7 @@ p.modifier.proficiency {
 @media print {
     html,
     body {
-        width: 148mm;
+        width: 297mm;
         height: 210mm;
         min-height: 0;
         overflow: hidden;
@@ -796,9 +835,9 @@ p.modifier.proficiency {
     }
 
     .page {
-        width: 148mm;
+        width: 297mm;
         height: 210mm;
-        min-width: 148mm;
+        min-width: 297mm;
         aspect-ratio: auto;
         overflow: hidden;
         break-after: avoid;
