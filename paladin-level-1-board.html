@@ -170,10 +170,7 @@
                 </section>
                 <section class="hit-points panel" aria-label="Initiative, speed, and hit points">
                     <h2 class="hp-label">SPELLCASTING</h2>
-                    <p class="small-text">
-                        Whenever you finish a Long Rest, you can replace one spell.
-                        You can use a Holy Symbol as a Spellcasting Focus.
-                    </p>
+
                     <div class="combat-stats">
                         <div>
                             <h2>SPELLCASTING ABILITY</h2>
@@ -189,8 +186,7 @@
                         </div>
                     </div>
                     <p class="small-text">
-                        <b>Level 2:</b> You gain a Fighting Style feat of your choice. Instead of choosing one of those feats, you can choose the option below. Blessed Warrior. </br>
-                        <b>Level 3:</b> Channel Divinity
+                        Holy symbol is your spellcasting focus. Slots per the class table, regained on a Long Rest. One spell can be swappedafter each Long Rest.
                     </p>
                     <table class="spell-progression">
                         <caption>Spell Slots per Spell Level</caption>
@@ -239,79 +235,78 @@
                     </p>
                 </section>
             </div>
-            <div class="board-column cards-column">
-                <section class="armor panel">
-                    <div class="armor-class">
-                        <h2>ARMOR CLASS</h2>
-                        <p>10</p>
-                    </div>
-                    <p>You can wear Light, Medium, or Heavy Armor by placing an Equipment Card for an armor of either type here.</p>
-                    <p>You can also use a Shield, but you can’t cast spells while you're holding one.</p>
-                    <div class="starting-card">
-                        <h2>STARTING CARD</h2>
-                        <p>Chain Mail</p>
-                    </div>
-                    <div class="ribbon equipment-ribbon">EQUIPMENT</div>
-                </section>
-                <section class="weapons panel">
-                    <p>You can use Simple Weapons and Martial Weapons by placing an Equipment Card for a weapon of either type here.</p>
-                    <p>You can use the Mastery property of any weapon you place here.</p>
-                    <div class="starting-card">
-                        <h2>STARTING CARD</h2>
-                        <p>Longsword</p>
-                    </div>
-                    <p>If you wield a ranged weapon without the Thrown property, your ranged attack rolls are +2.</p>
-                    <div class="ribbon equipment-ribbon">EQUIPMENT</div>
-                    <div class="attack-ribbon">
-                        <span>MELEE ATTACK ROLLS: <span class="die">d20</span> + 5</span>
-                        <span>RANGED ATTACK ROLLS: <span class="die">d20</span> + 5</span>
-                    </div>
-                </section>
-                <section class="concentration panel">
-                    <h2>Concentration Spell</h2>
-                    <p>When you cast a spell that requires Concentration, place that Spell Card here to show that you are concentrating on it. You can end Concentration at any time (no action required). These factors break Concentration:</p>
-                    <p><b>Another Concentration Spell.</b> You lose Concentration on a spell the moment you start casting another spell that requires Concentration.</p>
-                    <p><b>Damage.</b> If you take Damage, you must succeed on a Constitution saving throw to maintain Concentration. The DC equals 10 or half the damage taken (rounded down), whichever is higher.</p>
-                    <p><b>Incapacitated or Dead.</b> Your Concentration ends if you have the Incapacitated condition or you die.</p>
-                    <div class="ribbon spell-ribbon">SPELL</div>
-                    <div class="attack-ribbon">
-                        <span>SPELL ATTACK ROLLS: <span class="die">d20</span> + 4</span>
-                        <span>SPELL SAVE DC: 12</span>
-                    </div>
-                </section>
-            </div>
+            
             <div class="board-column class-column">
                 <section class="class-features panel">
                     <h2>Paladin Class Features</h2>
                     <section>
-                        <h3>Lay On Hands</h3>
-                        <p>Place 5 Hit Point Tokens here to create healing pool. As a Bonus Action, you touch a creature giving it Hit Points from the available pool. You may also expend 5 Hit Points from the pool to remove the Poisoned condition.</p>
+                        <h3>Level 1</h3>
+                        <p><b>Lay on Hands:</b> Bonus-action touch healing</p>
+                        <p><b>Weapon Mastery:</b> Pick two proficient weapon types for their mastery properties; change them on a Long Rest.</p>
                     </section>
                     <section>
-                        <h3>Spellcasting</h3>
-                        <p>Remove 1 Power Token below to cast a level 1 spell from one of your Spell Cards.</p>
-                        <div class="token-pair" aria-label="Spell token spaces">
-                            <span class="token" aria-hidden="true"></span>
-                            <span class="token" aria-hidden="true"></span>
-                        </div>
+                        <h3>Level 2</h3>
+                        <p><b>Fighting Style / Blessed Warrior:</b> Take a Fighting Style feat, or pick Blessed Warrior: two Cleric cantrips as paladin spells, swappable per level.</p>                        
+                        <p><b>Paladin's Smite:</b> Divine Smite always prepared; cast it once without a slot until your next Long Rest.</p>
+                    </section>
+                    <section>
+                        <h3>Level 3</h3>
+                        <p><b>Channel Divinity:</b> Two uses; +1 use at level 11. One use per Short Rest, all per Long Rest. Save DC = spell save DC. Effect: Divine Sense (bonus action, 10 min) detects celestials, fiends, undead within 60 ft and consecrated/desecrated sites.</p>
+                        <p><b>Subclass:</b>Choose a subclass</p>
+                    </section>
+                    <section>
+                        <h3>Level 4/8/12/16</h3>
+                        <p>Ability Score Improvement feat or another qualifying feat.</p>
+                    </section>
+                    <section>
+                        <h3>Level 5</h3>
+                        <p><b>Extra Attack:</b> Two attacks with the Attack action.</p>
+                        <p><b>Faithful Steed:</b> Find Steed always prepared; free cast once per Long Rest.</p>
+                    </section>
+                    <section>
+                        <h3>Level 6</h3>
+                        <p><b>Aura of Protection:</b> 10-ft aura; you and allies add your Cha modifier (min +1) to saves. Inactive while Incapacitated; only one such aura applies at a time.</p>
+                    </section>
+                    <section>
+                        <h3>Level 9</h3>
+                        <p><b>Abjure Foes:</b> Spend Channel Divinity (Magic action) to frighten up to your Cha modifier targets within 60 ft (Wis save negates). Lasts 1 minute or until damaged; frightened target may do only one of move/action/bonus action.</p>
+                    </section>
+                    <section>
+                        <h3>Level 10</h3>
+                        <p><b>Aura of Courage:</b> You and allies in the aura are immune to Frightened.</p>
+                    </section>
+                    <section>
+                        <h3>Level 11</h3>
+                        <p><b>Radiant Strikes:</b> Melee/unarmed hits deal +1d8 radiant.</p>
+                    </section>
+                    <section>
+                        <h3>Level 14</h3>
+                        <p><b>Restoring Touch:</b> Spend 5 Lay on Hands points per condition to remove Blinded, Charmed, Deafened, Frightened, Paralyzed, or Stunned.</p>
+                    </section>
+                    <section>
+                        <h3>Level 18</h3>
+                        <p><b>Aura Expansion:</b> Aura expands to 30 ft.</p>
+                    </section>
+                    <section>
+                        <h3>Level 19</h3>
+                        <p>Epic Boon feat or another qualifying feat.</p>
                     </section>
                 </section>
-                <section class="playing-tips panel">
-                    <h2>Playing a Paladin</h2>
-                    <p>Choose this class if you want to play a holy warrior who wields divine power to protects allies and smite foes.</p>
-                    <p><b><i>Paladin Tips.</i></b> In combat, stay on the front line with your Longsword and shield. Use Lay on Hands to restore your allies when they fall.</p>
-                    <p>Out of combat, your presence, and conviction make you a strong leader (Persuasion) and your keen intuition helps discern truths (Insight).</p>
-                    <p><b><i>Recommended Origin.</i></b> If you need help deciding your origin, the Soldier Background Card and the Human Species Card complement this class well.</p>
-                    <p><b><i>Gaining a Level.</i></b> When you advance to level 2, flip this Class Board to the level 2 side and retrieve the additional components listed in the “What You Need to Play” section on that side. The adventure states when this advancement occurs.</p>
-                </section>
+
                 <section class="rest-reminders panel">
                     <p>After a <b>Short Rest:</b></p>
                     <ul>
-                        <li>Regain 7 Hit Point Tokens.</li>
+                        <li>Channel Divinity: regain one expended use.</li>
                     </ul>
                     <p>After a <b>Long Rest:</b></p>
                     <ul>
-                        <li>Regain all Hit Point Tokens, Hit Point Pool Tokens, and all expended Power Tokens.</li>
+                        <li>Lay on Hands pool fully replenishes.</li>
+                        <li>All expended spell slots are regained.</li>
+                        <li>Divine Smite cast becomes available again.</li>
+                        <li>Find Steed cast returns.</li>
+                        <li>Channel Divinity: all expended uses regained.</li>
+                        <li>Change your prepared spell list</li>
+                        <li>Change Weapon Mastery properties.</li>
                     </ul>
                 </section>
             </div>
