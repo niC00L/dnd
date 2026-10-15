@@ -11,380 +11,417 @@
 <body>
     <main class="page" aria-label="A4 landscape Paladin class board">
         <article class="board" aria-label="Level 1 Paladin">
-            <div class="board-column identity-column">
-                <header class="masthead">
-                    <div class="masthead-title">
-                        <span class="crest-mark">
-                            <img class="crest" src="paladin-board-assets/paladin-crest.png" alt="">
-                        </span>
-                        <h1>PALADIN</h1>
-                        <section class="inspiration">
-                            <h3>LEVEL</h3>
-                            <p class="modifier proficiency"></p>
-                        </section>
+            <header class="masthead">
+                <div class="masthead-title">
+                    <span class="crest-mark">
+                        <img class="crest" src="paladin-board-assets/paladin-crest.png" alt="">
+                    </span>
+                    <h1>PALADIN</h1>
+                    <div class="character-details">
+                        <h2>CHARACTER NAME</h2>
+                        <h2>RACE, BACKGROUND</h2>
                     </div>
-                </header>
-                <section class="hit-points panel" aria-label="Initiative, speed, and hit points">
-                    <div class="combat-stats">
-                        <div>
-                            <h2>ARMOR CLASS</h2>
-                            <p>&nbsp;</p>
+                    <section class="level">
+                        <h3>LEVEL</h3>
+                        <p class="modifier proficiency"></p>
+                    </section>
+                </div>
+            </header>
+            <div class="character-columns">
+                <div class="board-column identity-column">
+                    <section class="hit-points panel" aria-label="Initiative, speed, and hit points">
+                        <div class="combat-stats">
+                            <div>
+                                <h2>ARMOR CLASS</h2>
+                                <p>&nbsp;</p>
+                            </div>
+                            <div>
+                                <h2>INITIATIVE</h2>
+                                <p>&nbsp;</p>
+                            </div>
+                            <div>
+                                <h2>SPEED</h2>
+                                <p>&nbsp;</p>
+                            </div>
                         </div>
-                        <div>
-                            <h2>INITIATIVE</h2>
-                            <p>&nbsp;</p>
+                    </section>
+                    <section class="abilities panel" aria-labelledby="abilities-title">
+                        <h2 id="abilities-title">Ability Modifiers<br>Saving Throws &amp; Skills</h2>
+                        <div class="ability-columns">
+                            <div class="ability-column">
+                                <section class="ability">
+                                    <h3>STRENGTH</h3>
+                                    <div class="modifier-row">
+                                        <p class="modifier"></p>
+                                        <span class="modifier-small" aria-hidden="true"></span>
+                                    </div>
+                                    <p class="save"><b></b> STR Save</p>
+                                    <ul>
+                                        <li><b></b> Athletics</li>
+                                    </ul>
+                                </section>
+                                <section class="ability">
+                                    <h3>CONSTITUTION</h3>
+                                    <div class="modifier-row">
+                                        <p class="modifier"></p>
+                                        <span class="modifier-small" aria-hidden="true"></span>
+                                    </div>
+                                    <p class="save"><b></b> CON Save</p>
+                                </section>
+                                <section class="ability">
+                                    <h3>WISDOM</h3>
+                                    <div class="modifier-row">
+                                        <p class="modifier"></p>
+                                        <span class="modifier-small" aria-hidden="true"></span>
+                                    </div>
+                                    <p class="save selected"><b></b> WIS Save</p>
+                                    <ul>
+                                        <li><b></b> Animal Handling</li>
+                                        <li><b></b> Insight</li>
+                                        <li><b></b> Medicine</li>
+                                        <li><b></b> Perception</li>
+                                        <li><b></b> Survival</li>
+                                    </ul>
+                                </section>
+                                <section class="inspiration">
+                                    <h3>PASSIVE WIS<br>(PERCEPTION)</h3>
+                                    <p class="modifier proficiency"></p>
+                                </section>
+                                <section class="inspiration">
+                                    <h3>PROFICIENCY<br>BONUS</h3>
+                                    <p class="modifier proficiency"></p>
+                                </section>
+                            </div>
+                            <div class="ability-column">
+                                <section class="ability">
+                                    <h3>DEXTERITY</h3>
+                                    <div class="modifier-row">
+                                        <p class="modifier"></p>
+                                        <span class="modifier-small" aria-hidden="true"></span>
+                                    </div>
+                                    <p class="save"><b></b> DEX Save</p>
+                                    <ul>
+                                        <li><b></b> Athletics</li>
+                                        <li><b></b> Sleight of Hand</li>
+                                        <li><b></b> Stealth</li>
+                                    </ul>
+                                </section>
+                                <section class="ability">
+                                    <h3>INTELLIGENCE</h3>
+                                    <div class="modifier-row">
+                                        <p class="modifier"></p>
+                                        <span class="modifier-small" aria-hidden="true"></span>
+                                    </div>
+                                    <p class="save"><b></b> INT Save</p>
+                                    <ul>
+                                        <li><b></b> Arcana</li>
+                                        <li><b></b> History</li>
+                                        <li><b></b> Investigation</li>
+                                        <li><b></b> Nature</li>
+                                        <li><b></b> Religion</li>
+                                    </ul>
+                                </section>
+                                <section class="ability">
+                                    <h3>CHARISMA</h3>
+                                    <div class="modifier-row">
+                                        <p class="modifier"></p>
+                                        <span class="modifier-small" aria-hidden="true"></span>
+                                    </div>
+                                    <p class="save selected"><b></b> CHA Save</p>
+                                    <ul>
+                                        <li><b></b> Deception</li>
+                                        <li><b></b> Intimidation</li>
+                                        <li><b></b> Performance</li>
+                                        <li><b></b> Persuasion</li>
+                                    </ul>
+                                </section>
+                                <section class="inspiration">
+                                    <h3>INSPIRATION</h3>
+                                    <p class="modifier proficiency"></p>
+                                </section>
+                            </div>
                         </div>
-                        <div>
-                            <h2>SPEED</h2>
-                            <p>&nbsp;</p>
-                        </div>
-                    </div>
-                </section>
-                <section class="abilities panel" aria-labelledby="abilities-title">
-                    <h2 id="abilities-title">Ability Modifiers<br>Saving Throws &amp; Skills</h2>
-                    <div class="ability-columns">
-                        <div class="ability-column">
-                            <section class="ability">
-                                <h3>STRENGTH</h3>
-                                <div class="modifier-row">
-                                    <p class="modifier"></p>
-                                    <span class="modifier-small" aria-hidden="true"></span>
-                                </div>
-                                <p class="save"><b></b> STR Save</p>
-                                <ul>
-                                    <li><b></b> Athletics</li>
-                                </ul>
-                            </section>
-                            <section class="ability">
-                                <h3>CONSTITUTION</h3>
-                                <div class="modifier-row">
-                                    <p class="modifier"></p>
-                                    <span class="modifier-small" aria-hidden="true"></span>
-                                </div>
-                                <p class="save"><b></b> CON Save</p>
-                            </section>
-                            <section class="ability">
-                                <h3>WISDOM</h3>
-                                <div class="modifier-row">
-                                    <p class="modifier"></p>
-                                    <span class="modifier-small" aria-hidden="true"></span>
-                                </div>
-                                <p class="save selected"><b></b> WIS Save</p>
-                                <ul>
-                                    <li><b></b> Animal Handling</li>
-                                    <li><b></b> Insight</li>
-                                    <li><b></b> Medicine</li>
-                                    <li><b></b> Perception</li>
-                                    <li><b></b> Survival</li>
-                                </ul>
-                            </section>
-                            <section class="inspiration">
-                                <h3>PASSIVE WIS<br>(PERCEPTION)</h3>
-                                <p class="modifier proficiency"></p>
-                            </section>
-                            <section class="inspiration">
-                                <h3>PROFICIENCY<br>BONUS</h3>
-                                <p class="modifier proficiency"></p>
-                            </section>
-                        </div>
-                        <div class="ability-column">
-                            <section class="ability">
-                                <h3>DEXTERITY</h3>
-                                <div class="modifier-row">
-                                    <p class="modifier"></p>
-                                    <span class="modifier-small" aria-hidden="true"></span>
-                                </div>
-                                <p class="save"><b></b> DEX Save</p>
-                                <ul>
-                                    <li><b></b> Athletics</li>
-                                    <li><b></b> Sleight of Hand</li>
-                                    <li><b></b> Stealth</li>
-                                </ul>
-                            </section>
-                            <section class="ability">
-                                <h3>INTELLIGENCE</h3>
-                                <div class="modifier-row">
-                                    <p class="modifier"></p>
-                                    <span class="modifier-small" aria-hidden="true"></span>
-                                </div>
-                                <p class="save"><b></b> INT Save</p>
-                                <ul>
-                                    <li><b></b> Arcana</li>
-                                    <li><b></b> History</li>
-                                    <li><b></b> Investigation</li>
-                                    <li><b></b> Nature</li>
-                                    <li><b></b> Religion</li>
-                                </ul>
-                            </section>
-                            <section class="ability">
-                                <h3>CHARISMA</h3>
-                                <div class="modifier-row">
-                                    <p class="modifier"></p>
-                                    <span class="modifier-small" aria-hidden="true"></span>
-                                </div>
-                                <p class="save selected"><b></b> CHA Save</p>
-                                <ul>
-                                    <li><b></b> Deception</li>
-                                    <li><b></b> Intimidation</li>
-                                    <li><b></b> Performance</li>
-                                    <li><b></b> Persuasion</li>
-                                </ul>
-                            </section>
-                            <section class="inspiration">
-                                <h3>INSPIRATION</h3>
-                                <p class="modifier proficiency"></p>
-                            </section>
-                        </div>
-                    </div>
-                </section>
-            </div>
+                    </section>
+                </div>
 
-            <div class="board-column combat-column stats-column">                
-                <section class="hit-points panel" aria-label="Initiative, speed, and hit points">
-                    <h2 class="hp-label">CURRENT HIT POINTS</h2>
-                    <p class="hp-value">&nbsp;</p>
-                    <div class="combat-stats">
-                        <div>
-                            <h2>TEMP HP</h2>
-                            <p>&nbsp;</p>
+                <div class="board-column combat-column stats-column">
+                    <section class="hit-points panel" aria-label="Initiative, speed, and hit points">
+                        <h2 class="hp-label">CURRENT HIT POINTS</h2>
+                        <p class="hp-value">&nbsp;</p>
+                        <div class="combat-stats">
+                            <div>
+                                <h2>TEMP HP</h2>
+                                <p>&nbsp;</p>
+                            </div>
+                            <div>
+                                <h2>MAX HP</h2>
+                                <p>&nbsp;</p>
+                            </div>
+                            <div>
+                                <h2>HIT DICE</h2>
+                                <p>&nbsp;</p>
+                            </div>
                         </div>
-                        <div>
-                            <h2>MAX HP</h2>
-                            <p>&nbsp;</p>
+                    </section>
+                    <section class="hit-points panel" aria-label="Initiative, speed, and hit points">
+                        <h2 class="hp-label">SPELLCASTING</h2>
+                        <p class="margin-bottom">
+                            Holy symbol is your spellcasting focus.
+                        </p>
+                        <div class="combat-stats">
+                            <div>
+                                <h2>SPELLCASTING ABILITY</h2>
+                                <p>CHA</p>
+                            </div>
+                            <div>
+                                <h2>SPELL SAVE DC</h2>
+                                <p>&nbsp;</p>
+                            </div>
+                            <div>
+                                <h2>SPELL ATTACK BONUS</h2>
+                                <p>&nbsp;</p>
+                            </div>
                         </div>
-                        <div>
-                            <h2>HIT DICE</h2>
-                            <p>&nbsp;</p>
-                        </div>
-                    </div>
-                </section>
-                <section class="hit-points panel" aria-label="Initiative, speed, and hit points">
-                    <h2 class="hp-label">SPELLCASTING</h2>
-                    <p class="margin-bottom">
-                        Holy symbol is your spellcasting focus.
-                    </p>
-                    <div class="combat-stats">
-                        <div>
-                            <h2>SPELLCASTING ABILITY</h2>
-                            <p>CHA</p>
-                        </div>
-                        <div>
-                            <h2>SPELL SAVE DC</h2>
-                            <p>&nbsp;</p>
-                        </div>
-                        <div>
-                            <h2>SPELL ATTACK BONUS</h2>
-                            <p>&nbsp;</p>
-                        </div>
-                    </div>
-                    <table class="spell-progression">
-                        <caption>Spell Slots per Spell Level</caption>
-                        <thead>
-                            <tr>
-                                <th scope="col" rowspan="2">Level</th>
-                                <th scope="col" rowspan="2">Prepared</th>
-                                <th scope="colgroup" colspan="5">Spell Slots</th>
-                            </tr>
-                            <tr>
-                                <th scope="col">1st</th>
-                                <th scope="col">2nd</th>
-                                <th scope="col">3rd</th>
-                                <th scope="col">4th</th>
-                                <th scope="col">5th</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <th scope="row">1st</th>
-                                <td>2</td>
-                                <td>2</td>
-                                <td>—</td>
-                                <td>—</td>
-                                <td>—</td>
-                                <td>—</td>
-                            </tr>
-                            <tr>
-                                <th scope="row">2nd</th>
-                                <td>3</td>
-                                <td>2</td>
-                                <td>—</td>
-                                <td>—</td>
-                                <td>—</td>
-                                <td>—</td>
-                            </tr>
-                            <tr>
-                                <th scope="row">3rd</th>
-                                <td>4</td>
-                                <td>3</td>
-                                <td>—</td>
-                                <td>—</td>
-                                <td>—</td>
-                                <td>—</td>
-                            </tr>
-                            <tr>
-                                <th scope="row">4th</th>
-                                <td>5</td>
-                                <td>3</td>
-                                <td>—</td>
-                                <td>—</td>
-                                <td>—</td>
-                                <td>—</td>
-                            </tr>
-                            <tr>
-                                <th scope="row">5th</th>
-                                <td>6</td>
-                                <td>4</td>
-                                <td>2</td>
-                                <td>—</td>
-                                <td>—</td>
-                                <td>—</td>
-                            </tr>
-                            <tr>
-                                <th scope="row">6th</th>
-                                <td>6</td>
-                                <td>4</td>
-                                <td>2</td>
-                                <td>—</td>
-                                <td>—</td>
-                                <td>—</td>
-                            </tr>
-                            <tr>
-                                <th scope="row">7th</th>
-                                <td>7</td>
-                                <td>4</td>
-                                <td>3</td>
-                                <td>—</td>
-                                <td>—</td>
-                                <td>—</td>
-                            </tr>
-                            <tr>
-                                <th scope="row">8th</th>
-                                <td>7</td>
-                                <td>4</td>
-                                <td>3</td>
-                                <td>—</td>
-                                <td>—</td>
-                                <td>—</td>
-                            </tr>
-                            <tr>
-                                <th scope="row">9th</th>
-                                <td>9</td>
-                                <td>4</td>
-                                <td>3</td>
-                                <td>2</td>
-                                <td>—</td>
-                                <td>—</td>
-                            </tr>
-                            <tr>
-                                <th scope="row">10th</th>
-                                <td>9</td>
-                                <td>4</td>
-                                <td>3</td>
-                                <td>2</td>
-                                <td>—</td>
-                                <td>—</td>
-                            </tr>
-                            <tr>
-                                <th scope="row">11th</th>
-                                <td>10</td>
-                                <td>4</td>
-                                <td>3</td>
-                                <td>3</td>
-                                <td>—</td>
-                                <td>—</td>
-                            </tr>
-                            <tr>
-                                <th scope="row">12th</th>
-                                <td>10</td>
-                                <td>4</td>
-                                <td>3</td>
-                                <td>3</td>
-                                <td>—</td>
-                                <td>—</td>
-                            </tr>
-                            <tr>
-                                <th scope="row">13th</th>
-                                <td>11</td>
-                                <td>4</td>
-                                <td>3</td>
-                                <td>3</td>
-                                <td>1</td>
-                                <td>—</td>
-                            </tr>
-                            <tr>
-                                <th scope="row">14th</th>
-                                <td>11</td>
-                                <td>4</td>
-                                <td>3</td>
-                                <td>3</td>
-                                <td>1</td>
-                                <td>—</td>
-                            </tr>
-                            <tr>
-                                <th scope="row">15th</th>
-                                <td>12</td>
-                                <td>4</td>
-                                <td>3</td>
-                                <td>3</td>
-                                <td>2</td>
-                                <td>—</td>
-                            </tr>
-                            <tr>
-                                <th scope="row">16th</th>
-                                <td>12</td>
-                                <td>4</td>
-                                <td>3</td>
-                                <td>3</td>
-                                <td>2</td>
-                                <td>—</td>
-                            </tr>
-                            <tr>
-                                <th scope="row">17th</th>
-                                <td>14</td>
-                                <td>4</td>
-                                <td>3</td>
-                                <td>3</td>
-                                <td>3</td>
-                                <td>1</td>
-                            </tr>
-                            <tr>
-                                <th scope="row">18th</th>
-                                <td>14</td>
-                                <td>4</td>
-                                <td>3</td>
-                                <td>3</td>
-                                <td>3</td>
-                                <td>1</td>
-                            </tr>
-                            <tr>
-                                <th scope="row">19th</th>
-                                <td>15</td>
-                                <td>4</td>
-                                <td>3</td>
-                                <td>3</td>
-                                <td>3</td>
-                                <td>2</td>
-                            </tr>
-                            <tr>
-                                <th scope="row">20th</th>
-                                <td>15</td>
-                                <td>4</td>
-                                <td>3</td>
-                                <td>3</td>
-                                <td>3</td>
-                                <td>2</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </section>
-                <section class="hit-points panel" aria-label="Initiative, speed, and hit points">
-                    <h2 class="hp-label">SUBCLASS</h2>
-                    <p class="small-text">
-                        <b>Level 3:</b> Choose oath
-                    </p>
-                </section>
+                        <table class="spell-progression">
+                            <caption>Spell Slots per Spell Level</caption>
+                            <thead>
+                                <tr>
+                                    <th scope="col" rowspan="2">Level</th>
+                                    <th scope="col" rowspan="2">Prepared</th>
+                                    <th scope="colgroup" colspan="5">Spell Slots</th>
+                                </tr>
+                                <tr>
+                                    <th scope="col">1st</th>
+                                    <th scope="col">2nd</th>
+                                    <th scope="col">3rd</th>
+                                    <th scope="col">4th</th>
+                                    <th scope="col">5th</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <th scope="row">1st</th>
+                                    <td>2</td>
+                                    <td>2</td>
+                                    <td>—</td>
+                                    <td>—</td>
+                                    <td>—</td>
+                                    <td>—</td>
+                                </tr>
+                                <tr>
+                                    <th scope="row">2nd</th>
+                                    <td>3</td>
+                                    <td>2</td>
+                                    <td>—</td>
+                                    <td>—</td>
+                                    <td>—</td>
+                                    <td>—</td>
+                                </tr>
+                                <tr>
+                                    <th scope="row">3rd</th>
+                                    <td>4</td>
+                                    <td>3</td>
+                                    <td>—</td>
+                                    <td>—</td>
+                                    <td>—</td>
+                                    <td>—</td>
+                                </tr>
+                                <tr>
+                                    <th scope="row">4th</th>
+                                    <td>5</td>
+                                    <td>3</td>
+                                    <td>—</td>
+                                    <td>—</td>
+                                    <td>—</td>
+                                    <td>—</td>
+                                </tr>
+                                <tr>
+                                    <th scope="row">5th</th>
+                                    <td>6</td>
+                                    <td>4</td>
+                                    <td>2</td>
+                                    <td>—</td>
+                                    <td>—</td>
+                                    <td>—</td>
+                                </tr>
+                                <tr>
+                                    <th scope="row">6th</th>
+                                    <td>6</td>
+                                    <td>4</td>
+                                    <td>2</td>
+                                    <td>—</td>
+                                    <td>—</td>
+                                    <td>—</td>
+                                </tr>
+                                <tr>
+                                    <th scope="row">7th</th>
+                                    <td>7</td>
+                                    <td>4</td>
+                                    <td>3</td>
+                                    <td>—</td>
+                                    <td>—</td>
+                                    <td>—</td>
+                                </tr>
+                                <tr>
+                                    <th scope="row">8th</th>
+                                    <td>7</td>
+                                    <td>4</td>
+                                    <td>3</td>
+                                    <td>—</td>
+                                    <td>—</td>
+                                    <td>—</td>
+                                </tr>
+                                <tr>
+                                    <th scope="row">9th</th>
+                                    <td>9</td>
+                                    <td>4</td>
+                                    <td>3</td>
+                                    <td>2</td>
+                                    <td>—</td>
+                                    <td>—</td>
+                                </tr>
+                                <tr>
+                                    <th scope="row">10th</th>
+                                    <td>9</td>
+                                    <td>4</td>
+                                    <td>3</td>
+                                    <td>2</td>
+                                    <td>—</td>
+                                    <td>—</td>
+                                </tr>
+                                <tr>
+                                    <th scope="row">11th</th>
+                                    <td>10</td>
+                                    <td>4</td>
+                                    <td>3</td>
+                                    <td>3</td>
+                                    <td>—</td>
+                                    <td>—</td>
+                                </tr>
+                                <tr>
+                                    <th scope="row">12th</th>
+                                    <td>10</td>
+                                    <td>4</td>
+                                    <td>3</td>
+                                    <td>3</td>
+                                    <td>—</td>
+                                    <td>—</td>
+                                </tr>
+                                <tr>
+                                    <th scope="row">13th</th>
+                                    <td>11</td>
+                                    <td>4</td>
+                                    <td>3</td>
+                                    <td>3</td>
+                                    <td>1</td>
+                                    <td>—</td>
+                                </tr>
+                                <tr>
+                                    <th scope="row">14th</th>
+                                    <td>11</td>
+                                    <td>4</td>
+                                    <td>3</td>
+                                    <td>3</td>
+                                    <td>1</td>
+                                    <td>—</td>
+                                </tr>
+                                <tr>
+                                    <th scope="row">15th</th>
+                                    <td>12</td>
+                                    <td>4</td>
+                                    <td>3</td>
+                                    <td>3</td>
+                                    <td>2</td>
+                                    <td>—</td>
+                                </tr>
+                                <tr>
+                                    <th scope="row">16th</th>
+                                    <td>12</td>
+                                    <td>4</td>
+                                    <td>3</td>
+                                    <td>3</td>
+                                    <td>2</td>
+                                    <td>—</td>
+                                </tr>
+                                <tr>
+                                    <th scope="row">17th</th>
+                                    <td>14</td>
+                                    <td>4</td>
+                                    <td>3</td>
+                                    <td>3</td>
+                                    <td>3</td>
+                                    <td>1</td>
+                                </tr>
+                                <tr>
+                                    <th scope="row">18th</th>
+                                    <td>14</td>
+                                    <td>4</td>
+                                    <td>3</td>
+                                    <td>3</td>
+                                    <td>3</td>
+                                    <td>1</td>
+                                </tr>
+                                <tr>
+                                    <th scope="row">19th</th>
+                                    <td>15</td>
+                                    <td>4</td>
+                                    <td>3</td>
+                                    <td>3</td>
+                                    <td>3</td>
+                                    <td>2</td>
+                                </tr>
+                                <tr>
+                                    <th scope="row">20th</th>
+                                    <td>15</td>
+                                    <td>4</td>
+                                    <td>3</td>
+                                    <td>3</td>
+                                    <td>3</td>
+                                    <td>2</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </section>
+                    <section class="hit-points panel" aria-label="Initiative, speed, and hit points">
+                        <h2 class="hp-label">WEAPON MASTERY</h2>
+                        <p class="small-text">
+                            Pick two proficient weapon types for their mastery properties; change them on a Long Rest.
+                        </p>
+                        <p>&nbsp;</p>
+                        <p>&nbsp;</p>
+                        <p>&nbsp;</p>
+                    </section>
+                </div>
             </div>
-
+            <div class="board-column cards-column">
+                <section class="hit-points panel" aria-label="Death saving throws">
+                    <h2 class="hp-label">DEATH SAVING THROWS</h2>
+                    <div class="combat-stats">
+                        <div>
+                            <h2>SUCCESS</h2>
+                            <p>○ ○ ○</p>
+                        </div>
+                        <div>
+                            <h2>FAILURE</h2>
+                            <p>○ ○ ○</p>
+                        </div>
+                    </div>
+                </section>
+                <section class="hit-points panel" aria-label="Initiative, speed, and hit points">
+                        <h2 class="hp-label">LAY ON HANDS</h2>
+                        <p>Bonus-action touch healing</p>
+                        <div class="combat-stats">
+                            <div>
+                                <h2>CURRENT POOL</h2>
+                                <p>&nbsp;</p>
+                            </div>
+                            <div>
+                                <h2>MAX POOL</h2>
+                                <p>&nbsp;</p>
+                            </div>
+                        </div>
+                    </section>
+            </div>
             <div class="board-column class-column">
                 <section class="text-only panel" aria-label="Initiative, speed, and hit points">
                     <p class="small-text">
@@ -393,17 +430,12 @@
                         <b>Armor Prof.:</b> Light, Medium, Heavy and Shields
                     </p>
                 </section>
-                <section class="class-features panel">
-                    <h2>Paladin Class Features</h2>
-                    <section>
-                        <h3>Level 1</h3>
-                        <p><b>Lay on Hands:</b> Bonus-action touch healing</p>
-                        <p><b>Weapon Mastery:</b> Pick two proficient weapon types for their mastery properties; change
-                            them on a Long Rest.</p>
-                    </section>
+                <section class="abilities panel features" aria-labelledby="abilities-title">
+                        <h2 class="title">Class features</h2>
                     <section>
                         <h3>Level 2</h3>
-                        <p><b>Fighting Style / Blessed Warrior:</b> Take a Fighting Style feat, or pick Blessed Warrior.</p>
+                        <p><b>Fighting Style / Blessed Warrior:</b> Take a Fighting Style feat, or pick Blessed Warrior.
+                        </p>
                         <p><b>Paladin's Smite:</b> Divine Smite always prepared; cast it once without a slot until your
                             next Long Rest.</p>
                     </section>
