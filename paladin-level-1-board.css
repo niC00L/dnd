@@ -21,10 +21,12 @@
     box-sizing: border-box;
 }
 
-.small-text {
+p.small-text {
     text-align: left;
 }
-
+p.margin-bottom {
+    margin-bottom: calc(var(--reference-unit) * 10) !important;
+}
 html,
 body {
     min-width: 0;
@@ -349,7 +351,7 @@ p.modifier.proficiency {
 
 /* Center equipment and spell panels */
 .hit-points {
-    padding: calc(var(--reference-unit) * 30) calc(var(--reference-unit) * 38);
+    padding: calc(var(--reference-unit) * 20) calc(var(--reference-unit) * 28);
     border-radius: calc(var(--reference-unit) * 48);
     text-align: center;
 }
@@ -359,33 +361,32 @@ p.modifier.proficiency {
     gap: calc(var(--reference-unit) * 20);
 }
 
-.combat-stats h2,
-.hp-label {
-    font-size: calc(var(--reference-unit) * 40);
+.combat-stats h2 {
+    font-size: calc(var(--reference-unit) * 32);
     line-height: 1.1;
 }
 
 .combat-stats div {
     flex: 1;
     background: white;
-    padding: calc(var(--reference-unit) * 8) calc(var(--reference-unit) * 12);
+    padding: calc(var(--reference-unit) * 10) 0;
     border-radius: calc(var(--reference-unit) * 12);
 }
 
 .combat-stats p,
 .hp-value {
-    margin: calc(var(--reference-unit) * 12) 0 calc(var(--reference-unit) * 18);
+    margin: calc(var(--reference-unit) * 5) 0;
     font-family: "DejaVu Sans Condensed", "DejaVu Sans", sans-serif;
     font-size: calc(var(--reference-unit) * 74);
     font-weight: 700;
 }
 
-.hp-label {
-    margin-top: calc(var(--reference-unit) * 12) !important;
+p.hp-value {
+    padding: calc(var(--reference-unit)*20);
 }
 
-.hp-value {
-    margin: calc(var(--reference-unit) * 5) 0 !important;
+.hp-label {
+    font-size: calc(var(--reference-unit) * 40);    
 }
 
 .hit-points > p:not(.hp-value) {
@@ -564,11 +565,6 @@ p.modifier.proficiency {
     padding: calc(var(--reference-unit) * 20) calc(var(--reference-unit) * 28) 0;
 }
 
-.class-features h3 {
-    margin-bottom: calc(var(--reference-unit) * 12);
-    font-size: calc(var(--reference-unit) * 39);
-}
-
 .class-features p {
     font-size: calc(var(--reference-unit) * 31);
     line-height: 1.35;
@@ -690,10 +686,6 @@ p.modifier.proficiency {
     padding: calc(var(--reference-unit) * 8) calc(var(--reference-unit) * 5);
 }
 
-.stats-column .combat-stats h2 {
-    font-size: calc(var(--reference-unit) * 32);
-}
-
 .stats-column .combat-stats p {
     margin-bottom: 0;
 }
@@ -702,18 +694,18 @@ p.modifier.proficiency {
     width: 100%;
     border-collapse: collapse;
     table-layout: fixed;
-    font-size: calc(var(--reference-unit) * 20);
+    font-size: calc(var(--reference-unit) * 32);
     line-height: 1;
 }
 
 .spell-progression caption {
-    padding: calc(var(--reference-unit) * 5);
+    padding: calc(var(--reference-unit) * 15);
     font-weight: 700;
 }
 
 .spell-progression th,
 .spell-progression td {
-    padding: calc(var(--reference-unit) * 1) calc(var(--reference-unit) * 2);
+    padding: calc(var(--reference-unit) * 5) calc(var(--reference-unit) * 2);
     border: 1px solid currentColor;
     text-align: center;
 }
@@ -801,8 +793,7 @@ p.modifier.proficiency {
 }
 
 .class-column .class-features h3 {
-    margin-bottom: calc(var(--reference-unit) * 8);
-    font-size: calc(var(--reference-unit) * 34);
+    font-size: calc(var(--reference-unit) * 30);
 }
 
 .class-column .class-features p {
@@ -811,7 +802,7 @@ p.modifier.proficiency {
 }
 
 .class-column .class-features section + section {
-    margin-top: calc(var(--reference-unit) * 16);
+    margin-top: calc(var(--reference-unit) * 10);
 }
 
 .class-column .playing-tips {
