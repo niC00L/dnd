@@ -18,8 +18,8 @@
                     </span>
                     <h1>PALADIN</h1>
                     <div class="character-details">
-                        <h2>CHARACTER NAME</h2>
-                        <h2>RACE, BACKGROUND</h2>
+                        <h2>Character name</h2>
+                        <h2>Race, background</h2>
                     </div>
                     <section class="level">
                         <h3>LEVEL</h3>
@@ -29,24 +29,9 @@
             </header>
             <div class="character-columns">
                 <div class="board-column identity-column">
-                    <section class="hit-points panel" aria-label="Initiative, speed, and hit points">
-                        <div class="combat-stats">
-                            <div>
-                                <h2>ARMOR CLASS</h2>
-                                <p>&nbsp;</p>
-                            </div>
-                            <div>
-                                <h2>INITIATIVE</h2>
-                                <p>&nbsp;</p>
-                            </div>
-                            <div>
-                                <h2>SPEED</h2>
-                                <p>&nbsp;</p>
-                            </div>
-                        </div>
-                    </section>
+
                     <section class="abilities panel" aria-labelledby="abilities-title">
-                        <h2 id="abilities-title">Ability Modifiers<br>Saving Throws &amp; Skills</h2>
+                        <h2 id="abilities-title">Ability modifiers<br>saving throws &amp; skills</h2>
                         <div class="ability-columns">
                             <div class="ability-column">
                                 <section class="ability">
@@ -74,7 +59,7 @@
                                         <p class="modifier"></p>
                                         <span class="modifier-small" aria-hidden="true"></span>
                                     </div>
-                                    <p class="save selected"><b></b> WIS Save</p>
+                                    <p class="save"><b></b> WIS Save</p>
                                     <ul>
                                         <li><b></b> Animal Handling</li>
                                         <li><b></b> Insight</li>
@@ -127,7 +112,7 @@
                                         <p class="modifier"></p>
                                         <span class="modifier-small" aria-hidden="true"></span>
                                     </div>
-                                    <p class="save selected"><b></b> CHA Save</p>
+                                    <p class="save"><b></b> CHA Save</p>
                                     <ul>
                                         <li><b></b> Deception</li>
                                         <li><b></b> Intimidation</li>
@@ -146,7 +131,23 @@
 
                 <div class="board-column combat-column stats-column">
                     <section class="hit-points panel" aria-label="Initiative, speed, and hit points">
-                        <h2 class="hp-label">CURRENT HIT POINTS</h2>
+                        <div class="combat-stats">
+                            <div>
+                                <h2>ARMOR CLASS</h2>
+                                <p>&nbsp;</p>
+                            </div>
+                            <div>
+                                <h2>INITIATIVE</h2>
+                                <p>&nbsp;</p>
+                            </div>
+                            <div>
+                                <h2>SPEED</h2>
+                                <p>&nbsp;</p>
+                            </div>
+                        </div>
+                    </section>
+                    <section class="hit-points panel" aria-label="Initiative, speed, and hit points">
+                        <h2 class="hp-label">Current hit points</h2>
                         <p class="hp-value">&nbsp;</p>
                         <div class="combat-stats">
                             <div>
@@ -164,14 +165,14 @@
                         </div>
                     </section>
                     <section class="hit-points panel" aria-label="Initiative, speed, and hit points">
-                        <h2 class="hp-label">SPELLCASTING</h2>
+                        <h2 class="hp-label">Spellcasting</h2>
                         <p class="margin-bottom">
                             Holy symbol is your spellcasting focus.
                         </p>
                         <div class="combat-stats">
                             <div>
                                 <h2>SPELLCASTING ABILITY</h2>
-                                <p>CHA</p>
+                                <p>&nbsp;</p>
                             </div>
                             <div>
                                 <h2>SPELL SAVE DC</h2>
@@ -183,311 +184,182 @@
                             </div>
                         </div>
                         <table class="spell-progression">
-                            <caption>Spell Slots per Spell Level</caption>
+                            <colgroup>
+                                <col>
+                                <col>
+                                <col>
+                            </colgroup>
                             <thead>
                                 <tr>
-                                    <th scope="col" rowspan="2">Level</th>
-                                    <th scope="col" rowspan="2">Prepared</th>
-                                    <th scope="colgroup" colspan="5">Spell Slots</th>
-                                </tr>
-                                <tr>
-                                    <th scope="col">1st</th>
-                                    <th scope="col">2nd</th>
-                                    <th scope="col">3rd</th>
-                                    <th scope="col">4th</th>
-                                    <th scope="col">5th</th>
+                                    <th scope="col">SPELL<br>LEVEL</th>
+                                    <th scope="col">REMAINING<br>SLOTS</th>
+                                    <th scope="col">MAX<br>SLOTS</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 <tr>
-                                    <th scope="row">1st</th>
-                                    <td>2</td>
-                                    <td>2</td>
-                                    <td>—</td>
-                                    <td>—</td>
-                                    <td>—</td>
-                                    <td>—</td>
+                                    <th scope="row">1</th>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
                                 </tr>
                                 <tr>
-                                    <th scope="row">2nd</th>
-                                    <td>3</td>
-                                    <td>2</td>
-                                    <td>—</td>
-                                    <td>—</td>
-                                    <td>—</td>
-                                    <td>—</td>
+                                    <th scope="row">2</th>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
                                 </tr>
                                 <tr>
-                                    <th scope="row">3rd</th>
-                                    <td>4</td>
-                                    <td>3</td>
-                                    <td>—</td>
-                                    <td>—</td>
-                                    <td>—</td>
-                                    <td>—</td>
+                                    <th scope="row">3</th>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
                                 </tr>
                                 <tr>
-                                    <th scope="row">4th</th>
-                                    <td>5</td>
-                                    <td>3</td>
-                                    <td>—</td>
-                                    <td>—</td>
-                                    <td>—</td>
-                                    <td>—</td>
+                                    <th scope="row">4</th>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
                                 </tr>
                                 <tr>
-                                    <th scope="row">5th</th>
-                                    <td>6</td>
-                                    <td>4</td>
-                                    <td>2</td>
-                                    <td>—</td>
-                                    <td>—</td>
-                                    <td>—</td>
-                                </tr>
-                                <tr>
-                                    <th scope="row">6th</th>
-                                    <td>6</td>
-                                    <td>4</td>
-                                    <td>2</td>
-                                    <td>—</td>
-                                    <td>—</td>
-                                    <td>—</td>
-                                </tr>
-                                <tr>
-                                    <th scope="row">7th</th>
-                                    <td>7</td>
-                                    <td>4</td>
-                                    <td>3</td>
-                                    <td>—</td>
-                                    <td>—</td>
-                                    <td>—</td>
-                                </tr>
-                                <tr>
-                                    <th scope="row">8th</th>
-                                    <td>7</td>
-                                    <td>4</td>
-                                    <td>3</td>
-                                    <td>—</td>
-                                    <td>—</td>
-                                    <td>—</td>
-                                </tr>
-                                <tr>
-                                    <th scope="row">9th</th>
-                                    <td>9</td>
-                                    <td>4</td>
-                                    <td>3</td>
-                                    <td>2</td>
-                                    <td>—</td>
-                                    <td>—</td>
-                                </tr>
-                                <tr>
-                                    <th scope="row">10th</th>
-                                    <td>9</td>
-                                    <td>4</td>
-                                    <td>3</td>
-                                    <td>2</td>
-                                    <td>—</td>
-                                    <td>—</td>
-                                </tr>
-                                <tr>
-                                    <th scope="row">11th</th>
-                                    <td>10</td>
-                                    <td>4</td>
-                                    <td>3</td>
-                                    <td>3</td>
-                                    <td>—</td>
-                                    <td>—</td>
-                                </tr>
-                                <tr>
-                                    <th scope="row">12th</th>
-                                    <td>10</td>
-                                    <td>4</td>
-                                    <td>3</td>
-                                    <td>3</td>
-                                    <td>—</td>
-                                    <td>—</td>
-                                </tr>
-                                <tr>
-                                    <th scope="row">13th</th>
-                                    <td>11</td>
-                                    <td>4</td>
-                                    <td>3</td>
-                                    <td>3</td>
-                                    <td>1</td>
-                                    <td>—</td>
-                                </tr>
-                                <tr>
-                                    <th scope="row">14th</th>
-                                    <td>11</td>
-                                    <td>4</td>
-                                    <td>3</td>
-                                    <td>3</td>
-                                    <td>1</td>
-                                    <td>—</td>
-                                </tr>
-                                <tr>
-                                    <th scope="row">15th</th>
-                                    <td>12</td>
-                                    <td>4</td>
-                                    <td>3</td>
-                                    <td>3</td>
-                                    <td>2</td>
-                                    <td>—</td>
-                                </tr>
-                                <tr>
-                                    <th scope="row">16th</th>
-                                    <td>12</td>
-                                    <td>4</td>
-                                    <td>3</td>
-                                    <td>3</td>
-                                    <td>2</td>
-                                    <td>—</td>
-                                </tr>
-                                <tr>
-                                    <th scope="row">17th</th>
-                                    <td>14</td>
-                                    <td>4</td>
-                                    <td>3</td>
-                                    <td>3</td>
-                                    <td>3</td>
-                                    <td>1</td>
-                                </tr>
-                                <tr>
-                                    <th scope="row">18th</th>
-                                    <td>14</td>
-                                    <td>4</td>
-                                    <td>3</td>
-                                    <td>3</td>
-                                    <td>3</td>
-                                    <td>1</td>
-                                </tr>
-                                <tr>
-                                    <th scope="row">19th</th>
-                                    <td>15</td>
-                                    <td>4</td>
-                                    <td>3</td>
-                                    <td>3</td>
-                                    <td>3</td>
-                                    <td>2</td>
-                                </tr>
-                                <tr>
-                                    <th scope="row">20th</th>
-                                    <td>15</td>
-                                    <td>4</td>
-                                    <td>3</td>
-                                    <td>3</td>
-                                    <td>3</td>
-                                    <td>2</td>
+                                    <th scope="row">5</th>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
                                 </tr>
                             </tbody>
                         </table>
                     </section>
-                    <section class="hit-points panel" aria-label="Initiative, speed, and hit points">
-                        <h2 class="hp-label">WEAPON MASTERY</h2>
+                    <section class="hit-points panel writing-lines proficiency-lines"
+                        aria-label="Initiative, speed, and hit points">
+                        <h2 class="hp-label">Proficiencies</h2>
                         <p class="small-text">
-                            Pick two proficient weapon types for their mastery properties; change them on a Long Rest.
+                            Simple and Martial weapons. </br>
+                            Light, Medium, Heavy armor. Shields.
                         </p>
                         <p>&nbsp;</p>
                         <p>&nbsp;</p>
                         <p>&nbsp;</p>
+                        <p>&nbsp;</p>
+                        <p>&nbsp;</p>
+                        <p>&nbsp;</p>
                     </section>
+
+
+
                 </div>
             </div>
             <div class="board-column cards-column">
-                <section class="hit-points panel" aria-label="Death saving throws">
-                    <h2 class="hp-label">DEATH SAVING THROWS</h2>
+
+
+                <section class="hit-points panel writing-lines" aria-label="Initiative, speed, and hit points">
+                    <h2 class="hp-label">Inventory</h2>
                     <div class="combat-stats">
                         <div>
-                            <h2>SUCCESS</h2>
-                            <p>○ ○ ○</p>
+                            <h2>GOLD</h2>
+                            <p>&nbsp;</p>
                         </div>
                         <div>
-                            <h2>FAILURE</h2>
-                            <p>○ ○ ○</p>
+                            <h2>SILVER</h2>
+                            <p>&nbsp;</p>
+                        </div>
+                        <div>
+                            <h2>COPPER</h2>
+                            <p>&nbsp;</p>
                         </div>
                     </div>
+                    <p>&nbsp;</p>
+                    <p>&nbsp;</p>
+                    <p>&nbsp;</p>
+                    <p>&nbsp;</p>
+                    <p>&nbsp;</p>
+                    <p>&nbsp;</p>
+                    <p>&nbsp;</p>
+                    <p>&nbsp;</p>
+                    <p>&nbsp;</p>
+                    <p>&nbsp;</p>
                 </section>
-                <section class="hit-points panel" aria-label="Initiative, speed, and hit points">
-                        <h2 class="hp-label">LAY ON HANDS</h2>
-                        <p>Bonus-action touch healing</p>
-                        <div class="combat-stats">
-                            <div>
-                                <h2>CURRENT POOL</h2>
-                                <p>&nbsp;</p>
-                            </div>
-                            <div>
-                                <h2>MAX POOL</h2>
-                                <p>&nbsp;</p>
-                            </div>
-                        </div>
-                    </section>
+
+                <section class="hit-points panel writing-lines" aria-label="Initiative, speed, and hit points">
+                    <h2 class="hp-label">Features</h2>
+                    <p>&nbsp;</p>
+                    <p>&nbsp;</p>
+                    <p>&nbsp;</p>
+                    <p>&nbsp;</p>
+                    <p>&nbsp;</p>
+                    <p>&nbsp;</p>
+                    <p>&nbsp;</p>
+                    <p>&nbsp;</p>
+                    <p>&nbsp;</p>
+                    <p>&nbsp;</p>
+                    <p>&nbsp;</p>
+                    <p>&nbsp;</p>
+                    <p>&nbsp;</p>
+                    <p>&nbsp;</p>
+                    <p>&nbsp;</p>
+                    <p>&nbsp;</p>
+                    <p>&nbsp;</p>
+                    <p>&nbsp;</p>
+                    <p>&nbsp;</p>
+                    <p>&nbsp;</p>
+                    <p>&nbsp;</p>
+                    <p>&nbsp;</p>
+                    <p>&nbsp;</p>
+                    <p>&nbsp;</p>
+                    <p>&nbsp;</p>
+                    <p>&nbsp;</p>
+                    <p>&nbsp;</p>
+                    <p>&nbsp;</p>
+                    <p>&nbsp;</p>
+                    <p>&nbsp;</p>
+                    <p>&nbsp;</p>
+                    <p>&nbsp;</p>
+                    <p>&nbsp;</p>
+                    <p>&nbsp;</p>
+                    <p>&nbsp;</p>
+                </section>
             </div>
             <div class="board-column class-column">
-                <section class="text-only panel" aria-label="Initiative, speed, and hit points">
-                    <p class="small-text">
-                        <b>Primary Ability:</b> Strength and Charisma </br>
-                        <b>Weapon Prof.:</b> Simple and Martial weapons</br>
-                        <b>Armor Prof.:</b> Light, Medium, Heavy and Shields
-                    </p>
-                </section>
-                <section class="abilities panel features" aria-labelledby="abilities-title">
-                        <h2 class="title">Class features</h2>
-                    <section>
-                        <h3>Level 2</h3>
-                        <p><b>Fighting Style / Blessed Warrior:</b> Take a Fighting Style feat, or pick Blessed Warrior.
-                        </p>
-                        <p><b>Paladin's Smite:</b> Divine Smite always prepared; cast it once without a slot until your
-                            next Long Rest.</p>
-                    </section>
-                    <section>
-                        <h3>Level 3</h3>
-                        <p><b>Channel Divinity:</b> Two uses. One use per Short Rest, all per Long
-                            Rest. Save DC = spell save DC. Effect: Divine Sense (bonus action, 10 min) detects
-                            celestials, fiends, undead within 60 ft and consecrated/desecrated sites.</p>
-                        <p><b>Subclass:</b>Choose a subclass</p>
-                    </section>
-                    <section>
-                        <h3>Level 4/8/12/16</h3>
-                        <p>Ability Score Improvement feat or another qualifying feat.</p>
-                    </section>
-                    <section>
-                        <h3>Level 5</h3>
-                        <p><b>Extra Attack:</b> Two attacks with the Attack action.</p>
-                        <p><b>Faithful Steed:</b> Find Steed always prepared; free cast once per Long Rest.</p>
-                    </section>
-                    <section>
-                        <h3>Level 6</h3>
-                        <p><b>Aura of Protection:</b> 10-ft aura; you and allies add your Cha modifier (min +1) to
-                            saves. Inactive while Incapacitated; only one such aura applies at a time.</p>
-                    </section>
-                    <section>
-                        <h3>Level 9</h3>
-                        <p><b>Abjure Foes:</b> Spend Channel Divinity (Magic action) to frighten up to your Cha modifier
-                            targets within 60 ft (Wis save negates). Lasts 1 minute or until damaged; frightened target
-                            may do only one of move/action/bonus action.</p>
-                    </section>
-                    <section>
-                        <h3>Level 10</h3>
-                        <p><b>Aura of Courage:</b> You and allies in the aura are immune to Frightened.</p>
-                    </section>
-                    <section>
-                        <h3>Level 11</h3>
-                        <p><b>Radiant Strikes:</b> Melee/unarmed hits deal +1d8 radiant.</p>
-                        <p><b>Channel Divinity:</b> +1 use.</p>
-                    </section>
-                    <section>
-                        <h3>Level 14</h3>
-                        <p><b>Restoring Touch:</b> Spend 5 Lay on Hands points per condition to remove Blinded, Charmed,
-                            Deafened, Frightened, Paralyzed, or Stunned.</p>
-                    </section>
-                    <section>
-                        <h3>Level 18</h3>
-                        <p><b>Aura Expansion:</b> Aura expands to 30 ft.</p>
-                    </section>
-                    <section>
-                        <h3>Level 19</h3>
-                        <p>Epic Boon feat or another qualifying feat.</p>
-                    </section>
+                <section class="hit-points panel prepared-spells writing-lines"
+                    aria-label="Initiative, speed, and hit points">
+                    <h2 class="hp-label">Prepared spells & cantrips</h2>
+                    <p>&nbsp;</p>
+                    <p>&nbsp;</p>
+                    <p>&nbsp;</p>
+                    <p>&nbsp;</p>
+                    <p>&nbsp;</p>
+                    <p>&nbsp;</p>
+                    <p>&nbsp;</p>
+                    <p>&nbsp;</p>
+                    <p>&nbsp;</p>
+
+                    <p>&nbsp;</p>
+                    <p>&nbsp;</p>
+                    <p>&nbsp;</p>
+                    <p>&nbsp;</p>
+                    <p>&nbsp;</p>
+                    <p>&nbsp;</p>
+                    <p>&nbsp;</p>
+                    <p>&nbsp;</p>
+                    <p>&nbsp;</p>
+                    <p>&nbsp;</p>
+                    <p>&nbsp;</p>
+                    <p>&nbsp;</p>
+                    <p>&nbsp;</p>
+                    <p>&nbsp;</p>
+                    <p>&nbsp;</p>
+                    <p>&nbsp;</p>
+                    <p>&nbsp;</p>
+                    <p>&nbsp;</p>
+                    <p>&nbsp;</p>
+                    <p>&nbsp;</p>
+                    <p>&nbsp;</p>
+                    <p>&nbsp;</p>
+                    <p>&nbsp;</p>
+                    <p>&nbsp;</p>
+                    <p>&nbsp;</p>
+                    <p>&nbsp;</p>
+                    <p>&nbsp;</p>
+                    <p>&nbsp;</p>
+                    <p>&nbsp;</p>
+                    <p>&nbsp;</p>
+                    <p>&nbsp;</p>
+                    <p>&nbsp;</p>
                 </section>
 
                 <section class="rest-reminders panel">
