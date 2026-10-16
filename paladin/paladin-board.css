@@ -346,6 +346,22 @@ p.modifier.proficiency {
     line-height: 1.05;
 }
 
+.passive-checks {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: calc(var(--reference-unit) * 10);
+}
+
+.passive-checks h3 {
+    font-size: calc(var(--reference-unit) * 24);
+}
+
+.passive-checks p.modifier {
+    width: calc(var(--reference-unit) * 105);
+    height: calc(var(--reference-unit) * 105);
+    font-size: calc(var(--reference-unit) * 48);
+}
+
 .token {
     display: block;
     width: calc(var(--reference-unit) * 148);
@@ -400,6 +416,7 @@ p.modifier.proficiency {
 
 .combat-stats div {
     flex: 1;
+    border: calc(var(--reference-unit) * 3) solid var(--gold);
     background: white;
     padding: calc(var(--reference-unit) * 10) 0;
     border-radius: calc(var(--reference-unit) * 12);
@@ -419,6 +436,7 @@ p.hp-value {
     padding: calc(var(--reference-unit) * 20);
     min-height: calc(var(--reference-unit) * 141);
     margin-bottom: calc(var(--reference-unit) * 15);
+    border: calc(var(--reference-unit) * 3) solid var(--gold);
     border-radius: calc(var(--reference-unit) * 12);
     background: white;
 }
@@ -582,33 +600,31 @@ p.hp-value {
 }
 
 /* Right-hand class text, rests, and card tabs */
-.class-features {
+.paladin-feature {
     height: auto;
-    border-radius: calc(var(--reference-unit) * 12);
+    padding: calc(var(--reference-unit) * 12) calc(var(--reference-unit) * 18);
     background: var(--paper);
 }
 
-.class-features > h2 {
-    height: calc(var(--reference-unit) * 94);
-    padding-top: calc(var(--reference-unit) * 22);
-    border-bottom: calc(var(--reference-unit) * 9) solid var(--gold);
-    color: white;
-    background: #754900;
-    font-size: calc(var(--reference-unit) * 38);
+.paladin-feature > h2,
+.lay-on-hands > h2 {
+    padding: calc(var(--reference-unit) * 5);
+    background: transparent;
+    color: #784b00;
+    font-size: calc(var(--reference-unit) * 37);
+    line-height: 1.15;
     text-align: center;
 }
 
-.class-features section {
-    padding: calc(var(--reference-unit) * 20) calc(var(--reference-unit) * 28) 0;
+.paladin-feature > p,
+.lay-on-hands > .feature-copy {
+    margin-top: calc(var(--reference-unit) * 8);
+    font-size: calc(var(--reference-unit) * 30);
+    line-height: 1.22;
 }
 
-.class-features p {
-    font-size: calc(var(--reference-unit) * 31);
-    line-height: 1.35;
-}
-
-.class-features section + section {
-    margin-top: calc(var(--reference-unit) * 25);
+.progression-card > p + p {
+    margin-top: calc(var(--reference-unit) * 5);
 }
 
 .token-pair {
@@ -737,6 +753,52 @@ p.hp-value {
     margin-bottom: 0;
 }
 
+.stats-column .hp-trio > div {
+    display: flex;
+    min-height: calc(var(--reference-unit) * 112);
+    flex-direction: column;
+}
+
+.stats-column .hp-trio h2 {
+    font-size: calc(var(--reference-unit) * 24);
+}
+
+.stats-column .hp-trio p {
+    display: grid;
+    flex: 1;
+    min-height: 0;
+    margin-top: 0;
+    place-items: center;
+    border-top: 0;
+    font-size: calc(var(--reference-unit) * 58);
+}
+
+.stats-column .hit-dice-tracker {
+    margin-top: calc(var(--reference-unit) * 10);
+    padding-top: calc(var(--reference-unit) * 8);
+    border-top: calc(var(--reference-unit) * 3) solid var(--gold);
+}
+
+.stats-column .hit-dice-tracker > h2 {
+    margin-bottom: calc(var(--reference-unit) * 6);
+    color: #784b00;
+    font-size: calc(var(--reference-unit) * 27);
+}
+
+.stats-column .hit-dice-tracker .combat-stats {
+    gap: calc(var(--reference-unit) * 8);
+}
+
+.stats-column .hit-dice-tracker .combat-stats div {
+    border: calc(var(--reference-unit) * 2) solid var(--gold);
+    background: white;
+}
+
+.stats-column .hit-dice-tracker .combat-stats p {
+    min-height: calc(var(--reference-unit) * 24);
+    font-size: calc(var(--reference-unit) * 34);
+}
+
 .spell-progression {
     width: 100%;
     margin-top: calc(var(--reference-unit) * 12);
@@ -814,6 +876,53 @@ p.hp-value {
     margin: 0;
 }
 
+.cards-column .character-fields,
+.cards-column .oath-features {
+    padding: calc(var(--reference-unit) * 18) calc(var(--reference-unit) * 22);
+}
+
+.cards-column .character-fields > h2,
+.cards-column .oath-features > h2 {
+    margin-bottom: calc(var(--reference-unit) * 10);
+    font-size: calc(var(--reference-unit) * 32);
+}
+
+.character-field-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: calc(var(--reference-unit) * 10);
+}
+
+.character-field-grid > div:last-child {
+    grid-column: 1 / -1;
+}
+
+.character-field-grid h3,
+.oath-feature-entry h3 {
+    color: #784b00;
+    font-size: calc(var(--reference-unit) * 24);
+    text-align: left;
+}
+
+.character-field-grid p {
+    min-height: calc(var(--reference-unit) * 38);
+    border-bottom: calc(var(--reference-unit) * 2) solid var(--gold);
+    background: white;
+}
+
+.oath-feature-entry {
+    margin-top: calc(var(--reference-unit) * 8);
+    padding-top: calc(var(--reference-unit) * 5);
+    border-top: calc(var(--reference-unit) * 2) solid var(--gold);
+}
+
+.oath-feature-entry p {
+    min-height: calc(var(--reference-unit) * 32);
+    margin-top: calc(var(--reference-unit) * 4);
+    border-bottom: 1px solid rgb(201 178 79 / 55%);
+    background: white;
+}
+
 .cards-column .armor,
 .cards-column .weapons,
 .cards-column .concentration {
@@ -858,7 +967,7 @@ p.hp-value {
     grid-row: 1 / 3;
     grid-template-rows: auto auto auto;
     align-content: start;
-    gap: calc(var(--reference-unit) * 15);
+    gap: calc(var(--reference-unit) * 10);
     padding-top: calc(var(--reference-unit) * 25);
 }
 
@@ -884,25 +993,90 @@ p.hp-value {
     margin-top: calc(var(--reference-unit) * 12);
 }
 
-.class-column .class-features section {
-    padding: calc(var(--reference-unit) * 12) calc(var(--reference-unit) * 18) 0;
+.class-column .lay-on-hands {
+    padding: calc(var(--reference-unit) * 12) calc(var(--reference-unit) * 20);
+    text-align: center;
 }
 
-.class-column .class-features h3 {
+.class-column .lay-on-hands > h2 {
+    font-size: calc(var(--reference-unit) * 37);
+}
+
+.class-column .lay-on-hands p.hp-value {
+    display: grid;
+    width: 70%;
+    min-height: calc(var(--reference-unit) * 88);
+    margin: calc(var(--reference-unit) * 10) auto;
+    padding: calc(var(--reference-unit) * 8);
+    place-items: center;
+    border: calc(var(--reference-unit) * 3) solid var(--gold);
+    border-radius: calc(var(--reference-unit) * 12);
+    background: white;
+    font-size: calc(var(--reference-unit) * 48);
+}
+
+.class-column .lay-on-hands .combat-stats {
+    gap: calc(var(--reference-unit) * 10);
+}
+
+.class-column .lay-on-hands .combat-stats div {
+    border: calc(var(--reference-unit) * 3) solid var(--gold);
+    background: white;
+}
+
+.class-column .lay-on-hands .combat-stats p {
+    min-height: calc(var(--reference-unit) * 30);
+    font-size: calc(var(--reference-unit) * 38);
+}
+
+.class-column .lay-on-hands > .feature-copy {
+    text-align: left;
+}
+
+.class-column .paladin-feature > h2 {
+    font-size: calc(var(--reference-unit) * 37);
+}
+
+.class-column .paladin-feature {
+    padding: calc(var(--reference-unit) * 8) calc(var(--reference-unit) * 16);
+}
+
+.class-column .paladin-feature > p {
+    margin-top: calc(var(--reference-unit) * 4);
     font-size: calc(var(--reference-unit) * 30);
+    line-height: 1.22;
 }
 
-.class-column .class-features p {
-    font-size: calc(var(--reference-unit) * 27);
-    line-height: 1.25;
+.class-column .feature-tracker {
+    display: flex;
+    align-items: center;
+    gap: calc(var(--reference-unit) * 8);
+    margin: calc(var(--reference-unit) * 4) 0 calc(var(--reference-unit) * 2);
+    color: #784b00;
+    font-size: calc(var(--reference-unit) * 22);
+    font-weight: 700;
 }
 
-.class-column .class-features section + section {
-    margin-top: calc(var(--reference-unit) * 10);
+.class-column .feature-tracker b {
+    display: inline-block;
+    width: calc(var(--reference-unit) * 56);
+    height: calc(var(--reference-unit) * 32);
+    border: calc(var(--reference-unit) * 2) solid var(--gold);
+    background: white;
+}
+
+.class-column .channel-tracker b {
+    width: calc(var(--reference-unit) * 31);
+    height: calc(var(--reference-unit) * 31);
+    border-radius: 50%;
 }
 
 .class-column .playing-tips {
     padding: calc(var(--reference-unit) * 14) calc(var(--reference-unit) * 20);
+}
+
+.class-column .rest-reminders {
+    padding: calc(var(--reference-unit) * 16) calc(var(--reference-unit) * 22);
 }
 
 .class-column .playing-tips p {
