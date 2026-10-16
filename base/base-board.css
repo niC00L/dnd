@@ -1,0 +1,960 @@
+/* A4 landscape page containing the complete board */
+@page {
+    size: A4 landscape;
+    margin: 0;
+}
+
+:root {
+    color-scheme: light;
+    --reference-unit: 0.0303cqw;
+    --earth: #603900;
+    --gold: #c9b24f;
+    --paper: #f8f4e7;
+    --black: #111111;
+    --green: #49ed00;
+    --blue: #096584;
+    --red: #e40026;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+.level h3{text-align: center;}
+
+p.small-text {
+    text-align: left;
+}
+p.margin-bottom {
+    margin-bottom: calc(var(--reference-unit) * 10) !important;
+}
+html,
+body {
+    min-width: 0;
+    min-height: 100%;
+    margin: 0;
+}
+
+body {
+    display: grid;
+    min-height: 100vh;
+    place-items: center;
+    background: #e7e5dc;
+    font-family: "Trebuchet MS", "DejaVu Sans", sans-serif;
+}
+
+.page {
+    display: grid;
+    width: min(297mm, 100vw);
+    aspect-ratio: 297 / 210;
+    overflow: hidden;
+    place-items: center;
+    background: #fff;
+    container-type: inline-size;
+    color: var(--black);
+}
+
+.board {
+    display: grid;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    grid-template-columns: repeat(2, minmax(0, 1fr)) calc(var(--reference-unit) * 30) repeat(2, minmax(0, 1fr));
+    grid-template-rows: auto minmax(0, 1fr) auto;
+    column-gap: 0.4545%;
+    justify-content: center;
+    padding: 0 calc(var(--reference-unit) * 30);
+    container-type: inline-size;
+    background-color: var(--earth);
+    background-image: url("board-assets/board-texture.jpg");
+    background-size: calc(var(--reference-unit) * 256) calc(var(--reference-unit) * 256);
+    font-size: calc(var(--reference-unit) * 30);
+    line-height: 1.22;
+}
+
+.board p,
+.board h1,
+.board h2,
+.board h3,
+.board ul {
+    margin: 0;
+}
+
+.board p,
+.board h1,
+.board h2,
+.board h3,
+.board li {
+    overflow-wrap: normal;
+}
+
+.masthead {
+    display: flex;
+    grid-column: 1 / 3;
+    grid-row: 1;
+    min-height: calc(var(--reference-unit) * 300);
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: calc(var(--reference-unit) * 18);
+    width: 100%;
+    /* padding: calc(var(--reference-unit) * 80) calc(var(--reference-unit) * 14) calc(var(--reference-unit) * 20); */
+    color: #fffdf3;
+}
+
+.masthead-title {
+    display: grid;
+    grid-template-columns: auto auto minmax(0, 1fr) auto;
+    align-items: center;
+    justify-content: center;
+    gap: calc(var(--reference-unit) * 20);
+    width: 100%;
+}
+
+.masthead-title h1 {
+    font-family: fantasy;
+    font-size: calc(var(--reference-unit) * 105);
+    font-weight: 700;
+    line-height: 1;
+    white-space: nowrap;
+}
+
+.character-details {
+    display: grid;
+    min-width: 0;
+    gap: calc(var(--reference-unit) * 35);
+    text-align: center;
+}
+
+.character-details h2 {
+    font-size: calc(var(--reference-unit) * 45);
+    line-height: 1.2;
+    overflow-wrap: anywhere;
+}
+
+.masthead-title .crest {
+    display: block;
+    width: calc(var(--reference-unit) * 280);
+    /* height: calc(var(--reference-unit) * 158); */
+    flex: none;
+    object-fit: contain;
+}
+
+.crest-mark {
+    position: relative;
+    display: flex;
+    flex: none;
+    align-items: center;
+}
+
+.default-crest {
+    position: absolute;
+    top: 14%;
+    left: 7%;
+    display: grid;
+    width: 86%;
+    height: 72%;
+    place-items: center;
+    border-radius: 50%;
+    background-color: var(--earth);
+    background-image: url("board-assets/board-texture.jpg");
+    background-position: calc(var(--reference-unit) * -20) calc(var(--reference-unit) * -24);
+    background-size: calc(var(--reference-unit) * 194) calc(var(--reference-unit) * 194);
+    overflow: hidden;
+}
+
+.default-crest img {
+    display: block;
+    width: 96%;
+    height: 96%;
+    object-fit: contain;
+}
+
+.crest-mark::after {
+    position: absolute;
+    top: 86%;
+    left: 100%;
+    width: calc(var(--reference-unit) * 500);
+    border-top: calc(var(--reference-unit) * 5) solid #b59a36;
+    content: "";
+    pointer-events: none;
+}
+
+.crest-mark::before {
+    position: absolute;
+    top: 91%;
+    left: 100%;
+    width: calc(var(--reference-unit) * 400);
+    border-top: calc(var(--reference-unit) * 1) solid #b59a36;
+    opacity: 0.7;
+    content: "";
+    pointer-events: none;
+}
+
+.masthead-title h1 {
+    position: relative;
+    z-index: 1;
+}
+
+.motto {
+    font-weight: 700;
+    text-align: left;
+    font-size: calc(var(--reference-unit) * 70);
+}
+
+/* Left ability reference panel */
+.panel {
+    overflow: visible;
+    border: calc(var(--reference-unit) * 9) solid var(--gold);
+    border-radius: calc(var(--reference-unit) * 45);
+    background: var(--paper);
+}
+
+.panel > h2 {
+    color: #784b00;
+    font-size: calc(var(--reference-unit) * 37);
+    line-height: 1.35;
+    text-align: center;
+}
+
+.panel.text-only {
+    padding: calc(var(--reference-unit)*20) calc(var(--reference-unit)*25);
+}
+
+.abilities {
+    height: auto;
+    padding: 0 calc(var(--reference-unit) * 24);
+}
+
+.abilities.features > h2.title {
+    height: auto;
+    margin-top: calc(var(--reference-unit) * 20);
+}
+
+.abilities.features p {
+    font-size: calc(var(--reference-unit) * 30);
+}
+
+.features h3 {
+    font-size: calc(var(--reference-unit) * 33);
+    margin-top: calc(var(--reference-unit) * 10);
+    margin-bottom: calc(var(--reference-unit) * -6);
+}
+
+.abilities > h2 {
+    display: grid;
+    width: 100%;
+    flex: none;
+    height: calc(var(--reference-unit) * 150);
+    place-content: center;
+}
+
+.ability-columns {
+    display: grid;
+    min-height: auto;
+    flex: none;
+    grid-template-columns: 1fr 1fr;
+}
+
+.ability-column {
+    padding: 0 calc(var(--reference-unit) * 30) 0 0;
+}
+
+.ability-column + .ability-column {
+    border-left: calc(var(--reference-unit) * 5) solid var(--gold);
+    padding: 0 0 0 calc(var(--reference-unit) * 30);
+}
+
+.ability {
+    margin-bottom: calc(var(--reference-unit) * 25);
+    font-size: calc(var(--reference-unit) * 31);
+    line-height: 1.55;
+}
+
+.ability h3 {
+    margin-bottom: calc(var(--reference-unit) * 16);
+    padding: 0 calc(var(--reference-unit) * 5);
+    border-top: calc(var(--reference-unit) * 3) solid var(--gold);
+    background: #e6e1bf;
+    font-size: calc(var(--reference-unit) * 32);
+    line-height: 1.12;
+    text-align: center;
+}
+
+.modifier-row {
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    margin: 0 0 2mm;
+}
+
+p.modifier {
+    display: grid;
+    width: calc(var(--reference-unit) * 158);
+    height: calc(var(--reference-unit) * 158);
+    margin: 0;
+    place-items: center;
+    background: white;
+    border: calc(var(--reference-unit) * 9) solid var(--gold);
+    border-radius: 50%;
+    font-family: "DejaVu Sans", sans-serif;
+    font-size: calc(var(--reference-unit) * 72);
+    font-weight: 700;
+    line-height: 1;
+}
+p.modifier.proficiency {
+    margin: calc(var(--reference-unit) * 10) auto 0;
+}
+
+.modifier-small {
+    display: block;
+    width: calc(var(--reference-unit) * 65);
+    height: calc(var(--reference-unit) * 65);
+    flex: none;
+    border: calc(var(--reference-unit) * 8) solid var(--gold);
+    border-radius: 50%;
+    background: white;
+}
+
+.save {
+    font-weight: 700;
+}
+
+.ability ul {
+    padding: 0;
+    list-style: none;
+}
+
+.ability li b,
+.ability .save b {
+    position: relative;
+    display: inline-block;
+    width: calc(var(--reference-unit) * 45);
+    height: calc(var(--reference-unit) * 45);
+    margin-left: calc(var(--reference-unit) * 40);
+    background: white;
+    border-bottom: 1px solid var(--black);
+    vertical-align: text-bottom;
+}
+
+.ability li b::before,
+.ability .save b::before {
+    position: absolute;
+    top: 54%;
+    left: calc(var(--reference-unit) * -40);
+    width: calc(var(--reference-unit) * 20);
+    width: calc(var(--reference-unit) * 20);
+    aspect-ratio: 1;
+    border: 1px solid var(--black);
+    border-radius: 50%;
+    background: white;
+    content: "";
+    transform: translateY(-50%);
+}
+
+.ability li.selected b::before,
+.ability .save.selected b::before {
+    background: var(--earth);
+}
+
+.inspiration {
+    margin-bottom: calc(var(--reference-unit) * 23);
+    padding: calc(var(--reference-unit) * 8);
+    background: #e6e1bf;
+    text-align: center;
+}
+
+.inspiration h3 {
+    font-size: calc(var(--reference-unit) * 32);
+    line-height: 1.05;
+}
+
+.token {
+    display: block;
+    width: calc(var(--reference-unit) * 148);
+    height: calc(var(--reference-unit) * 148);
+    border: calc(var(--reference-unit) * 5) dashed #b8b574;
+    border-radius: 50%;
+}
+
+.inspiration .token {
+    margin: calc(var(--reference-unit) * 16) auto 0;
+}
+
+.play-needs {
+    width: 100%;
+    height: calc(var(--reference-unit) * 260);
+    overflow: hidden;
+    padding: calc(var(--reference-unit) * 8) calc(var(--reference-unit) * 20);
+    background: #e6e1bf;
+    font-size: calc(var(--reference-unit) * 27);
+    line-height: 1.32;
+}
+
+.play-needs h2 {
+    margin: calc(var(--reference-unit) * -8) calc(var(--reference-unit) * -20) calc(var(--reference-unit) * 10);
+    padding: calc(var(--reference-unit) * 5);
+    color: white;
+    background: var(--gold);
+    font-size: calc(var(--reference-unit) * 33);
+    text-align: center;
+}
+
+.play-needs p + p {
+    margin-top: calc(var(--reference-unit) * 9);
+}
+
+/* Center equipment and spell panels */
+.hit-points {
+    padding: calc(var(--reference-unit) * 20) calc(var(--reference-unit) * 28);
+    border-radius: calc(var(--reference-unit) * 48);
+    text-align: center;
+}
+
+.combat-stats {
+    display: flex;
+    gap: calc(var(--reference-unit) * 20);
+}
+
+.combat-stats h2 {
+    font-size: calc(var(--reference-unit) * 27);
+    line-height: 1.1;
+}
+
+.combat-stats div {
+    flex: 1;
+    background: white;
+    padding: calc(var(--reference-unit) * 10) 0;
+    border-radius: calc(var(--reference-unit) * 12);
+}
+
+.combat-stats p,
+.hp-value {
+    margin: calc(var(--reference-unit) * 5) 0;
+    font-family: "DejaVu Sans Condensed", "DejaVu Sans", sans-serif;
+    font-size: calc(var(--reference-unit) * 74);
+    font-weight: 700;
+}
+
+p.hp-value {
+    align-self: center;
+    width: calc(33.333333% - var(--reference-unit) * 5.333333);
+    padding: calc(var(--reference-unit) * 20);
+    min-height: calc(var(--reference-unit) * 141);
+    margin-bottom: calc(var(--reference-unit) * 15);
+    border-radius: calc(var(--reference-unit) * 12);
+    background: white;
+}
+
+.hp-label {
+    font-size: calc(var(--reference-unit) * 40);    
+}
+
+.hit-points > p:not(.hp-value) {
+    margin-top: calc(var(--reference-unit) * 14);
+    font-size: calc(var(--reference-unit) * 33);
+}
+
+.armor {
+    display: flex;
+    height: auto;
+    flex-direction: column;
+    padding: calc(var(--reference-unit) * 112) calc(var(--reference-unit) * 55) 0;
+    border: calc(var(--reference-unit) * 9) solid var(--green);
+    border-radius: calc(var(--reference-unit) * 48);
+    background: #f4f7fb;
+    text-align: center;
+}
+
+.armor-class {
+    width: calc(var(--reference-unit) * 300);
+    margin: 0 auto calc(var(--reference-unit) * 82);
+    padding: calc(var(--reference-unit) * 12);
+    border-radius: 0 calc(var(--reference-unit) * 45) 0 calc(var(--reference-unit) * 45);
+    color: white;
+    background: var(--red);
+}
+
+.armor-class h2 {
+    font-size: calc(var(--reference-unit) * 36);
+}
+
+.armor-class p {
+    font-size: calc(var(--reference-unit) * 78);
+    font-weight: 700;
+}
+
+.armor > p {
+    margin-bottom: calc(var(--reference-unit) * 25);
+    font-size: calc(var(--reference-unit) * 35);
+    line-height: 1.38;
+}
+
+.starting-card {
+    margin: calc(var(--reference-unit) * 82) auto 0;
+    background: #e6e1bf;
+}
+
+.starting-card h2 {
+    padding: calc(var(--reference-unit) * 5);
+    color: white;
+    background: var(--gold);
+    font-size: calc(var(--reference-unit) * 38);
+}
+
+.starting-card p {
+    padding: calc(var(--reference-unit) * 8);
+    font-size: calc(var(--reference-unit) * 34);
+}
+
+.ribbon {
+    display: grid;
+    width: 100%;
+    height: calc(var(--reference-unit) * 115);
+    flex: none;
+    place-items: center;
+    color: white;
+    font-size: calc(var(--reference-unit) * 44);
+    font-weight: 700;
+    letter-spacing: calc(var(--reference-unit) * 4);
+}
+
+.equipment-ribbon {
+    margin-top: auto;
+    background: var(--green);
+}
+
+.weapons,
+.concentration {
+    display: flex;
+    height: auto;
+    flex-direction: column;
+    padding: calc(var(--reference-unit) * 100) calc(var(--reference-unit) * 90) 0;
+    border-color: var(--green);
+    border-radius: calc(var(--reference-unit) * 48);
+    background: #f4f7fb;
+    text-align: center;
+}
+
+.weapons > p,
+.concentration > p {
+    margin-bottom: calc(var(--reference-unit) * 18);
+    font-size: calc(var(--reference-unit) * 34);
+    line-height: 1.4;
+}
+
+.weapons .starting-card {
+    margin-top: calc(var(--reference-unit) * 64);
+}
+
+.weapons .attack-ribbon,
+.concentration .attack-ribbon {
+    display: flex;
+    width: 100%;
+    height: calc(var(--reference-unit) * 162);
+    flex: none;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    background: var(--red);
+    font-size: calc(var(--reference-unit) * 38);
+    font-weight: 700;
+    line-height: 1.65;
+}
+
+.attack-line {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: calc(var(--reference-unit) * 8);
+    white-space: nowrap;
+}
+
+.die {
+    display: inline-grid;
+    width: calc(var(--reference-unit) * 50);
+    height: calc(var(--reference-unit) * 50);
+    place-items: center;
+    border: calc(var(--reference-unit) * 3) solid currentColor;
+    clip-path: polygon(50% 0, 96% 25%, 88% 78%, 50% 100%, 12% 78%, 4% 25%);
+    font-size: calc(var(--reference-unit) * 21);
+    vertical-align: middle;
+}
+
+.concentration {
+    border-color: var(--blue);
+    padding-right: calc(var(--reference-unit) * 38);
+    padding-left: calc(var(--reference-unit) * 38);
+}
+
+.concentration > h2 {
+    margin-bottom: calc(var(--reference-unit) * 16);
+    font-size: calc(var(--reference-unit) * 36);
+}
+
+.concentration > p {
+    margin-bottom: calc(var(--reference-unit) * 13);
+    font-family: "DejaVu Sans Condensed", "Liberation Sans Narrow", sans-serif;
+    font-size: calc(var(--reference-unit) * 31);
+    line-height: 1.25;
+}
+
+.spell-ribbon {
+    background: var(--blue);
+}
+
+/* Right-hand class text, rests, and card tabs */
+.class-features {
+    height: auto;
+    border-radius: calc(var(--reference-unit) * 12);
+    background: var(--paper);
+}
+
+.class-features > h2 {
+    height: calc(var(--reference-unit) * 94);
+    padding-top: calc(var(--reference-unit) * 22);
+    border-bottom: calc(var(--reference-unit) * 9) solid var(--gold);
+    color: white;
+    background: #754900;
+    font-size: calc(var(--reference-unit) * 38);
+    text-align: center;
+}
+
+.class-features section {
+    padding: calc(var(--reference-unit) * 20) calc(var(--reference-unit) * 28) 0;
+}
+
+.class-features p {
+    font-size: calc(var(--reference-unit) * 31);
+    line-height: 1.35;
+}
+
+.class-features section + section {
+    margin-top: calc(var(--reference-unit) * 25);
+}
+
+.token-pair {
+    display: flex;
+    justify-content: center;
+    gap: calc(var(--reference-unit) * 34);
+    margin-top: calc(var(--reference-unit) * 24);
+}
+
+.token-pair .token {
+    width: calc(var(--reference-unit) * 158);
+    height: calc(var(--reference-unit) * 158);
+}
+
+.playing-tips {
+    height: auto;
+    padding: calc(var(--reference-unit) * 18) calc(var(--reference-unit) * 28);
+    background: #f0e3d4;
+    border-top: calc(var(--reference-unit) * 5) solid #111;
+    border-bottom: calc(var(--reference-unit) * 5) solid #111;
+}
+
+.playing-tips h2 {
+    margin-bottom: calc(var(--reference-unit) * 10);
+    font-size: calc(var(--reference-unit) * 38);
+    font-variant: small-caps;
+}
+
+.playing-tips p {
+    margin-bottom: calc(var(--reference-unit) * 10);
+    font-size: calc(var(--reference-unit) * 30);
+    line-height: 1.34;
+}
+
+.rest-reminders {
+    height: auto;
+    padding: calc(var(--reference-unit) * 22) calc(var(--reference-unit) * 30);
+    border: calc(var(--reference-unit) * 9) solid var(--gold);
+    background: var(--paper);
+    font-size: calc(var(--reference-unit) * 29);
+    line-height: 1.35;
+}
+
+.rest-reminders p + p {
+    margin-top: calc(var(--reference-unit) * 18);
+}
+
+.rest-reminders ul {
+    padding-left: calc(var(--reference-unit) * 32);
+    list-style-type: square;
+}
+
+.legal {
+    grid-column: 1 / -1;
+    align-self: end;
+    margin: 0 calc(var(--reference-unit) * 95) calc(var(--reference-unit) * 8) calc(var(--reference-unit) * 30);
+    color: #9d8952;
+    font-size: calc(var(--reference-unit) * 20);
+    white-space: normal;
+    overflow-wrap: anywhere;
+}
+
+/* Three-column board layout */
+.character-columns {
+    display: grid;
+    grid-column: 1 / 3;
+    grid-row: 2;
+    grid-template-columns: subgrid;
+    align-items: start;
+    column-gap: normal;
+    min-height: 0;
+}
+
+.board-column {
+    min-width: 0;
+}
+
+.identity-column {
+    display: flex;
+    flex-direction: column;
+    align-content: start;
+    padding-top: 0;
+}
+
+.identity-column .masthead {
+    width: 100%;
+}
+
+.identity-column .abilities {
+    width: 100%;
+    min-height: 0;
+    margin-top: calc(var(--reference-unit) * 15);
+}
+
+.stats-column {
+    display: grid;
+    grid-column: 2;
+    grid-template-rows: auto auto;
+    align-content: start;
+    gap: calc(var(--reference-unit) * 15);
+    padding-top: 0;
+}
+
+.stats-column > .panel {
+    width: 100%;
+    margin: 0;
+}
+
+.stats-column .hit-points {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: calc(var(--reference-unit) * 20);
+}
+
+.stats-column .combat-stats {
+    gap: calc(var(--reference-unit) * 8);
+}
+
+.stats-column .combat-stats div {
+    min-width: 0;
+    padding: calc(var(--reference-unit) * 8) calc(var(--reference-unit) * 5);
+}
+
+.stats-column .combat-stats p {
+    margin-bottom: 0;
+}
+
+.spell-progression {
+    width: 100%;
+    margin-top: calc(var(--reference-unit) * 12);
+    overflow: hidden;
+    border: calc(var(--reference-unit) * 3) solid var(--gold);
+    border-radius: calc(var(--reference-unit) * 16);
+    border-collapse: separate;
+    border-spacing: 0;
+    table-layout: fixed;
+    color: var(--earth);
+    font-size: calc(var(--reference-unit) * 32);
+    line-height: 1;
+}
+
+.spell-progression col:nth-child(1) {
+    width: 20%;
+}
+
+.spell-progression col:nth-child(2) {
+    width: 45%;
+}
+
+.spell-progression col:nth-child(3) {
+    width: 35%;
+}
+
+.spell-progression caption {
+    padding: calc(var(--reference-unit) * 15);
+    font-weight: 700;
+}
+
+.spell-progression th,
+.spell-progression td {
+    padding: calc(var(--reference-unit) * 14) calc(var(--reference-unit) * 3);
+    border-right: 1px solid var(--gold);
+    border-bottom: 1px solid var(--gold);
+    text-align: center;
+}
+
+.spell-progression thead th {
+    background: #e6e1bf;
+}
+
+.spell-progression tbody th {
+    background: #f1ecd7;
+}
+
+.spell-progression tbody td {
+    background: #fff;
+    padding-top: calc(var(--reference-unit) * 30);
+    padding-bottom: calc(var(--reference-unit) * 30);
+}
+
+.spell-progression tr > :last-child {
+    border-right: 0;
+}
+
+.spell-progression tbody tr:last-child > * {
+    border-bottom: 0;
+}
+
+.cards-column {
+    display: grid;
+    grid-column: 4;
+    grid-row: 1 / 3;
+    grid-template-rows: auto auto auto;
+    align-content: start;
+    gap: calc(var(--reference-unit) * 15);
+    padding-top: calc(var(--reference-unit) * 25);
+}
+
+.cards-column > .panel {
+    width: 100%;
+    height: auto;
+    margin: 0;
+}
+
+.cards-column .armor,
+.cards-column .weapons,
+.cards-column .concentration {
+    padding: calc(var(--reference-unit) * 28) calc(var(--reference-unit) * 34) 0;
+}
+
+.cards-column .armor-class {
+    width: min(100%, calc(var(--reference-unit) * 300));
+    margin-bottom: calc(var(--reference-unit) * 22);
+}
+
+.cards-column .armor > p,
+.cards-column .weapons > p,
+.cards-column .concentration > p {
+    margin-bottom: calc(var(--reference-unit) * 10);
+    font-size: calc(var(--reference-unit) * 26);
+    line-height: 1.2;
+}
+
+.cards-column .starting-card {
+    margin-top: calc(var(--reference-unit) * 14);
+}
+
+.cards-column .attack-ribbon {
+    width: calc(100% + var(--reference-unit) * 68);
+    margin-right: calc(var(--reference-unit) * -34);
+    margin-left: calc(var(--reference-unit) * -34);
+    font-size: calc(var(--reference-unit) * 31);
+}
+
+.cards-column .ribbon {
+    margin-top: auto;
+}
+
+.cards-column .attack-ribbon {
+    margin-top: 0;
+}
+
+.class-column {
+    display: grid;
+    grid-column: 5;
+    grid-row: 1 / 3;
+    grid-template-rows: auto auto auto;
+    align-content: start;
+    gap: calc(var(--reference-unit) * 15);
+    padding-top: calc(var(--reference-unit) * 25);
+}
+
+.class-column > .panel,
+.class-column > .playing-tips,
+.class-column > .rest-reminders {
+    width: 100%;
+    height: auto;
+    margin: 0;
+}
+
+.writing-lines > p:not(.small-text) {
+    margin-top: 0;
+    background: #fff;
+    border-bottom: 1px solid rgb(201 178 79 / 35%);
+}
+
+.writing-lines > p:not(.small-text):first-of-type {
+    margin-top: calc(var(--reference-unit) * 12);
+}
+
+.proficiency-lines > p.small-text + p {
+    margin-top: calc(var(--reference-unit) * 12);
+}
+
+.class-column .class-features section {
+    padding: calc(var(--reference-unit) * 12) calc(var(--reference-unit) * 18) 0;
+}
+
+.class-column .class-features h3 {
+    font-size: calc(var(--reference-unit) * 30);
+}
+
+.class-column .class-features p {
+    font-size: calc(var(--reference-unit) * 27);
+    line-height: 1.25;
+}
+
+.class-column .class-features section + section {
+    margin-top: calc(var(--reference-unit) * 10);
+}
+
+.class-column .playing-tips {
+    padding: calc(var(--reference-unit) * 14) calc(var(--reference-unit) * 20);
+}
+
+.class-column .playing-tips p {
+    margin-bottom: calc(var(--reference-unit) * 7);
+    font-size: calc(var(--reference-unit) * 27);
+    line-height: 1.25;
+}
+
+@media print {
+    html,
+    body {
+        width: 297mm;
+        height: 210mm;
+        min-height: 0;
+        overflow: hidden;
+        background: white;
+    }
+
+    .page {
+        width: 297mm;
+        height: 210mm;
+        min-width: 297mm;
+        aspect-ratio: auto;
+        overflow: hidden;
+        break-after: avoid;
+    }
+
+    .board {
+        print-color-adjust: exact;
+        -webkit-print-color-adjust: exact;
+    }
+}
