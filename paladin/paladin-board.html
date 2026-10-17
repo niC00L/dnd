@@ -29,7 +29,10 @@
                 <div class="board-column identity-column">
 
                     <section class="abilities panel" aria-labelledby="abilities-title">
-                        <h2 id="abilities-title">Ability modifiers<br>saving throws &amp; skills</h2>
+                        <h2 id="abilities-title">
+                            <span>Ability Modifiers</span>
+                            <span>Saving Throws &amp; Skills</span>
+                        </h2>
                         <div class="ability-columns">
                             <div class="ability-column">
                                 <section class="ability">
@@ -150,8 +153,6 @@
                                 <p>&nbsp;</p>
                             </div>
                         </div>
-                    </section>
-                    <section class="hit-points panel" aria-label="Initiative, speed, and hit points">
                         <h2 class="hp-label">Hit Points</h2>
                         <div class="hp-trio combat-stats">
                             <div>
@@ -167,7 +168,6 @@
                                 <p>&nbsp;</p>
                             </div>
                         </div>
-                        <div class="hit-dice-tracker">
                             <h2 class="hp-label">Hit Dice</h2>
                             <div class="combat-stats">
                                 <div>
@@ -180,13 +180,12 @@
                                 </div>
                                 <div>
                                     <h2>DIE</h2>
-                                    <p>d10</p>
+                                    <p>&nbsp;</p>
                                 </div>
-                            </div>
                         </div>
                     </section>
                     <section class="hit-points panel" aria-label="Initiative, speed, and hit points">
-                        <h2 class="hp-label">Spellcasting</h2>
+                        <h2>Spellcasting</h2>
                         <p class="margin-bottom">
                             Holy symbol is your spellcasting focus.
                         </p>
@@ -246,11 +245,15 @@
                     </section>
                     <section class="hit-points panel writing-lines proficiency-lines"
                         aria-label="Initiative, speed, and hit points">
-                        <h2 class="hp-label">Proficiencies</h2>
+                        <h2>Proficiencies</h2>
                         <p class="small-text">
                             Simple and Martial weapons. </br>
                             Light, Medium, Heavy armor. Shields.
                         </p>
+                        <p>&nbsp;</p>
+                        <p>&nbsp;</p>
+                        <p>&nbsp;</p>
+                        <p>&nbsp;</p>
                         <p>&nbsp;</p>
                         <p>&nbsp;</p>
                         <p>&nbsp;</p>
@@ -267,7 +270,7 @@
 
 
                 <section class="hit-points panel writing-lines" aria-label="Initiative, speed, and hit points">
-                    <h2 class="hp-label">Inventory</h2>
+                    <h2>Inventory</h2>
                     <div class="combat-stats">
                         <div>
                             <h2>GOLD</h2>
@@ -282,6 +285,7 @@
                             <p>&nbsp;</p>
                         </div>
                     </div>
+                    <p>&nbsp;</p>
                     <p>&nbsp;</p>
                     <p>&nbsp;</p>
                     <p>&nbsp;</p>
@@ -312,7 +316,7 @@
                         Paladin level). Spend 5 points to end the Poisoned condition.</p>
                 </section>
                 <section class="divine-sense panel" aria-labelledby="divine-sense-title">
-                    <div class="level-badge" role="img" aria-label="Level 3"><span>LVL</span><b>1</b></div>
+                    <div class="level-badge" role="img" aria-label="Level 1"><span>LVL</span><b>1</b></div>
                     <h2 class="hp-label" id="divine-sense-title">Divine Sense</h2>
                     <div class="combat-stats">
                         <div>
@@ -345,6 +349,8 @@
             <div class="board-column class-column">
 <section class="oath-features panel paladin-feature" aria-labelledby="oath-features-title">
                     <h2 class="hp-label" id="oath-features-title">Sacred Oath</h2>
+                    <div class="oath-name-field" aria-label="Sacred Oath name"></div>
+                    <h3 class="oath-feature-heading">Oath Features</h3>
 
                     <div class="oath-feature-entry">
                         <div class="oath-feature-lines">
@@ -381,18 +387,17 @@
                 </section>
                 <section class="paladin-feature progression-card panel">
                     <h2>Class Progression</h2>
-                    <p><b>2</b> Divine Smite is always prepared. Cast it once without a spell slot; regain this free
-                        cast after a Long Rest.</p>
-                    <p><b>5</b> Extra Attack; Faithful Steed (Find Steed always prepared, one free cast per Long Rest).
-                    </p>
-                    <p><b>6</b> Aura of Protection: you and nearby allies add your Charisma modifier to saves.</p>
-                    <p><b>9</b> Abjure Foes. </p>
-                    <p><b>10</b> Aura of Courage. </p>
-                    <p><b>11</b> Radiant Strikes (+1d8).</p>
-                    <p><b>14</b> Restoring Touch. </p>
-                    <p><b>18</b> Aura expands to 30 feet.</p>
-                </section>
-                <section class="rest-reminders panel">
+                    <ul class="progression-list">
+                        <li><b>2.</b><span>Divine Smite is always prepared. Cast it once without a spell slot; regain this free cast after a Long Rest.</span></li>
+                        <li><b>5.</b><span>Extra Attack; Faithful Steed (Find Steed always prepared, one free cast per Long Rest).</span></li>
+                        <li><b>6.</b><span>Aura of Protection: you and nearby allies add your Charisma modifier to saves.</span></li>
+                        <li><b>9.</b><span>Abjure Foes.</span></li>
+                        <li><b>10.</b><span>Aura of Courage.</span></li>
+                        <li><b>11.</b><span>Radiant Strikes (+1d8).</span></li>
+                        <li><b>14.</b><span>Restoring Touch.</span></li>
+                        <li><b>18.</b><span>Aura expands to 30 feet.</span></li>
+                    </ul>
+                    <div class="progression-rest-divider" aria-hidden="true"></div>
                     <p>After a <b>Short Rest:</b></p>
                     <ul>
                         <li>Channel Divinity: regain one expended use.</li>
