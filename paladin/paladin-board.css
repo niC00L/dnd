@@ -4,11 +4,29 @@
     margin: 0;
 }
 
+@font-face {
+    font-family: "Molengo";
+    src: url("../fonts/Molengo/Molengo-Regular.ttf") format("truetype");
+    font-style: normal;
+    font-weight: 400;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: "Oswald";
+    src: url("../fonts/Oswald/Oswald-VariableFont_wght.ttf") format("truetype");
+    font-style: normal;
+    font-weight: 200 700;
+    font-display: swap;
+}
+
 
 
 :root {
     color-scheme: light;
     --reference-unit: 0.0303cqw;
+    --font-body: "Molengo", sans-serif;
+    --font-label: "Molengo", sans-serif;
     --earth: #603900;
     --gold: #c9b24f;
     --paper: #f8f4e7;
@@ -45,7 +63,19 @@ body {
     min-height: 100vh;
     place-items: center;
     background: #e7e5dc;
-    font-family: "Trebuchet MS", "DejaVu Sans", sans-serif;
+    font-family: var(--font-body);
+}
+
+.masthead h3,
+.ability h3,
+.inspiration h3,
+.combat-stats h2,
+.combat-stats p,
+.spell-progression th,
+.level-badge > span,
+.ribbon,
+.attack-ribbon {
+    font-family: var(--font-label);
 }
 
 .page {
@@ -223,12 +253,12 @@ body {
 
 .abilities > h2 > span:first-child {
     align-self: end;
-    margin-bottom: calc(var(--reference-unit) * 5);
+    margin-bottom: calc(var(--reference-unit) * 8);
 }
 
 .abilities > h2 > span:last-child {
     align-self: start;
-    margin-top: calc(var(--reference-unit) * 5);
+    margin-top: calc(var(--reference-unit) * 10);
 }
 
 .abilities-heading-divider {
@@ -283,7 +313,6 @@ p.modifier {
     background: white;
     border: calc(var(--reference-unit) * 9) solid var(--gold);
     border-radius: 50%;
-    font-family: "DejaVu Sans", sans-serif;
     font-size: calc(var(--reference-unit) * 72);
     font-weight: 700;
     line-height: 1;
@@ -435,7 +464,6 @@ p.modifier.proficiency {
 .combat-stats p,
 .hp-value {
     margin: calc(var(--reference-unit) * 5) 0;
-    font-family: "DejaVu Sans Condensed", "DejaVu Sans", sans-serif;
     font-size: calc(var(--reference-unit) * 74);
     font-weight: 700;
 }
@@ -598,7 +626,6 @@ p.hp-value {
 
 .concentration > p {
     margin-bottom: calc(var(--reference-unit) * 13);
-    font-family: "DejaVu Sans Condensed", "Liberation Sans Narrow", sans-serif;
     font-size: calc(var(--reference-unit) * 31);
     line-height: 1.25;
 }
