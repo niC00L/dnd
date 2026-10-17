@@ -13,13 +13,11 @@
         <article class="board" aria-label="Level 1 Paladin">
             <header class="masthead">
                 <div class="masthead-title">
-                    <span class="crest-mark">
-                        <img class="crest" src="paladin-board-assets/paladin-crest.png" alt="">
-                    </span>
-                    <h1>PALADIN</h1>
+                    <img class="masthead-wordmark" src="paladin-board-assets/paladin-wordmark.png"
+                        alt="Paladin crest and wordmark">
                     <div class="character-details">
                         <h2>Character name</h2>
-                        <h2>Race, background</h2>
+                        <h2>Race, Background, Alignment</h2>
                     </div>
                     <section class="level">
                         <h3>LEVEL</h3>
@@ -136,6 +134,7 @@
                 </div>
 
                 <div class="board-column combat-column stats-column">
+
                     <section class="hit-points panel" aria-label="Initiative, speed, and hit points">
                         <div class="combat-stats">
                             <div>
@@ -169,7 +168,7 @@
                             </div>
                         </div>
                         <div class="hit-dice-tracker">
-                            <h2>HIT DICE</h2>
+                            <h2 class="hp-label">Hit Dice</h2>
                             <div class="combat-stats">
                                 <div>
                                     <h2>USED</h2>
@@ -194,7 +193,7 @@
                         <div class="combat-stats">
                             <div>
                                 <h2>SPELLCASTING ABILITY</h2>
-                                <p>&nbsp;</p>
+                                <p>CHA</p>
                             </div>
                             <div>
                                 <h2>SPELL SAVE DC</h2>
@@ -210,37 +209,35 @@
                                 <col>
                                 <col>
                                 <col>
+                                <col>
+                                <col>
+                                <col>
                             </colgroup>
                             <thead>
                                 <tr>
-                                    <th scope="col">SPELL<br>LEVEL</th>
-                                    <th scope="col">REMAINING<br>SLOTS</th>
-                                    <th scope="col">MAX<br>SLOTS</th>
+                                    <th scope="col">SLOTS</th>
+                                    <th scope="col">1st</th>
+                                    <th scope="col">2nd</th>
+                                    <th scope="col">3rd</th>
+                                    <th scope="col">4th</th>
+                                    <th scope="col">5th</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 <tr>
-                                    <th scope="row">1</th>
+                                    <th scope="row">LEFT</th>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
                                     <td>&nbsp;</td>
                                     <td>&nbsp;</td>
                                 </tr>
                                 <tr>
-                                    <th scope="row">2</th>
+                                    <th scope="row">MAX</th>
                                     <td>&nbsp;</td>
                                     <td>&nbsp;</td>
-                                </tr>
-                                <tr>
-                                    <th scope="row">3</th>
                                     <td>&nbsp;</td>
-                                    <td>&nbsp;</td>
-                                </tr>
-                                <tr>
-                                    <th scope="row">4</th>
-                                    <td>&nbsp;</td>
-                                    <td>&nbsp;</td>
-                                </tr>
-                                <tr>
-                                    <th scope="row">5</th>
                                     <td>&nbsp;</td>
                                     <td>&nbsp;</td>
                                 </tr>
@@ -296,52 +293,11 @@
                     <p>&nbsp;</p>
                     <p>&nbsp;</p>
                 </section>
-                <section class="character-fields panel" aria-labelledby="character-fields-title">
-                    <h2 class="hp-label" id="character-fields-title">Character Details</h2>
-                    <div class="character-field-grid">
-                        <div>
-                            <h3>ALIGNMENT</h3>
-                            <p>&nbsp;</p>
-                        </div>
-                        <div>
-                            <h3>EXPERIENCE POINTS</h3>
-                            <p>&nbsp;</p>
-                        </div>
-                        <div>
-                            <h3>SACRED OATH</h3>
-                            <p>&nbsp;</p>
-                        </div>
-                    </div>
-                </section>
-                <section class="oath-features panel" aria-labelledby="oath-features-title">
-                    <h2 class="hp-label" id="oath-features-title">Sacred Oath Features</h2>
-                    <div class="oath-feature-entry">
-                        <h3>LEVEL 3</h3>
-                        <p>&nbsp;</p>
-                        <p>&nbsp;</p>
-                    </div>
-                    <div class="oath-feature-entry">
-                        <h3>LEVEL 7</h3>
-                        <p>&nbsp;</p>
-                        <p>&nbsp;</p>
-                    </div>
-                    <div class="oath-feature-entry">
-                        <h3>LEVEL 15</h3>
-                        <p>&nbsp;</p>
-                        <p>&nbsp;</p>
-                    </div>
-                    <div class="oath-feature-entry">
-                        <h3>LEVEL 20</h3>
-                        <p>&nbsp;</p>
-                        <p>&nbsp;</p>
-                    </div>
-                </section>
 
-            </div>
-            <div class="board-column class-column">
+                
                 <section class="lay-on-hands panel" aria-labelledby="lay-on-hands-title">
-                    <h2 class="hp-label" id="lay-on-hands-title">Lay on Hands · Level 1</h2>
-                    <p class="hp-value">&nbsp;</p>
+                    <div class="level-badge" role="img" aria-label="Level 1"><span>LVL</span><b>1</b></div>
+                    <h2 class="hp-label" id="lay-on-hands-title">Lay on Hands</h2>
                     <div class="combat-stats">
                         <div>
                             <h2>USED</h2>
@@ -352,35 +308,89 @@
                             <p>&nbsp;</p>
                         </div>
                     </div>
-                    <p class="feature-copy">Bonus Action: touch a creature to restore Hit Points from your pool (5 × Paladin level). Spend 5 points to end the Poisoned condition.</p>
+                    <p class="feature-copy">Bonus Action: touch a creature to restore Hit Points from your pool (5 ×
+                        Paladin level). Spend 5 points to end the Poisoned condition.</p>
+                </section>
+                <section class="divine-sense panel" aria-labelledby="divine-sense-title">
+                    <div class="level-badge" role="img" aria-label="Level 3"><span>LVL</span><b>1</b></div>
+                    <h2 class="hp-label" id="divine-sense-title">Divine Sense</h2>
+                    <div class="combat-stats">
+                        <div>
+                            <h2>USED</h2>
+                            <p>&nbsp;</p>
+                        </div>
+                        <div>
+                            <h2>TOTAL</h2>
+                            <p>&nbsp;</p>
+                        </div>
+                    </div>
+                    <p class="feature-copy">Bonus Action: expend a Channel Divinity use to sense celestials, fiends, and
+                        undead within 60 feet, and detect consecrated or desecrated places for 10 minutes.</p>
                 </section>
                 <section class="paladin-feature panel">
-                    <h2>Weapon Mastery · Level 1</h2>
-                    <p>Choose two weapon types you know and use their mastery properties. Change your choices after a Long Rest.</p>
-                    <div class="feature-tracker"><span>MASTERY</span><b></b><b></b></div>
+                    <div class="level-badge" role="img" aria-label="Level 1"><span>LVL</span><b>1</b></div>
+                    <h2>Weapon Mastery</h2>
+                    <p>Choose two weapon types and use their mastery properties. Change your choices after a Long Rest.
+                    </p>
+                    <div class="feature-tracker"><b></b></div>
                 </section>
                 <section class="paladin-feature panel">
-                    <h2>Fighting Style · Level 2</h2>
-                    <p>Gain a Fighting Style feat, or choose Blessed Warrior to learn two Cleric cantrips as Paladin spells.</p>
-                    <div class="feature-tracker"><span>CHOICE</span><b></b></div>
+                    <div class="level-badge" role="img" aria-label="Level 2"><span>LVL</span><b>2</b></div>
+                    <h2>Fighting Style</h2>
+                    <p>Gain a Fighting Style feat, or choose Blessed Warrior to learn two Cleric cantrips as Paladin
+                        spells.</p>
+                    <div class="feature-tracker"><b></b></div>
                 </section>
-                <section class="paladin-feature panel">
-                    <h2>Paladin's Smite · Level 2</h2>
-                    <p>Divine Smite is always prepared. Cast it once without a spell slot; regain this free cast after a Long Rest.</p>
-                    <div class="feature-tracker"><span>FREE CAST USED</span><b></b></div>
-                </section>
-                <section class="paladin-feature panel">
-                    <h2>Divine Sense · Level 3</h2>
-                    <p>Bonus Action: expend Channel Divinity to sense celestials, fiends, and undead within 60 feet for 10 minutes, and detect consecrated or desecrated places.</p>
-                    <div class="feature-tracker channel-tracker"><span>CHANNEL DIVINITY</span><b></b><b></b></div>
+            </div>
+            <div class="board-column class-column">
+<section class="oath-features panel paladin-feature" aria-labelledby="oath-features-title">
+                    <h2 class="hp-label" id="oath-features-title">Sacred Oath</h2>
+
+                    <div class="oath-feature-entry">
+                        <div class="oath-feature-lines">
+                            <p>&nbsp;</p>
+                            <p>&nbsp;</p>
+                            <p>&nbsp;</p>
+                        </div>
+                        <div class="level-badge" role="img" aria-label="Level 3"><span>LVL</span><b>3</b></div>
+                    </div>
+                    <div class="oath-feature-entry">
+                        <div class="oath-feature-lines">
+                            <p>&nbsp;</p>
+                            <p>&nbsp;</p>
+                            <p>&nbsp;</p>
+                        </div>
+                        <div class="level-badge" role="img" aria-label="Level 7"><span>LVL</span><b>7</b></div>
+                    </div>
+                    <div class="oath-feature-entry">
+                        <div class="oath-feature-lines">
+                            <p>&nbsp;</p>
+                            <p>&nbsp;</p>
+                            <p>&nbsp;</p>
+                        </div>
+                        <div class="level-badge" role="img" aria-label="Level 15"><span>LVL</span><b>15</b></div>
+                    </div>
+                    <div class="oath-feature-entry">
+                        <div class="oath-feature-lines">
+                            <p>&nbsp;</p>
+                            <p>&nbsp;</p>
+                            <p>&nbsp;</p>
+                        </div>
+                        <div class="level-badge" role="img" aria-label="Level 20"><span>LVL</span><b>20</b></div>
+                    </div>
                 </section>
                 <section class="paladin-feature progression-card panel">
                     <h2>Class Progression</h2>
-                    <p><b>3</b> Sacred Oath: choose a subclass; features at levels 3, 7, 15, and 20.</p>
-                    <p><b>5</b> Extra Attack; Faithful Steed (Find Steed always prepared, one free cast per Long Rest).</p>
+                    <p><b>2</b> Divine Smite is always prepared. Cast it once without a spell slot; regain this free
+                        cast after a Long Rest.</p>
+                    <p><b>5</b> Extra Attack; Faithful Steed (Find Steed always prepared, one free cast per Long Rest).
+                    </p>
                     <p><b>6</b> Aura of Protection: you and nearby allies add your Charisma modifier to saves.</p>
-                    <p><b>9</b> Abjure Foes. <b>10</b> Aura of Courage. <b>11</b> Radiant Strikes (+1d8).</p>
-                    <p><b>14</b> Restoring Touch. <b>18</b> Aura expands to 30 feet.</p>
+                    <p><b>9</b> Abjure Foes. </p>
+                    <p><b>10</b> Aura of Courage. </p>
+                    <p><b>11</b> Radiant Strikes (+1d8).</p>
+                    <p><b>14</b> Restoring Touch. </p>
+                    <p><b>18</b> Aura expands to 30 feet.</p>
                 </section>
                 <section class="rest-reminders panel">
                     <p>After a <b>Short Rest:</b></p>

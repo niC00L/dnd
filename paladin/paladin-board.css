@@ -92,7 +92,7 @@ body {
     display: flex;
     grid-column: 1 / 3;
     grid-row: 1;
-    min-height: calc(var(--reference-unit) * 300);
+    min-height: calc(var(--reference-unit) * 280);
     flex-direction: column;
     align-items: center;
     justify-content: center;
@@ -104,19 +104,20 @@ body {
 
 .masthead-title {
     display: grid;
-    grid-template-columns: auto auto minmax(0, 1fr) auto;
+    grid-template-columns: auto minmax(0, 1fr) auto;
     align-items: center;
     justify-content: center;
     gap: calc(var(--reference-unit) * 20);
     width: 100%;
 }
 
-.masthead-title h1 {
-    font-family: fantasy;
-    font-size: calc(var(--reference-unit) * 105);
-    font-weight: 700;
-    line-height: 1;
-    white-space: nowrap;
+.masthead-wordmark {
+    display: block;
+    width: calc(var(--reference-unit) * 800);
+    max-width: 100%;
+    height: auto;
+    flex: none;
+    object-fit: contain;
 }
 
 .character-details {
@@ -130,47 +131,6 @@ body {
     font-size: calc(var(--reference-unit) * 45);
     line-height: 1.2;
     overflow-wrap: anywhere;
-}
-
-.masthead-title .crest {
-    display: block;
-    width: calc(var(--reference-unit) * 280);
-    /* height: calc(var(--reference-unit) * 158); */
-    flex: none;
-    object-fit: contain;
-}
-
-.crest-mark {
-    position: relative;
-    display: flex;
-    flex: none;
-    align-items: center;
-}
-
-.crest-mark::after {
-    position: absolute;
-    top: 86%;
-    left: 100%;
-    width: calc(var(--reference-unit) * 500);
-    border-top: calc(var(--reference-unit) * 5) solid #b59a36;
-    content: "";
-    pointer-events: none;
-}
-
-.crest-mark::before {
-    position: absolute;
-    top: 91%;
-    left: 100%;
-    width: calc(var(--reference-unit) * 400);
-    border-top: calc(var(--reference-unit) * 1) solid #b59a36;
-    opacity: 0.7;
-    content: "";
-    pointer-events: none;
-}
-
-.masthead-title h1 {
-    position: relative;
-    z-index: 1;
 }
 
 .motto {
@@ -410,13 +370,12 @@ p.modifier.proficiency {
 }
 
 .combat-stats h2 {
-    font-size: calc(var(--reference-unit) * 27);
+    font-size: calc(var(--reference-unit) * 32);
     line-height: 1.1;
 }
 
 .combat-stats div {
     flex: 1;
-    border: calc(var(--reference-unit) * 3) solid var(--gold);
     background: white;
     padding: calc(var(--reference-unit) * 10) 0;
     border-radius: calc(var(--reference-unit) * 12);
@@ -436,7 +395,6 @@ p.hp-value {
     padding: calc(var(--reference-unit) * 20);
     min-height: calc(var(--reference-unit) * 141);
     margin-bottom: calc(var(--reference-unit) * 15);
-    border: calc(var(--reference-unit) * 3) solid var(--gold);
     border-radius: calc(var(--reference-unit) * 12);
     background: white;
 }
@@ -746,11 +704,13 @@ p.hp-value {
 
 .stats-column .combat-stats div {
     min-width: 0;
+    height: calc(var(--reference-unit) * 160);
     padding: calc(var(--reference-unit) * 8) calc(var(--reference-unit) * 5);
 }
 
 .stats-column .combat-stats p {
     margin-bottom: 0;
+    font-size: calc(var(--reference-unit) * 55);
 }
 
 .stats-column .hp-trio > div {
@@ -760,7 +720,7 @@ p.hp-value {
 }
 
 .stats-column .hp-trio h2 {
-    font-size: calc(var(--reference-unit) * 24);
+    font-size: calc(var(--reference-unit) * 32);
 }
 
 .stats-column .hp-trio p {
@@ -775,14 +735,14 @@ p.hp-value {
 
 .stats-column .hit-dice-tracker {
     margin-top: calc(var(--reference-unit) * 10);
-    padding-top: calc(var(--reference-unit) * 8);
-    border-top: calc(var(--reference-unit) * 3) solid var(--gold);
 }
 
 .stats-column .hit-dice-tracker > h2 {
     margin-bottom: calc(var(--reference-unit) * 6);
     color: #784b00;
-    font-size: calc(var(--reference-unit) * 27);
+    font-size: calc(var(--reference-unit) * 37);
+    line-height: 1.35;
+    text-align: center;
 }
 
 .stats-column .hit-dice-tracker .combat-stats {
@@ -790,7 +750,6 @@ p.hp-value {
 }
 
 .stats-column .hit-dice-tracker .combat-stats div {
-    border: calc(var(--reference-unit) * 2) solid var(--gold);
     background: white;
 }
 
@@ -813,16 +772,12 @@ p.hp-value {
     line-height: 1;
 }
 
-.spell-progression col:nth-child(1) {
+.spell-progression col:first-child {
     width: 20%;
 }
 
-.spell-progression col:nth-child(2) {
-    width: 45%;
-}
-
-.spell-progression col:nth-child(3) {
-    width: 35%;
+.spell-progression col:not(:first-child) {
+    width: 16%;
 }
 
 .spell-progression caption {
@@ -866,7 +821,7 @@ p.hp-value {
     grid-row: 1 / 3;
     grid-template-rows: auto auto auto;
     align-content: start;
-    gap: calc(var(--reference-unit) * 15);
+    gap: calc(var(--reference-unit) * 8);
     padding-top: calc(var(--reference-unit) * 25);
 }
 
@@ -881,10 +836,15 @@ p.hp-value {
     padding: calc(var(--reference-unit) * 18) calc(var(--reference-unit) * 22);
 }
 
-.cards-column .character-fields > h2,
-.cards-column .oath-features > h2 {
+.cards-column .character-fields > h2 {
     margin-bottom: calc(var(--reference-unit) * 10);
     font-size: calc(var(--reference-unit) * 32);
+}
+
+.cards-column .oath-features > h2 {
+    margin-bottom: calc(var(--reference-unit) * 10);
+    font-size: calc(var(--reference-unit) * 37);
+    line-height: 1.35;
 }
 
 .character-field-grid {
@@ -897,8 +857,7 @@ p.hp-value {
     grid-column: 1 / -1;
 }
 
-.character-field-grid h3,
-.oath-feature-entry h3 {
+.character-field-grid h3 {
     color: #784b00;
     font-size: calc(var(--reference-unit) * 24);
     text-align: left;
@@ -911,15 +870,68 @@ p.hp-value {
 }
 
 .oath-feature-entry {
-    margin-top: calc(var(--reference-unit) * 8);
-    padding-top: calc(var(--reference-unit) * 5);
-    border-top: calc(var(--reference-unit) * 2) solid var(--gold);
+    display: flex;
+    align-items: center;
+    gap: calc(var(--reference-unit) * 10);
+    margin-top: calc(var(--reference-unit) * 20);
 }
 
-.oath-feature-entry p {
-    min-height: calc(var(--reference-unit) * 32);
-    margin-top: calc(var(--reference-unit) * 4);
-    border-bottom: 1px solid rgb(201 178 79 / 55%);
+.level-badge {
+    position: absolute;
+    top: calc(var(--reference-unit) * 5);
+    right: calc(var(--reference-unit) * 8);
+    z-index: 1;
+    display: grid;
+    width: calc(var(--reference-unit) * 82);
+    height: calc(var(--reference-unit) * 82);
+    align-content: center;
+    justify-items: center;
+    gap: calc(var(--reference-unit) * 1);
+    border: calc(var(--reference-unit) * 3) solid var(--earth);
+    border-radius: 50%;
+    background: white;
+    color: var(--earth);
+    line-height: 1;
+    text-align: center;
+    pointer-events: none;
+}
+
+.level-badge > span {
+    font-size: calc(var(--reference-unit) * 20);
+    font-weight: 700;
+}
+
+.level-badge > b {
+    font-size: calc(var(--reference-unit) * 36);
+    font-weight: 700;
+}
+
+.oath-feature-entry > .level-badge {
+    position: relative;
+    top: auto;
+    right: auto;
+    flex: none;
+}
+
+.oath-feature-lines {
+    display: grid;
+    min-width: 0;
+    flex: 1;
+    gap: calc(var(--reference-unit) * 8);
+}
+
+.class-column .lay-on-hands > h2,
+.class-column .paladin-feature > h2 {
+    display: grid;
+    min-height: calc(var(--reference-unit) * 82);
+    align-items: center;
+    padding-right: calc(var(--reference-unit) * 88);
+    font-size: calc(var(--reference-unit) * 37);
+}
+
+.oath-feature-lines p {
+    min-height: calc(var(--reference-unit) * 20);
+    margin: 0;
     background: white;
 }
 
@@ -993,58 +1005,102 @@ p.hp-value {
     margin-top: calc(var(--reference-unit) * 12);
 }
 
-.class-column .lay-on-hands {
-    padding: calc(var(--reference-unit) * 12) calc(var(--reference-unit) * 20);
-    text-align: center;
-}
-
-.class-column .lay-on-hands > h2 {
-    font-size: calc(var(--reference-unit) * 37);
-}
-
-.class-column .lay-on-hands p.hp-value {
-    display: grid;
-    width: 70%;
-    min-height: calc(var(--reference-unit) * 88);
-    margin: calc(var(--reference-unit) * 10) auto;
-    padding: calc(var(--reference-unit) * 8);
-    place-items: center;
-    border: calc(var(--reference-unit) * 3) solid var(--gold);
-    border-radius: calc(var(--reference-unit) * 12);
-    background: white;
-    font-size: calc(var(--reference-unit) * 48);
-}
-
-.class-column .lay-on-hands .combat-stats {
-    gap: calc(var(--reference-unit) * 10);
-}
-
-.class-column .lay-on-hands .combat-stats div {
-    border: calc(var(--reference-unit) * 3) solid var(--gold);
-    background: white;
-}
-
-.class-column .lay-on-hands .combat-stats p {
-    min-height: calc(var(--reference-unit) * 30);
-    font-size: calc(var(--reference-unit) * 38);
-}
-
-.class-column .lay-on-hands > .feature-copy {
-    text-align: left;
-}
-
-.class-column .paladin-feature > h2 {
-    font-size: calc(var(--reference-unit) * 37);
+.cards-column .paladin-feature {
+    position: relative;
+    padding: calc(var(--reference-unit) * 18) calc(var(--reference-unit) * 22);
 }
 
 .class-column .paladin-feature {
-    padding: calc(var(--reference-unit) * 8) calc(var(--reference-unit) * 16);
+    position: relative;
+    padding: calc(var(--reference-unit) * 5) calc(var(--reference-unit) * 12);
 }
 
-.class-column .paladin-feature > p {
-    margin-top: calc(var(--reference-unit) * 4);
+.cards-column .paladin-feature > h2,
+.class-column .paladin-feature > h2 {
+    display: grid;
+    min-height: calc(var(--reference-unit) * 82);
+    align-items: center;
+    padding-right: calc(var(--reference-unit) * 88);
     font-size: calc(var(--reference-unit) * 30);
-    line-height: 1.22;
+    line-height: 1.1;
+}
+
+.cards-column .paladin-feature > p,
+.class-column .paladin-feature > p {
+    margin-top: calc(var(--reference-unit) * 2);
+    font-size: calc(var(--reference-unit) * 29);
+    line-height: 1.35;
+}
+
+.cards-column .paladin-feature .combat-stats {
+    gap: calc(var(--reference-unit) * 10);
+}
+
+.cards-column .paladin-feature .combat-stats div {
+    background: white;
+}
+
+
+.cards-column .lay-on-hands,
+.cards-column .divine-sense {
+    position: relative;
+    padding: calc(var(--reference-unit) * 18) calc(var(--reference-unit) * 22);
+    text-align: center;
+}
+
+.cards-column .lay-on-hands .combat-stats,
+.cards-column .divine-sense .combat-stats {
+    gap: calc(var(--reference-unit) * 10);
+}
+
+.cards-column .lay-on-hands .combat-stats div,
+.cards-column .divine-sense .combat-stats div {
+    background: white;
+}
+
+.cards-column .lay-on-hands .combat-stats p,
+.cards-column .divine-sense .combat-stats p {
+    min-height: calc(var(--reference-unit) * 70);
+    font-size: calc(var(--reference-unit) * 38);
+}
+
+.cards-column .lay-on-hands > .feature-copy,
+.cards-column .divine-sense > .feature-copy {
+    margin-top: calc(var(--reference-unit) * 10);
+    font-size: calc(var(--reference-unit) * 29);
+    line-height: 1.35;
+    text-align: left;
+}
+
+.cards-column .lay-on-hands > h2,
+.cards-column .divine-sense > h2,
+.cards-column .paladin-feature > h2,
+.class-column .paladin-feature > h2 {
+    display: block;
+    min-height: 0;
+    padding: calc(var(--reference-unit) * 5);
+    font-size: calc(var(--reference-unit) * 37);
+    line-height: 1.35;
+    text-align: center;
+}
+
+.paladin-feature .feature-tracker,
+.paladin-feature .feature-tracker {
+    margin-top: calc(var(--reference-unit) * 3);
+}
+
+.paladin-feature .feature-tracker b,
+.paladin-feature .feature-tracker b {
+    display: block;
+    width: 100%;
+    height: calc(var(--reference-unit) * 60);
+    border-radius: calc(var(--reference-unit) * 12);
+    margin-top: 0;
+    background: white;
+}
+
+.cards-column .rest-reminders {
+    padding: calc(var(--reference-unit) * 9) calc(var(--reference-unit) * 22);
 }
 
 .class-column .feature-tracker {
@@ -1059,9 +1115,10 @@ p.hp-value {
 
 .class-column .feature-tracker b {
     display: inline-block;
-    width: calc(var(--reference-unit) * 56);
-    height: calc(var(--reference-unit) * 32);
-    border: calc(var(--reference-unit) * 2) solid var(--gold);
+    width: 100%;
+    height: calc(var(--reference-unit) * 80);
+    border-radius: calc(var(--reference-unit) * 12);
+    margin-top: calc(var(--reference-unit) * 8);
     background: white;
 }
 
