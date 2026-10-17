@@ -45,9 +45,6 @@ ul {
 
 .level h3{text-align: center;}
 
-p.small-text {
-    text-align: left;
-}
 p.margin-bottom {
     margin-bottom: calc(var(--reference-unit) * 10) !important;
 }
@@ -115,6 +112,15 @@ body {
     margin: 0;
 }
 
+.shared-copy {
+    font-family: var(--font-body);
+    font-size: calc(var(--reference-unit) * 32);
+    font-weight: 400;
+    line-height: 1.1;
+    margin-bottom: calc(var(--reference-unit) * 12) !important;
+    text-align: left;
+}
+
 .board p,
 .board h1,
 .board h2,
@@ -156,18 +162,39 @@ body {
     object-fit: contain;
 }
 
-.character-details {
+/* .character-details {
     display: grid;
     min-width: 0;
-    gap: calc(var(--reference-unit) * 35);
-    text-align: center;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: calc(var(--reference-unit) * 10);
+    padding: calc(var(--reference-unit) * 12);
+    border: calc(var(--reference-unit) * 3) solid var(--gold);
+    border-radius: calc(var(--reference-unit) * 12);
+    background: var(--paper);
+    color: var(--earth);
 }
 
-.character-details h2 {
-    font-size: calc(var(--reference-unit) * 45);
-    line-height: 1.2;
-    overflow-wrap: anywhere;
+.character-details label {
+    display: grid;
+    min-width: 0;
+    gap: calc(var(--reference-unit) * 4);
+    font-size: calc(var(--reference-unit) * 20);
+    line-height: 1.1;
+    text-align: left;
 }
+
+.character-details input {
+    width: 100%;
+    min-width: 0;
+    height: calc(var(--reference-unit) * 28);
+    padding: 0 calc(var(--reference-unit) * 4);
+    border: 0;
+    border-bottom: calc(var(--reference-unit) * 2) solid var(--gold);
+    border-radius: calc(var(--reference-unit) * 3);
+    background: white;
+    color: var(--black);
+    font: inherit;
+} */
 
 .motto {
     font-weight: 700;
@@ -283,13 +310,13 @@ body {
 
 .ability {
     margin-bottom: calc(var(--reference-unit) * 25);
-    font-size: calc(var(--reference-unit) * 31);
+    font-size: calc(var(--reference-unit) * 33);
     line-height: 1.55;
 }
 
 .ability h3 {
     margin-bottom: calc(var(--reference-unit) * 16);
-    padding: 0 calc(var(--reference-unit) * 5);
+    padding: calc(var(--reference-unit)*10) calc(var(--reference-unit) * 5);
     border-top: calc(var(--reference-unit) * 3) solid var(--gold);
     background: #e6e1bf;
     font-size: calc(var(--reference-unit) * 32);
@@ -450,7 +477,7 @@ p.modifier.proficiency {
 }
 
 .combat-stats h2 {
-    font-size: calc(var(--reference-unit) * 32);
+    font-size: calc(var(--reference-unit) * 28);
     line-height: 1.1;
 }
 
@@ -482,7 +509,7 @@ p.hp-value {
     font-size: calc(var(--reference-unit) * 40);    
 }
 
-.hit-points > p:not(.hp-value) {
+.hit-points > p:not(.hp-value):not(.shared-copy) {
     font-size: calc(var(--reference-unit) * 33);
 }
 
@@ -638,7 +665,7 @@ p.hp-value {
 
 
 .paladin-feature > h2,
-.lay-on-hands > h2 {
+.lay-on-hands .feature-block > h2 {
     padding: calc(var(--reference-unit) * 5);
     background: transparent;
     color: #784b00;
@@ -648,10 +675,8 @@ p.hp-value {
 }
 
 .paladin-feature > p,
-.lay-on-hands > .feature-copy {
+.lay-on-hands .feature-block > .feature-copy {
     margin-top: calc(var(--reference-unit) * 8);
-    font-size: calc(var(--reference-unit) * 30);
-    line-height: 1.22;
 }
 
 .progression-card > p + p {
@@ -792,7 +817,7 @@ p.hp-value {
 }
 
 .stats-column .hp-trio h2 {
-    font-size: calc(var(--reference-unit) * 32);
+    font-size: calc(var(--reference-unit) * 28);
 }
 
 .stats-column .hp-trio p {
@@ -908,11 +933,7 @@ p.hp-value {
 }
 
 .class-column .oath-name-field {
-    width: 100%;
-    height: calc(var(--reference-unit) * 60);
     margin-bottom: calc(var(--reference-unit) * 8);
-    border-radius: calc(var(--reference-unit) * 12);
-    background: white;
 }
 
 .class-column .oath-feature-heading {
@@ -986,6 +1007,18 @@ p.hp-value {
     pointer-events: none;
 }
 
+.cards-column .lay-on-hands .feature-block {
+    display: grid;
+    min-height: calc(var(--reference-unit) * 82);
+    grid-template-columns: minmax(0, 1fr) calc(var(--reference-unit) * 82);
+    column-gap: calc(var(--reference-unit) * 20);
+    align-items: center;
+}
+
+.cards-column .lay-on-hands .feature-block + .feature-block {
+    margin-top: calc(var(--reference-unit) * 18);
+}
+
 .level-badge > span {
     font-size: calc(var(--reference-unit) * 20);
     font-weight: 700;
@@ -1010,7 +1043,7 @@ p.hp-value {
     gap: 0
 }
 
-.class-column .lay-on-hands > h2,
+.class-column .lay-on-hands .feature-block > h2,
 .class-column .paladin-feature > h2 {
     display: grid;
     min-height: calc(var(--reference-unit) * 82);
@@ -1019,11 +1052,27 @@ p.hp-value {
     font-size: calc(var(--reference-unit) * 37);
 }
 
-.oath-feature-lines p {
-    min-height: calc(var(--reference-unit) * 20);
+.shared-writing-lines > p:not(.small-text) {
+    min-height: calc(var(--reference-unit) * 51);
     margin: 0;
     background: #fff;
     border-bottom: 1px solid rgb(201 178 79 / 35%);
+}
+
+.features-writing-lines {
+    margin-top: calc(var(--reference-unit) * 40);
+}
+
+.shared-writing-field {
+    display: block;
+    width: 100%;
+    height: calc(var(--reference-unit) * 85);
+    border-radius: calc(var(--reference-unit) * 12);
+    background: white;
+}
+
+.inventory-writing-lines {
+    padding-top: calc(var(--reference-unit) * 12);
 }
 
 .cards-column .armor,
@@ -1080,20 +1129,6 @@ p.hp-value {
     margin: 0;
 }
 
-.writing-lines > p:not(.small-text) {
-    margin-top: 0;
-    background: #fff;
-    border-bottom: 1px solid rgb(201 178 79 / 35%);
-}
-
-.writing-lines > p:not(.small-text):first-of-type {
-    margin-top: calc(var(--reference-unit) * 12);
-}
-
-.proficiency-lines > p.small-text + p {
-    margin-top: calc(var(--reference-unit) * 12);
-}
-
 .cards-column .paladin-feature,
 .class-column .paladin-feature {
     position: relative;
@@ -1112,8 +1147,6 @@ p.hp-value {
 .cards-column .paladin-feature > p,
 .class-column .paladin-feature > p {
     margin-top: calc(var(--reference-unit) * 2);
-    font-size: calc(var(--reference-unit) * 31);
-    line-height: 1.35;
 }
 
 .class-column .progression-list {
@@ -1122,8 +1155,6 @@ p.hp-value {
     margin-top: calc(var(--reference-unit) * 2);
     padding: 0;
     list-style: none;
-    font-size: calc(var(--reference-unit) * 31);
-    line-height: 1.35;
 }
 
 .class-column .progression-list li {
@@ -1180,14 +1211,12 @@ p.hp-value {
 }
 
 .cards-column .lay-on-hands > .feature-copy,
-.cards-column .divine-sense > .feature-copy {
+.cards-column .divine-sense > .feature-copy,
+.cards-column .lay-on-hands .feature-block > .feature-copy {
     margin-top: calc(var(--reference-unit) * 10);
-    font-size: calc(var(--reference-unit) * 31);
-    line-height: 1.35;
-    text-align: left;
 }
 
-.cards-column .lay-on-hands > h2,
+.cards-column .lay-on-hands .feature-block > h2,
 .cards-column .divine-sense > h2,
 .cards-column .paladin-feature > h2,
 .class-column .paladin-feature > h2 {
@@ -1199,19 +1228,26 @@ p.hp-value {
     text-align: center;
 }
 
+.cards-column .lay-on-hands .feature-block > h2 {
+    font-size: calc(var(--reference-unit) * 29);
+    line-height: 1.2;
+}
+
+.cards-column .lay-on-hands .feature-block > .level-badge {
+    position: static;
+    grid-column: 2;
+    grid-row: 1 / span 4;
+    justify-self: center;
+    align-self: center;
+}
+
+.cards-column .lay-on-hands .feature-block > :not(.level-badge) {
+    grid-column: 1;
+}
+
 .paladin-feature .feature-tracker,
 .paladin-feature .feature-tracker {
     margin-top: calc(var(--reference-unit) * 3);
-}
-
-.paladin-feature .feature-tracker b,
-.paladin-feature .feature-tracker b {
-    display: block;
-    width: 100%;
-    height: calc(var(--reference-unit) * 60);
-    border-radius: calc(var(--reference-unit) * 12);
-    margin-top: 0;
-    background: white;
 }
 
 .cards-column .rest-reminders {

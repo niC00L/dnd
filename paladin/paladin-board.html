@@ -16,9 +16,16 @@
                     <img class="masthead-wordmark" src="paladin-board-assets/paladin-wordmark.png"
                         alt="Paladin crest and wordmark">
                     <div class="character-details">
-                        <h2>Character name</h2>
-                        <h2>Race, Background, Alignment</h2>
+                        <h2>Character name, Race</h2>
+                        <h2>Background, Alignment</h2>
                     </div>
+
+                    <!-- <div class="character-details" aria-label="Character details">
+                        <label>Character name<input type="text" name="character-name"></label>
+                        <label>Race<input type="text" name="race"></label>
+                        <label>Background<input type="text" name="background"></label>
+                        <label>Alignment<input type="text" name="alignment"></label>
+                    </div> -->
                     <section class="level">
                         <h3>LEVEL</h3>
                         <p class="modifier proficiency"></p>
@@ -186,7 +193,7 @@
                     </section>
                     <section class="hit-points panel" aria-label="Initiative, speed, and hit points">
                         <h2>Spellcasting</h2>
-                        <p class="margin-bottom">
+                        <p class="margin-bottom shared-copy">
                             Holy symbol is your spellcasting focus.
                         </p>
                         <div class="combat-stats">
@@ -243,13 +250,14 @@
                             </tbody>
                         </table>
                     </section>
-                    <section class="hit-points panel writing-lines proficiency-lines"
+                    <section class="hit-points panel proficiency-lines"
                         aria-label="Initiative, speed, and hit points">
                         <h2>Proficiencies</h2>
-                        <p class="small-text">
+                        <p class="small-text shared-copy">
                             Simple and Martial weapons. </br>
                             Light, Medium, Heavy armor. Shields.
                         </p>
+                        <div class="shared-writing-lines proficiency-writing-lines">
                         <p>&nbsp;</p>
                         <p>&nbsp;</p>
                         <p>&nbsp;</p>
@@ -260,6 +268,7 @@
                         <p>&nbsp;</p>
                         <p>&nbsp;</p>
                         <p>&nbsp;</p>
+                        </div>
                     </section>
 
 
@@ -269,7 +278,7 @@
             <div class="board-column cards-column">
 
 
-                <section class="hit-points panel writing-lines" aria-label="Initiative, speed, and hit points">
+                <section class="hit-points panel" aria-label="Initiative, speed, and hit points">
                     <h2>Inventory</h2>
                     <div class="combat-stats">
                         <div>
@@ -285,6 +294,7 @@
                             <p>&nbsp;</p>
                         </div>
                     </div>
+                    <div class="shared-writing-lines inventory-writing-lines">
                     <p>&nbsp;</p>
                     <p>&nbsp;</p>
                     <p>&nbsp;</p>
@@ -296,64 +306,77 @@
                     <p>&nbsp;</p>
                     <p>&nbsp;</p>
                     <p>&nbsp;</p>
+                    </div>
                 </section>
 
                 
-                <section class="lay-on-hands panel" aria-labelledby="lay-on-hands-title">
-                    <div class="level-badge" role="img" aria-label="Level 1"><span>LVL</span><b>1</b></div>
-                    <h2 class="hp-label" id="lay-on-hands-title">Lay on Hands</h2>
-                    <div class="combat-stats">
-                        <div>
-                            <h2>USED</h2>
-                            <p>&nbsp;</p>
-                        </div>
-                        <div>
-                            <h2>POOL TOTAL</h2>
-                            <p>&nbsp;</p>
-                        </div>
-                    </div>
-                    <p class="feature-copy">Bonus Action: touch a creature to restore Hit Points from your pool (5 ×
-                        Paladin level). Spend 5 points to end the Poisoned condition.</p>
-                </section>
-                <section class="divine-sense panel" aria-labelledby="divine-sense-title">
-                    <div class="level-badge" role="img" aria-label="Level 1"><span>LVL</span><b>1</b></div>
-                    <h2 class="hp-label" id="divine-sense-title">Divine Sense</h2>
-                    <div class="combat-stats">
-                        <div>
-                            <h2>USED</h2>
-                            <p>&nbsp;</p>
-                        </div>
-                        <div>
-                            <h2>TOTAL</h2>
-                            <p>&nbsp;</p>
+                <section class="lay-on-hands panel" aria-labelledby="features-panel-title">
+                    <h2 id="features-panel-title">Features</h2>
+                    <div class="feature-block">
+                        <div class="level-badge" role="img" aria-label="Level 1"><span>LVL</span><b>1</b></div>
+                        <h2 class="hp-label">Lay on Hands</h2>
+                        <div class="combat-stats">
+                            <div>
+                                <h2>USED</h2>
+                                <p>&nbsp;</p>
+                            </div>
+                            <div>
+                                <h2>TOTAL</h2>
+                                <p>&nbsp;</p>
+                            </div>
                         </div>
                     </div>
-                    <p class="feature-copy">Bonus Action: expend a Channel Divinity use to sense celestials, fiends, and
-                        undead within 60 feet, and detect consecrated or desecrated places for 10 minutes.</p>
-                </section>
-                <section class="paladin-feature panel">
-                    <div class="level-badge" role="img" aria-label="Level 1"><span>LVL</span><b>1</b></div>
-                    <h2>Weapon Mastery</h2>
-                    <p>Choose two weapon types and use their mastery properties. Change your choices after a Long Rest.
-                    </p>
-                    <div class="feature-tracker"><b></b></div>
-                </section>
-                <section class="paladin-feature panel">
-                    <div class="level-badge" role="img" aria-label="Level 2"><span>LVL</span><b>2</b></div>
-                    <h2>Fighting Style</h2>
-                    <p>Gain a Fighting Style feat, or choose Blessed Warrior to learn two Cleric cantrips as Paladin
-                        spells.</p>
-                    <div class="feature-tracker"><b></b></div>
+
+                    <div class="feature-block">
+                        <div class="level-badge" role="img" aria-label="Level 1"><span>LVL</span><b>1</b></div>
+                        <h2>Weapon Mastery</h2>
+                        <p class="shared-copy">Choose two weapon types.</p>
+                        <div class="feature-tracker"><b class="shared-writing-field"></b></div>
+                    </div>
+
+                    <div class="feature-block">
+                        <div class="level-badge" role="img" aria-label="Level 2"><span>LVL</span><b>2</b></div>
+                        <h2>Fighting Style</h2>
+                        <div class="feature-tracker"><b class="shared-writing-field"></b></div>
+                    </div>
+
+                    <div class="feature-block">
+                        <div class="level-badge" role="img" aria-label="Level 3"><span>LVL</span><b>3</b></div>
+                        <h2 class="hp-label" id="channel-divinity-title">Channel divinity</h2>
+                        <div class="combat-stats">
+                            <div>
+                                <h2>USED</h2>
+                                <p>&nbsp;</p>
+                            </div>
+                            <div>
+                                <h2>TOTAL</h2>
+                                <p>&nbsp;</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="shared-writing-lines features-writing-lines">
+                        <p>&nbsp;</p>
+                        <p>&nbsp;</p>
+                        <p>&nbsp;</p>
+                        <p>&nbsp;</p>
+                        <p>&nbsp;</p>
+                        <p>&nbsp;</p>
+                        <p>&nbsp;</p>
+                        <p>&nbsp;</p>
+                        <p>&nbsp;</p>
+                        <p>&nbsp;</p>
+                        <p>&nbsp;</p>
+                        </div>
                 </section>
             </div>
             <div class="board-column class-column">
 <section class="oath-features panel paladin-feature" aria-labelledby="oath-features-title">
                     <h2 class="hp-label" id="oath-features-title">Sacred Oath</h2>
-                    <div class="oath-name-field" aria-label="Sacred Oath name"></div>
+                    <div class="oath-name-field shared-writing-field" aria-label="Sacred Oath name"></div>
                     <h3 class="oath-feature-heading">Oath Features</h3>
 
                     <div class="oath-feature-entry">
-                        <div class="oath-feature-lines">
+                        <div class="oath-feature-lines shared-writing-lines">
                             <p>&nbsp;</p>
                             <p>&nbsp;</p>
                             <p>&nbsp;</p>
@@ -361,7 +384,7 @@
                         <div class="level-badge" role="img" aria-label="Level 3"><span>LVL</span><b>3</b></div>
                     </div>
                     <div class="oath-feature-entry">
-                        <div class="oath-feature-lines">
+                        <div class="oath-feature-lines shared-writing-lines">
                             <p>&nbsp;</p>
                             <p>&nbsp;</p>
                             <p>&nbsp;</p>
@@ -369,7 +392,7 @@
                         <div class="level-badge" role="img" aria-label="Level 7"><span>LVL</span><b>7</b></div>
                     </div>
                     <div class="oath-feature-entry">
-                        <div class="oath-feature-lines">
+                        <div class="oath-feature-lines shared-writing-lines">
                             <p>&nbsp;</p>
                             <p>&nbsp;</p>
                             <p>&nbsp;</p>
@@ -377,7 +400,7 @@
                         <div class="level-badge" role="img" aria-label="Level 15"><span>LVL</span><b>15</b></div>
                     </div>
                     <div class="oath-feature-entry">
-                        <div class="oath-feature-lines">
+                        <div class="oath-feature-lines shared-writing-lines">
                             <p>&nbsp;</p>
                             <p>&nbsp;</p>
                             <p>&nbsp;</p>
@@ -385,25 +408,65 @@
                         <div class="level-badge" role="img" aria-label="Level 20"><span>LVL</span><b>20</b></div>
                     </div>
                 </section>
+                <section class="hit-points panel proficiency-lines"
+                        aria-label="Initiative, speed, and hit points">
+
+                        <div class="shared-writing-lines proficiency-writing-lines">
+                        <p>&nbsp;</p>
+                        <p>&nbsp;</p>
+                        <p>&nbsp;</p>
+                        <p>&nbsp;</p>
+
+                        <p>&nbsp;</p>
+                        <p>&nbsp;</p>
+                        <p>&nbsp;</p>
+                        </div>
+                    </section>
+                <!-- <section class="paladin-feature progression-card panel">
+                    <div class="shared-writing-lines">
+                            <p>&nbsp;</p>
+                            <p>&nbsp;</p>
+                            <p>&nbsp;</p>
+                            <p>&nbsp;</p>
+                            <p>&nbsp;</p>
+                            <p>&nbsp;</p>
+                            <p>&nbsp;</p>
+                            <p>&nbsp;</p>
+                            <p>&nbsp;</p>
+                            <p>&nbsp;</p>
+                            <p>&nbsp;</p>
+                            <p>&nbsp;</p>
+                            <p>&nbsp;</p>
+                            <p>&nbsp;</p>
+                            <p>&nbsp;</p>
+                            <p>&nbsp;</p>
+                            <p>&nbsp;</p>
+                            <p>&nbsp;</p>
+                            <p>&nbsp;</p>
+                            <p>&nbsp;</p>
+                            <p>&nbsp;</p>
+                        </div>
+                </section> -->
                 <section class="paladin-feature progression-card panel">
                     <h2>Class Progression</h2>
-                    <ul class="progression-list">
-                        <li><b>2.</b><span>Divine Smite is always prepared. Cast it once without a spell slot; regain this free cast after a Long Rest.</span></li>
-                        <li><b>5.</b><span>Extra Attack; Faithful Steed (Find Steed always prepared, one free cast per Long Rest).</span></li>
-                        <li><b>6.</b><span>Aura of Protection: you and nearby allies add your Charisma modifier to saves.</span></li>
+                    <ul class="progression-list shared-copy">
+                        <li><b>2.</b><span>Divine Smite is always prepared. </span></li>
+                        <li><b>3.</b><span>Divine sense.</span></li>
+                        <li><b>5.</b><span>Extra Attack; Faithful Steed </span></li>
+                        <li><b>6.</b><span>Aura of Protection: add your Cha modifier to saves.</span></li>
                         <li><b>9.</b><span>Abjure Foes.</span></li>
-                        <li><b>10.</b><span>Aura of Courage.</span></li>
-                        <li><b>11.</b><span>Radiant Strikes (+1d8).</span></li>
+                        <li><b>10.</b><span>Aura of Courage: Immune to Frightened.</span></li>
+                        <li><b>11.</b><span>Radiant Strikes: Melee/unarmed +1d8 radiant.</span></li>
                         <li><b>14.</b><span>Restoring Touch.</span></li>
                         <li><b>18.</b><span>Aura expands to 30 feet.</span></li>
                     </ul>
                     <div class="progression-rest-divider" aria-hidden="true"></div>
-                    <p>After a <b>Short Rest:</b></p>
-                    <ul>
+                    <p class="shared-copy">After a <b>Short Rest:</b></p>
+                    <ul class="shared-copy">
                         <li>Channel Divinity: regain one expended use.</li>
                     </ul>
-                    <p>After a <b>Long Rest:</b></p>
-                    <ul>
+                    <p class="shared-copy">After a <b>Long Rest:</b></p>
+                    <ul class="shared-copy">
                         <li>Lay on Hands pool fully replenishes.</li>
                         <li>All expended spell slots are regained.</li>
                         <li>Divine Smite cast becomes available again.</li>
