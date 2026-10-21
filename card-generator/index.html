@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#243c36">
+    <title>Spell Card Press</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Alegreya+Sans:ital,wght@0,400;0,500;0,700;1,400;1,700&family=Girassol&family=Jost:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="app.css">
+    <script src="app.js?v=footer-fit-1" defer></script>
+</head>
+<body data-card-size="half">
+    <header class="topbar">
+        <a class="brand" href="./" aria-label="Spell Card Press home">
+            <span class="brand-mark" aria-hidden="true">S</span>
+            <span class="brand-copy"><strong>Spell Card Press</strong><span>5e 2024 rules</span></span>
+        </a>
+        <div class="topbar-meta">
+            <span class="edition-tag">SRD 5.2</span>
+            <button class="button button-primary" id="print-button" type="button" disabled>Print selected <span id="print-count">0</span></button>
+        </div>
+    </header>
+
+    <main class="workspace">
+        <section class="library" aria-labelledby="library-title">
+            <div class="section-heading">
+                <div><p class="eyebrow">SPELL LIBRARY</p><h1 id="library-title">Choose your cards</h1></div>
+                <p class="result-count" id="result-count" aria-live="polite">Loading spells...</p>
+            </div>
+            <div class="filters" aria-label="Filter spells">
+                <label class="search-field"><span>Search</span><input id="search-input" type="search" placeholder="Spell name or description" autocomplete="off"></label>
+                <label><span>Level</span><select id="level-filter"><option value="">All levels</option></select></label>
+                <label><span>School</span><select id="school-filter"><option value="">All schools</option></select></label>
+                <label><span>Class</span><select id="class-filter"><option value="">All classes</option></select></label>
+            </div>
+            <div class="list-toolbar">
+                <span id="selection-summary">No cards selected</span>
+                <div class="toolbar-actions">
+                    <button class="text-button" id="select-visible" type="button">Select visible</button>
+                    <button class="text-button" id="clear-selection" type="button" disabled>Clear selection</button>
+                </div>
+            </div>
+            <div class="spell-list" id="spell-list" aria-label="Available spells" aria-busy="true">
+                <p class="list-message">Loading the 2024 SRD spell list...</p>
+            </div>
+        </section>
+
+        <aside class="selection" aria-labelledby="selection-title">
+            <div class="section-heading selection-heading">
+                <div><p class="eyebrow">PRINT SHEET</p><h2 id="selection-title">Selected cards</h2></div>
+                <span class="selected-count" id="selected-count" aria-live="polite">0</span>
+            </div>
+            <p class="selection-note" id="selection-note">Half size · 44.5 x 63.5 mm · up to 16 cards per A4 page</p>
+            <fieldset class="size-picker">
+                <legend>Card size</legend>
+                <div class="size-options">
+                    <label class="size-option">
+                        <input type="radio" name="card-size" value="standard">
+                        <span class="size-option-copy"><strong>Standard</strong><small>63.5 x 88.9 mm</small></span>
+                    </label>
+                    <label class="size-option">
+                        <input type="radio" name="card-size" value="half" checked>
+                        <span class="size-option-copy"><strong>Half size</strong><small>44.5 x 63.5 mm</small></span>
+                    </label>
+                </div>
+            </fieldset>
+            <div class="selected-cards" id="selected-cards">
+                <div class="selection-empty"><span class="empty-mark" aria-hidden="true">+</span><p>Your selected cards will appear here.</p></div>
+            </div>
+        </aside>
+    </main>
+
+    <footer class="app-footer">
+        <span>Spell data: Open5e · System Reference Document 5.2</span>
+        <a href="https://open5e.com/sources/srd-2024" target="_blank" rel="noreferrer">CC BY 4.0 attribution</a>
+    </footer>
+
+    <div class="print-root" id="print-root" aria-hidden="true"></div>
+
+    <template id="spell-card-template">
+        <article class="spell-card">
+            <div class="card-inner">
+                <header class="card-header">
+                    <h2 class="card-title" data-field="name"></h2>
+                    <div class="level-badge" aria-label="Spell level"><span class="badge-prefix" data-field="badge-prefix">lvl</span><strong data-field="badge"></strong></div>
+                </header>
+                <section class="card-meta" aria-label="Casting time, range, and duration">
+                    <div class="meta-item"><strong>Casting time:</strong><span data-field="casting-time"></span></div>
+                    <div class="meta-item"><strong>Range:</strong><span data-field="range"></span></div>
+                    <div class="meta-item"><strong>Duration:</strong><span data-field="duration"></span></div>
+                </section>
+                <div class="card-ornament" aria-hidden="true"></div>
+                <p class="card-description" data-field="description"></p>
+                <div class="card-upgrade" data-field="upgrade-container" hidden><p><strong data-field="upgrade-label"></strong> <span data-field="upgrade-text"></span></p></div>
+                <footer class="card-footer"><span class="card-school" data-field="school"></span><span class="card-classes" data-field="classes"></span></footer>
+            </div>
+        </article>
+    </template>
+</body>
+</html>
