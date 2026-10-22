@@ -151,7 +151,7 @@ h1, h2, p { margin-top: 0; }
     overflow: hidden;
     border: 0;
     background-color: #f8f6ee;
-    background-image: url("./template/background.png");
+    background-image: url("./img/background.png");
     background-position: center;
     background-size: 100% 100%;
     background-repeat: no-repeat;
@@ -160,32 +160,37 @@ h1, h2, p { margin-top: 0; }
     print-color-adjust: exact;
     -webkit-print-color-adjust: exact;
 }
-.card-inner { position: absolute; inset: 0; container-type: inline-size; padding: 7.2% 5.4% 4.6%; }
-.card-header { display: flex; min-height: 10.5%; align-items: flex-start; justify-content: center; padding: 0 14% 0 1%; }
-.card-title { max-width: 100%; margin: 0; font-family: var(--card-title-font); font-size: clamp(20px, 11cqw, 48px); font-weight: 400; line-height: 0.98; text-align: center; text-transform: uppercase; }
+.card-inner { position: absolute; inset: 0; container-type: inline-size; padding: 5.5% 5.4% 4.6%; }
+.card-header { display: flex; height: 13%; align-items: center; justify-content: center; padding: 0 12% 0 1%; }
+.card-title { max-width: 100%; margin: 0; font-family: var(--card-title-font); font-size: clamp(20px, 10.5cqw, 48px); font-weight: 400; line-height: 0.98; text-align: center; text-transform: uppercase; }
 .spell-card.is-long-title .card-title { font-size: clamp(15px, 8cqw, 34px); }
-.level-badge { position: absolute; top: 0; right: 4.2%; display: flex; width: 11.7%; height: 11.7%; align-items: center; flex-direction: column; justify-content: flex-start; background: url("./template/flag.svg") center / 100% 100% no-repeat; padding-top: 2%; color: #24231f; font-family: var(--label-font); line-height: 1; }
+.level-badge { position: absolute; top: 0; right: 4.2%; display: flex; width: 11.7%; height: 13%; align-items: center; flex-direction: column; justify-content: flex-start; background: url("./img/flag.svg") center / 100% 100% no-repeat; padding-top: 2%; color: #24231f; font-family: var(--label-font); line-height: 1; }
 .badge-prefix { font-size: 3.6cqw; }
 .level-badge strong { margin-top: 2px; font-size: 7cqw; font-weight: 500; }
 .spell-card.is-cantrip .level-badge { justify-content: center; padding-top: 0; }
 .spell-card.is-cantrip .badge-prefix { display: none; }
 .spell-card.is-cantrip .level-badge strong { margin-top: 0; font-size: 6cqw; }
-.card-meta { display: grid; grid-template-columns: 1fr 0.85fr 1.2fr; gap: 3%; padding: 0 0.4%; }
-.meta-item { display: flex; min-width: 0; flex-direction: column; gap: 1px; line-height: 1.12; }
-.meta-item strong { font-size: 4.8cqw; font-weight: 700; }
-.meta-item span { overflow-wrap: anywhere; font-size: 5.2cqw; }
-.card-ornament { height: 4.5cqw; margin: 1.4% 0 0; background: url("./template/arrow.svg") center / 100% 100% no-repeat; }
-.card-description { max-height: 58%; overflow: hidden; margin: 4.5% 0 0; font-size: 5.2cqw; line-height: 1.28; white-space: pre-line; }
-.spell-card.has-upgrade .card-description { max-height: 43%; }
-.spell-card.is-continuation .card-meta { display: none; }
-.spell-card.is-continuation .card-description { max-height: 70%; margin-top: 2.5%; font-size: 4.6cqw; line-height: 1.2; }
-.spell-card.is-dense .card-description { font-size: 4.2cqw; line-height: 1.18; }
-.spell-card.is-very-dense .card-description { font-size: 3.8cqw; line-height: 1.14; }
-.card-upgrade { position: absolute; right: 5.4%; bottom: 11.5%; left: 5.4%; max-height: 16%; overflow: hidden; font-size: 3.6cqw; line-height: 1.2; }
+.card-keywords { display: grid; height: 19%; grid-template-columns: 1.08fr 0.92fr 1fr; grid-template-rows: repeat(2, minmax(0, 1fr)); column-gap: 3%; row-gap: 2%; padding: 0 0.4%; }
+.keyword-item { display: flex; min-width: 0; flex-direction: column; gap: 1px; line-height: 1.08; }
+.keyword-item strong { font-family: var(--body-font); font-size: 3.4cqw; font-weight: 700; line-height: 1.1; text-transform: uppercase; }
+.keyword-item > span[data-field] { display: flex; min-width: 0; align-items: center; flex-wrap: wrap; gap: 0.12em; overflow-wrap: anywhere; font-family: var(--body-font); font-size: 4.6cqw; line-height: 1.08; }
+.keyword-icon { width: 0.9em; height: 0.9em; flex: none; }
+.range-layout { display: flex; min-width: 0; width: 100%; flex-direction: column; align-items: flex-start; gap: 0; line-height: 1.02; }
+.range-area { display: inline-flex; width: max-content; flex: none; align-items: center; gap: 0.12em; white-space: nowrap; }
+.range-area-text { flex: none; white-space: nowrap; }
+.card-ornament { height: 5cqw; margin: 0.6% 0 0; background: url("./img/arrow.svg") center / 100% 100% no-repeat; }
+.card-description { max-height: 48%; overflow: hidden; margin: 1.8% 0 0; font-size: 4.6cqw; line-height: 1.28; white-space: pre-line; }
+.spell-card.has-upgrade .card-description { max-height: 42%; }
+.spell-card.is-continuation .card-keywords { display: none; }
+.spell-card.is-continuation .card-description { max-height: 70%; margin-top: 2.5%; line-height: 1.2; }
+.spell-card.is-dense .card-description { line-height: 1.18; }
+.spell-card.is-very-dense .card-description { line-height: 1.14; }
+.card-upgrade { position: absolute; right: 5.4%; bottom: 10%; left: 5.4%; max-height: 15%; overflow: hidden; font-size: 4.6cqw; line-height: 1.2; }
 .card-upgrade[hidden] { display: none; }
 .card-upgrade p { margin: 0; }
 .card-upgrade strong { font-style: italic; font-weight: 700; }
-.card-footer { position: absolute; right: 0; bottom: 0; left: 0; display: flex; height: 6%; align-items: center; justify-content: space-between; gap: 5px; padding: 0 4%; background: #2872c7; color: #fff; font-family: "Jost", sans-serif; font-size: 4.5cqw; line-height: 1; }
+.card-material-note { position: absolute; right: 5.4%; bottom: 6.3%; left: 5.4%; margin: 0; font-size: 4cqw; font-style: italic; text-align: right; }
+.card-footer { position: absolute; right: 0; bottom: 0; left: 0; display: flex; height: 6%; align-items: center; justify-content: space-between; gap: 5px; padding: 0 4%; background: #2872c7; color: #fff; font-family: var(--label-font); font-size: 4.5cqw; line-height: 1; }
 .card-school { flex: none; }
 .card-classes { overflow: hidden; text-align: right; text-overflow: ellipsis; white-space: nowrap; }
 

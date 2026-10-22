@@ -1,4 +1,44 @@
 const DATA_URL = "./data/spells-2024-srd.json";
+const TEMPLATE_ONLY_SPELLS = [{
+    key: "local-word-of-radiance",
+    name: "Word of Radiance",
+    level: 0,
+    school: { name: "Evocation" },
+    classes: [{ name: "Cleric" }],
+    desc: "Burning radiance erupts from you in a 5-foot Emanation. Each creature of your choice that you can see in it must succeed on a Constitution saving throw or take 1d6 Radiant damage.",
+    higher_level: "The damage increases by 1d6 when you reach levels 5 (2d6), 11 (3d6), and 17 (4d6).",
+    range_text: "Self",
+    range: 0,
+    shape_size: 5,
+    shape_size_unit: "feet",
+    shape_type: "emanation",
+    casting_time: "action",
+    duration: "instantaneous",
+    saving_throw_ability: "constitution",
+    attack_roll: false,
+    damage_roll: "1d6",
+    damage_types: ["radiant"],
+    verbal: true,
+    somatic: false,
+    material: true,
+    material_specified: "",
+    concentration: false,
+    ritual: false
+}];
+const ICON_URL = "./img/icons/";
+const DAMAGE_ICONS = new Set([
+    "acid", "bludgeoning", "cold", "fire", "force", "lightning", "necrotic",
+    "piercing", "poison", "psychic", "radiant", "slashing", "thunder"
+]);
+const CONDITION_ICONS = [
+    "blinded", "charmed", "deafened", "exhaustion", "frightened", "invisible",
+    "paralyzed", "petrified", "poisoned", "prone", "restrained", "unconscious"
+];
+const AREA_ICONS = new Set(["cone", "cube", "cylinder", "emanation", "square"]);
+const ABILITY_ABBREVIATIONS = {
+    strength: "STR", dexterity: "DEX", constitution: "CON",
+    intelligence: "INT", wisdom: "WIS", charisma: "CHA"
+};
 
 const elements = {
     search: document.querySelector("#search-input"),
@@ -30,8 +70,8 @@ function cardSizeSettings() {
     const standard = document.body.dataset.cardSize === "standard";
     return {
         cardsPerPage: standard ? 9 : 16,
-        maxTextLength: 700,
-        inlineDescriptionLength: 700,
+        maxTextLength: 750,
+        inlineDescriptionLength: 350,
         inlineUpgradeLength: 200,
         label: standard ? "Standard" : "Half size",
         dimensions: standard ? "63.5 x 88.9 mm" : "44.5 x 63.5 mm"
@@ -59,10 +99,7 @@ function formatCastingTime(value) {
 
 function displayDuration(spell) {
     const rawDuration = String(spell.duration || "Special").trim();
-    const duration = rawDuration.charAt(0).toUpperCase() + rawDuration.slice(1);
-    if (!spell.concentration) return duration;
-    const limit = /^up to\b/i.test(rawDuration) ? rawDuration : `up to ${rawDuration}`;
-    return `Concentration, ${limit}`;
+    return rawDuration.charAt(0).toUpperCase() + rawDuration.slice(1);
 }
 
 function populateFilters() {
@@ -108,6 +145,113 @@ function matchesFilters(spell) {
 function spellDetails(spell) {
     const classes = (spell.classes || []).map(item => item.name).join(", ");
     return `${levelLabel(spell.level)} · ${spell.school?.name || "Unlisted"} · ${classes}`;
+}
+
+function createKeywordIcon(name) {
+    const image = document.createElement("img");
+    image.className = "keyword-icon";
+    image.src = `${ICON_URL}${name}.svg`;
+    image.alt = "";
+    image.setAttribute("aria-hidden", "true");
+    return image;
+}
+
+function keywordContent(card, field, text, icons = []) {
+    const value = card.querySelector(`[data-field="${field}"]`);
+    value.replaceChildren(...icons.map(createKeywordIcon), document.createTextNode(text || "None"));
+}
+
+function formatRangeArea(spell) {
+    const range = String(spell.range_text || "Special").replace(/\bfeet\b/gi, "ft").replace(/\bfoot\b/gi, "ft");
+    if (spell.shape_type && spell.shape_size) {
+        return {
+            text: range,
+            area: {
+                size: `${spell.shape_size} ft`,
+                icon: AREA_ICONS.has(spell.shape_type) ? spell.shape_type : "",
+                label: titleCase(spell.shape_type)
+            }
+        };
+    }
+    return { text: range, area: null };
+}
+
+function rangeAreaContent(card, range) {
+    const value = card.querySelector('[data-field="range"]');
+    const layout = document.createElement("span");
+    layout.className = "range-layout";
+    const rangeText = document.createElement("span");
+    rangeText.textContent = range.text;
+    layout.append(rangeText);
+
+    if (range.area) {
+        const area = document.createElement("span");
+        area.className = "range-area";
+        const areaSize = document.createElement("span");
+        areaSize.className = "range-area-text";
+        areaSize.textContent = `(${range.area.size}`;
+        area.append(areaSize);
+        if (range.area.icon) area.append(createKeywordIcon(range.area.icon));
+        else {
+            const areaLabel = document.createElement("span");
+            areaLabel.className = "range-area-text";
+            areaLabel.textContent = range.area.label;
+            area.append(areaLabel);
+        }
+        const closingParenthesis = document.createElement("span");
+        closingParenthesis.className = "range-area-text";
+        closingParenthesis.textContent = ")";
+        area.append(closingParenthesis);
+        layout.append(area);
+    }
+    value.replaceChildren(layout);
+}
+
+function effectSummary(spell) {
+    const damageTypes = spell.damage_types || [];
+    if (damageTypes.length) {
+        const damageText = [spell.damage_roll, ...damageTypes.map(titleCase)].filter(Boolean).join(" ");
+        return { text: damageText, icons: damageTypes.filter(type => DAMAGE_ICONS.has(type.toLowerCase())) };
+    }
+
+    const description = spell.desc || "";
+    if (/\b(regain|regains|restore|restores|healing|heal)\b/i.test(description)) {
+        return { text: "Healing", icons: [] };
+    }
+    const conditions = CONDITION_ICONS.filter(condition => new RegExp(`\\b${condition}\\b`, "i").test(description));
+    if (conditions.length) return { text: conditions.map(titleCase).join(", "), icons: conditions };
+    if (/\b(subtract|reduce|decrease|weaken|impair)\b/i.test(description)) {
+        return { text: "Debuff", icons: [] };
+    }
+    return { text: "Utility", icons: [] };
+}
+
+function spellKeywords(spell) {
+    const savingThrow = ABILITY_ABBREVIATIONS[spell.saving_throw_ability];
+    let attackSave = "None";
+    let attackIcons = [];
+    if (savingThrow) {
+        attackSave = `${savingThrow} Save`;
+    } else if (spell.attack_roll) {
+        const melee = spell.range <= 5 || /touch|melee/i.test(spell.range_text || "");
+        attackSave = `${melee ? "Melee" : "Ranged"} Spell Attack`;
+        attackIcons = [melee ? "melee_spell" : "ranged_spell"];
+    }
+
+    const components = [];
+    if (spell.verbal) components.push("V");
+    if (spell.somatic) components.push("S");
+    if (spell.material) components.push(`M${spell.material_specified ? "*" : ""}`);
+    const effect = effectSummary(spell);
+
+    return {
+        "casting-time": { text: formatCastingTime(spell.casting_time), icons: spell.ritual ? ["ritual"] : [] },
+        range: formatRangeArea(spell),
+        duration: { text: displayDuration(spell), icons: spell.concentration ? ["concentration"] : [] },
+        "attack-save": { text: attackSave, icons: attackIcons },
+        effect,
+        components: { text: components.join(", ") || "None", icons: [] }
+    };
 }
 
 function splitText(text, maxLength = cardSizeSettings().maxTextLength) {
@@ -255,15 +399,18 @@ function buildCard(spell, part = getSpellCardParts(spell)[0]) {
     setText("name", part.continuation ? `${spell.name} (CONT.)` : spell.name);
     setText("badge", cantrip ? "C" : String(spell.level));
     setText("badge-prefix", cantrip ? "" : "lvl");
-    setText("casting-time", formatCastingTime(spell.casting_time));
-    setText("range", spell.range_text || "Special");
-    setText("duration", displayDuration(spell));
+    const keywords = spellKeywords(spell);
+    for (const [field, value] of Object.entries(keywords)) {
+        if (field === "range") rangeAreaContent(card, value);
+        else keywordContent(card, field, value.text, value.icons);
+    }
     renderDescription(card.querySelector('[data-field="description"]'), part.description);
+    setText("material-note", spell.material_specified ? `* ${spell.material_specified}` : "");
     setText("school", spell.school?.name || "Unlisted");
-        const classNames = (spell.classes || []).map(item => item.name).join(", ");
-        setText("classes", classNames);
-        const classFontSize = Math.max(2.8, Math.min(4.5, 170 / Math.max(classNames.length, 1)));
-        card.querySelector('[data-field="classes"]').style.fontSize = `${classFontSize}cqw`;
+    const classNames = (spell.classes || []).map(item => item.name).join(", ");
+    setText("classes", classNames);
+    const classFontSize = Math.max(2.8, Math.min(4.5, 170 / Math.max(classNames.length, 1)));
+    card.querySelector('[data-field="classes"]').style.fontSize = `${classFontSize}cqw`;
 
     if (part.upgrade) {
         card.querySelector('[data-field="upgrade-container"]').hidden = false;
@@ -338,9 +485,10 @@ async function loadSpells() {
         if (!response.ok) throw new Error(`Data request failed (${response.status}).`);
         const spells = await response.json();
         if (!Array.isArray(spells)) throw new Error("The spell data must be a JSON array.");
-        state.spells = spells
-            .filter(spell => spell && spell.key && spell.name && Number.isInteger(spell.level))
-            .sort((a, b) => a.name.localeCompare(b.name));
+        state.spells = spells.filter(spell => spell && spell.key && spell.name && Number.isInteger(spell.level));
+        const knownNames = new Set(state.spells.map(spell => spell.name));
+        state.spells.push(...TEMPLATE_ONLY_SPELLS.filter(spell => !knownNames.has(spell.name)));
+        state.spells.sort((a, b) => a.name.localeCompare(b.name));
         populateFilters();
         renderSpellList();
     } catch (error) {
@@ -379,6 +527,7 @@ for (const input of elements.cardSizeInputs) {
 elements.printButton.addEventListener("click", async () => {
     renderPrintPages();
     await document.fonts.ready;
+    await Promise.all([...elements.printRoot.querySelectorAll("img")].map(image => image.decode().catch(() => {})));
     window.print();
 });
 

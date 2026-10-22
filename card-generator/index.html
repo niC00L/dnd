@@ -9,7 +9,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Alegreya+Sans:ital,wght@0,400;0,500;0,700;1,400;1,700&family=Girassol&family=Jost:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="app.css">
-    <script src="app.js?v=footer-fit-1" defer></script>
+    <script src="app.js?v=keyword-layout-2" defer></script>
 </head>
 <body data-card-size="half">
     <header class="topbar">
@@ -86,14 +86,18 @@
                     <h2 class="card-title" data-field="name"></h2>
                     <div class="level-badge" aria-label="Spell level"><span class="badge-prefix" data-field="badge-prefix">lvl</span><strong data-field="badge"></strong></div>
                 </header>
-                <section class="card-meta" aria-label="Casting time, range, and duration">
-                    <div class="meta-item"><strong>Casting time:</strong><span data-field="casting-time"></span></div>
-                    <div class="meta-item"><strong>Range:</strong><span data-field="range"></span></div>
-                    <div class="meta-item"><strong>Duration:</strong><span data-field="duration"></span></div>
+                <section class="card-keywords" aria-label="Spell keywords">
+                    <div class="keyword-item"><strong>Casting Time</strong><span data-field="casting-time"></span></div>
+                    <div class="keyword-item"><strong>Range/Area</strong><span data-field="range"></span></div>
+                    <div class="keyword-item"><strong>Duration</strong><span data-field="duration"></span></div>
+                    <div class="keyword-item"><strong>Attack/Save</strong><span data-field="attack-save"></span></div>
+                    <div class="keyword-item"><strong>DMG/Effect</strong><span data-field="effect"></span></div>
+                    <div class="keyword-item"><strong>Components</strong><span data-field="components"></span></div>
                 </section>
                 <div class="card-ornament" aria-hidden="true"></div>
                 <p class="card-description" data-field="description"></p>
                 <div class="card-upgrade" data-field="upgrade-container" hidden><p><strong data-field="upgrade-label"></strong> <span data-field="upgrade-text"></span></p></div>
+                <p class="card-material-note" data-field="material-note"></p>
                 <footer class="card-footer"><span class="card-school" data-field="school"></span><span class="card-classes" data-field="classes"></span></footer>
             </div>
         </article>
