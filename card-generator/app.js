@@ -24,6 +24,53 @@ const TEMPLATE_ONLY_SPELLS = [{
     material_specified: "",
     concentration: false,
     ritual: false
+}, {
+    key: "local-thunderclap",
+    name: "Thunderclap",
+    level: 0,
+    school: { name: "Evocation" },
+    classes: ["Bard", "Druid", "Sorcerer", "Warlock", "Wizard"].map(name => ({ name })),
+    desc: "Create a thunderous burst audible within 100 feet. Each creature other than you within 5 feet must make a Constitution saving throw, taking 1d6 Thunder damage on a failure.",
+    higher_level: "Damage increases by 1d6 at character levels 5, 11, and 17.",
+    range_text: "Self",
+    range: 5,
+    shape_size: 5,
+    shape_size_unit: "feet",
+    shape_type: "sphere",
+    casting_time: "action",
+    duration: "instantaneous",
+    saving_throw_ability: "constitution",
+    attack_roll: false,
+    damage_roll: "1d6",
+    damage_types: ["thunder"],
+    verbal: false,
+    somatic: true,
+    material: false,
+    material_specified: "",
+    concentration: false,
+    ritual: false
+}, {
+    key: "local-toll-the-dead",
+    name: "Toll the Dead",
+    level: 0,
+    school: { name: "Necromancy" },
+    classes: ["Cleric", "Warlock", "Wizard"].map(name => ({ name })),
+    desc: "A distant bell sounds to one creature within range. It must make a Wisdom saving throw, taking 1d8 Necrotic damage on a failure, or 1d12 if it is missing any Hit Points.",
+    higher_level: "The damage increases to 2d8 or 2d12 at level 5, 3d8 or 3d12 at level 11, and 4d8 or 4d12 at level 17.",
+    range_text: "60 feet",
+    range: 60,
+    casting_time: "action",
+    duration: "instantaneous",
+    saving_throw_ability: "wisdom",
+    attack_roll: false,
+    damage_roll: "1d8 or 1d12",
+    damage_types: ["necrotic"],
+    verbal: true,
+    somatic: true,
+    material: false,
+    material_specified: "",
+    concentration: false,
+    ritual: false
 }];
 const ICON_URL = "./img/icons/";
 const DAMAGE_ICONS = new Set([
@@ -65,14 +112,16 @@ const state = {
     filtered: [],
     selected: new Map()
 };
+const cardPartsCache = new WeakMap();
+let cardMeasurementRoot;
 
 function cardSizeSettings() {
     const standard = document.body.dataset.cardSize === "standard";
     return {
         cardsPerPage: standard ? 9 : 16,
-        maxTextLength: 750,
+        maxTextLength: 900,
         inlineDescriptionLength: 350,
-        inlineUpgradeLength: 200,
+        inlineUpgradeLength: 225,
         label: standard ? "Standard" : "Half size",
         dimensions: standard ? "63.5 x 88.9 mm" : "44.5 x 63.5 mm"
     };
@@ -234,7 +283,7 @@ function spellKeywords(spell) {
         attackSave = `${savingThrow} Save`;
     } else if (spell.attack_roll) {
         const melee = spell.range <= 5 || /touch|melee/i.test(spell.range_text || "");
-        attackSave = `${melee ? "Melee" : "Ranged"} Spell Attack`;
+        attackSave = `${melee ? "Melee" : "Ranged"} Spell`;
         attackIcons = [melee ? "melee_spell" : "ranged_spell"];
     }
 
@@ -318,8 +367,54 @@ function renderDescription(element, text) {
     element.replaceChildren(fragment);
 }
 
+function descriptionFits(spell, part) {
+    if (!cardMeasurementRoot) {
+        cardMeasurementRoot = document.createElement("div");
+        cardMeasurementRoot.style.cssText = "position:fixed;left:-10000px;top:0;width:300px;visibility:hidden;pointer-events:none;";
+        document.body.append(cardMeasurementRoot);
+    }
+    const card = buildCard(spell, part);
+    cardMeasurementRoot.append(card);
+    const description = card.querySelector(".card-description");
+    const fits = description.scrollHeight <= description.clientHeight;
+    card.remove();
+    return fits;
+}
+
+function fitCardParts(spell, parts) {
+    const fittedParts = [];
+    for (const part of parts) {
+        if (descriptionFits(spell, part)) {
+            fittedParts.push(part);
+            continue;
+        }
+
+        let maxLength = cardSizeSettings().maxTextLength;
+        let chunks;
+        while (maxLength > 120) {
+            chunks = splitText(part.description, maxLength);
+            if (descriptionFits(spell, { ...part, description: chunks[0] })) break;
+            maxLength = Math.max(120, Math.floor(maxLength * 0.9));
+        }
+        if (!chunks || !descriptionFits(spell, { ...part, description: chunks[0] })) {
+            chunks = splitText(part.description, 120);
+        }
+        chunks.forEach((description, index) => fittedParts.push({
+            ...part,
+            description,
+            continuation: part.continuation || index > 0,
+            upgrade: index === 0 ? part.upgrade : ""
+        }));
+    }
+    return fittedParts;
+}
+
 function getSpellCardParts(spell) {
     const size = cardSizeSettings();
+    const sizeKey = document.body.dataset.cardSize || "half";
+    const cachedParts = cardPartsCache.get(spell)?.get(sizeKey);
+    if (cachedParts) return cachedParts;
+
     const description = normalizeDescription(spell.desc || "Description unavailable in this data source.");
     const descriptionParts = splitText(description);
     const parts = descriptionParts.map((text, index) => ({
@@ -338,7 +433,11 @@ function getSpellCardParts(spell) {
             for (const text of upgradeParts) parts.push({ description: text, continuation: true, upgrade: "" });
         }
     }
-    return parts;
+    const fittedParts = fitCardParts(spell, parts);
+    const sizeCache = cardPartsCache.get(spell) || new Map();
+    sizeCache.set(sizeKey, fittedParts);
+    cardPartsCache.set(spell, sizeCache);
+    return fittedParts;
 }
 
 function renderSpellList() {
@@ -390,6 +489,8 @@ function buildCard(spell, part = getSpellCardParts(spell)[0]) {
     card.classList.toggle("is-long-title", spell.name.length > 22);
     card.classList.toggle("is-continuation", part.continuation);
     card.classList.toggle("has-upgrade", Boolean(part.upgrade));
+    card.classList.toggle("has-material-note", Boolean(spell.material_specified));
+    card.classList.toggle("has-no-lower-content", !part.upgrade && !spell.material_specified);
     card.classList.toggle("is-dense", descriptionLength > 200);
     card.classList.toggle("is-very-dense", descriptionLength > 340);
 
