@@ -1,5 +1,10 @@
 const DATA_URL = "./data/spells-2024-srd.json";
 const SELECTION_STORAGE_KEY = "card-generator.selected-spells";
+const CUSTOM_CARDS_STORAGE_KEY = "card-generator.custom-cards";
+const CUSTOM_CARDS_DATA_URL = "./data/custom-spells.json";
+const SPELL_CLASSES = ["Artificer", "Bard", "Cleric", "Druid", "Paladin", "Ranger", "Sorcerer", "Warlock", "Wizard"];
+const SPELL_SCHOOLS = ["Abjuration", "Conjuration", "Divination", "Enchantment", "Evocation", "Illusion", "Necromancy", "Transmutation"];
+const CASTING_TIMES = ["Action", "Bonus Action", "Reaction", "1 minute", "10 minutes", "1 hour", "8 hours", "12 hours", "24 hours", "Special"];
 const TEMPLATE_ONLY_SPELLS = [{
     key: "local-word-of-radiance",
     name: "Word of Radiance",
@@ -93,6 +98,7 @@ const elements = {
     level: document.querySelector("#level-filter"),
     school: document.querySelector("#school-filter"),
     className: document.querySelector("#class-filter"),
+    source: document.querySelector("#source-filter"),
     list: document.querySelector("#spell-list"),
     resultCount: document.querySelector("#result-count"),
     selectionSummary: document.querySelector("#selection-summary"),
@@ -111,8 +117,23 @@ const elements = {
 const state = {
     spells: [],
     filtered: [],
+    customSpells: [],
     selected: new Map()
 };
+const customEditor = {
+    dialog: document.querySelector("#custom-card-dialog"),
+    form: document.querySelector("#custom-card-form"),
+    title: document.querySelector("#custom-card-title"),
+    preview: document.querySelector("#custom-card-preview"),
+    error: document.querySelector("#custom-card-error"),
+    createButton: document.querySelector("#create-custom-card"),
+    classSearch: document.querySelector("#custom-class-search"),
+    classOptions: document.querySelector("#custom-class-options"),
+    selectedClasses: document.querySelector("#custom-selected-classes"),
+    classes: new Set(),
+    key: null
+};
+let customSpellsFileHandle;
 const cardPartsCache = new WeakMap();
 let cardMeasurementRoot;
 
@@ -151,6 +172,10 @@ function displayDuration(spell) {
 }
 
 function populateFilters() {
+    const previousValues = [elements.level.value, elements.school.value, elements.className.value];
+    for (const filter of [elements.level, elements.school, elements.className]) {
+        filter.replaceChildren(filter.firstElementChild);
+    }
     const levels = [...new Set(state.spells.map(spell => spell.level))].sort((a, b) => a - b);
     const schools = [...new Set(state.spells.map(spell => spell.school?.name).filter(Boolean))]
         .sort((a, b) => a.localeCompare(b));
@@ -175,6 +200,10 @@ function populateFilters() {
         option.textContent = className;
         elements.className.append(option);
     }
+    [elements.level, elements.school, elements.className].forEach((filter, index) => {
+        filter.value = [...filter.options].some(option => option.value === previousValues[index])
+            ? previousValues[index] : "";
+    });
 }
 
 function matchesFilters(spell) {
@@ -187,7 +216,9 @@ function matchesFilters(spell) {
     const matchesSchool = elements.school.value === "" || spell.school?.name === elements.school.value;
     const matchesClass = elements.className.value === ""
         || (spell.classes || []).some(item => item.name === elements.className.value);
-    return matchesSearch && matchesLevel && matchesSchool && matchesClass;
+    const isCustom = state.customSpells.some(custom => custom.key === spell.key);
+    const matchesSource = elements.source.value === "" || isCustom === (elements.source.value === "custom");
+    return matchesSearch && matchesLevel && matchesSchool && matchesClass && matchesSource;
 }
 
 function spellDetails(spell) {
@@ -281,7 +312,9 @@ function spellKeywords(spell) {
     if (savingThrow) {
         attackSave = `${savingThrow} Save`;
     } else if (spell.attack_roll) {
-        const melee = spell.range <= 5 || /touch|melee/i.test(spell.range_text || "");
+        const melee = spell.custom_attack
+            ? spell.custom_attack === "melee"
+            : spell.range <= 5 || /touch|melee/i.test(spell.range_text || "");
         attackSave = `${melee ? "Melee" : "Ranged"} Spell`;
         attackIcons = [melee ? "melee_spell" : "ranged_spell"];
     }
@@ -479,7 +512,30 @@ function renderSpellList() {
         details.textContent = spellDetails(spell);
         content.append(name, details);
         label.append(checkbox, content);
-        fragment.append(label);
+        if (state.customSpells.some(custom => custom.key === spell.key)) {
+            details.textContent += " · Custom";
+            const row = document.createElement("div");
+            row.className = "spell-entry";
+            const actions = document.createElement("div");
+            actions.className = "custom-card-actions";
+            for (const [symbol, action, handler] of [
+                ["\u270e", "Edit", () => openCustomEditor(spell)],
+                ["\u00d7", "Delete", () => deleteCustomCard(spell)]
+            ]) {
+                const button = document.createElement("button");
+                button.type = "button";
+                button.className = "icon-button";
+                button.textContent = symbol;
+                button.title = `${action} ${spell.name}`;
+                button.setAttribute("aria-label", `${action} ${spell.name}`);
+                button.addEventListener("click", handler);
+                actions.append(button);
+            }
+            row.append(label, actions);
+            fragment.append(row);
+        } else {
+            fragment.append(label);
+        }
     }
     elements.list.append(fragment);
 }
@@ -491,6 +547,7 @@ function buildCard(spell, part = getSpellCardParts(spell)[0]) {
     card.classList.toggle("is-cantrip", cantrip);
     card.classList.toggle("is-long-title", spell.name.length > 22);
     card.classList.toggle("is-continuation", part.continuation);
+    card.classList.toggle("is-custom", spell.key.startsWith("custom-"));
     card.classList.toggle("has-upgrade", Boolean(part.upgrade));
     card.classList.toggle("has-material-note", Boolean(spell.material_specified));
     card.classList.toggle("has-no-lower-content", !part.upgrade && !spell.material_specified);
@@ -563,6 +620,284 @@ function renderSelectedCards() {
     renderSpellList();
 }
 
+function readCustomCard() {
+    const fields = customEditor.form.elements;
+    const rangeText = fields.range_text.value.trim();
+    const attack = fields.attack.value;
+    const material = fields.material.checked;
+    return {
+        key: customEditor.key || "custom-preview",
+        name: fields.name.value.trim() || "Custom spell",
+        level: Number(fields.level.value),
+        school: { name: fields.school.value.trim() || "Custom" },
+        classes: [...customEditor.classes].map(name => ({ name })),
+        casting_time: fields.casting_time.value.trim(),
+        range_text: rangeText,
+        range: /self|touch|melee/i.test(rangeText) ? 0 : (Number.parseFloat(rangeText) || 60),
+        duration: fields.duration.value.trim(),
+        attack_roll: attack === "ranged" || attack === "melee",
+        saving_throw_ability: Object.hasOwn(ABILITY_ABBREVIATIONS, attack) ? attack : "",
+        damage_roll: fields.damage_roll.value.trim(),
+        damage_types: fields.damage_type.value ? [fields.damage_type.value] : [],
+        shape_type: fields.shape_type.value || null,
+        shape_size: fields.shape_type.value ? Number(fields.shape_size.value) || null : null,
+        shape_size_unit: "feet",
+        verbal: fields.verbal.checked,
+        somatic: fields.somatic.checked,
+        material,
+        material_specified: material ? fields.material_specified.value.trim() : "",
+        concentration: fields.concentration.checked,
+        ritual: fields.ritual.checked,
+        desc: fields.desc.value.trim(),
+        higher_level: fields.higher_level.value.trim(),
+        custom_attack: attack
+    };
+}
+
+function updateCustomPreview() {
+    const fields = customEditor.form.elements;
+    fields.material_specified.disabled = !fields.material.checked;
+    fields.shape_size.required = Boolean(fields.shape_type.value);
+    const spell = readCustomCard();
+    customEditor.preview.replaceChildren(...getSpellCardParts(spell).map(part => buildCard(spell, part)));
+}
+
+function renderClassPicker() {
+    customEditor.selectedClasses.replaceChildren();
+    for (const name of customEditor.classes) {
+        const tag = document.createElement("span");
+        tag.className = "selected-class";
+        const remove = document.createElement("button");
+        remove.type = "button";
+        remove.textContent = "\u00d7";
+        remove.title = `Remove ${name}`;
+        remove.setAttribute("aria-label", `Remove ${name}`);
+        remove.addEventListener("click", () => {
+            customEditor.classes.delete(name);
+            renderClassPicker();
+            updateCustomPreview();
+            customEditor.classSearch.focus();
+        });
+        tag.append(document.createTextNode(name), remove);
+        customEditor.selectedClasses.append(tag);
+    }
+    customEditor.classOptions.replaceChildren();
+    const query = customEditor.classSearch.value.trim().toLocaleLowerCase();
+    const names = [...new Set([...SPELL_CLASSES, ...customEditor.classes])]
+        .filter(name => name.toLocaleLowerCase().includes(query));
+    for (const name of names) {
+        const option = document.createElement("div");
+        option.className = "class-option";
+        option.tabIndex = 0;
+        option.setAttribute("role", "option");
+        option.setAttribute("aria-selected", String(customEditor.classes.has(name)));
+        option.textContent = `${customEditor.classes.has(name) ? "\u2713 " : ""}${name}`;
+        const toggle = () => {
+            if (customEditor.classes.has(name)) customEditor.classes.delete(name);
+            else customEditor.classes.add(name);
+            customEditor.classSearch.value = "";
+            renderClassPicker();
+            updateCustomPreview();
+            customEditor.classSearch.focus();
+            setClassPickerOpen(false);
+        };
+        option.addEventListener("click", toggle);
+        option.addEventListener("keydown", event => {
+            if (event.key === "Enter" || event.key === " ") {
+                event.preventDefault();
+                toggle();
+            } else if (event.key === "ArrowDown" || event.key === "ArrowUp") {
+                event.preventDefault();
+                const next = event.key === "ArrowDown" ? option.nextElementSibling : option.previousElementSibling;
+                (next || customEditor.classSearch).focus();
+            } else if (event.key === "Escape") {
+                event.preventDefault();
+                event.stopPropagation();
+                customEditor.classSearch.focus();
+                setClassPickerOpen(false);
+            }
+        });
+        customEditor.classOptions.append(option);
+    }
+    if (!names.length) {
+        const empty = document.createElement("p");
+        empty.className = "class-empty";
+        empty.textContent = "No matching classes";
+        customEditor.classOptions.append(empty);
+    }
+}
+
+function setClassPickerOpen(open) {
+    customEditor.classOptions.hidden = !open;
+    customEditor.classSearch.setAttribute("aria-expanded", String(open));
+}
+
+function setEditorOption(select, value) {
+    for (const option of [...select.options]) {
+        if (option.dataset.legacy) option.remove();
+    }
+    if (![...select.options].some(option => option.value === value)) {
+        const option = new Option(value, value);
+        option.dataset.legacy = "true";
+        select.add(option);
+    }
+    select.value = value;
+}
+
+function openCustomEditor(spell = null) {
+    customEditor.form.reset();
+    customEditor.classes = new Set((spell?.classes || []).map(item => item.name));
+    customEditor.classSearch.value = "";
+    renderClassPicker();
+    setClassPickerOpen(false);
+    customEditor.key = spell?.key || null;
+    customEditor.title.textContent = spell ? "Edit custom card" : "New custom card";
+    customEditor.error.hidden = true;
+    if (spell) {
+        const fields = customEditor.form.elements;
+        for (const field of ["name", "level", "range_text", "duration", "damage_roll", "shape_size", "material_specified", "desc", "higher_level"]) {
+            fields[field].value = spell[field] ?? "";
+        }
+        setEditorOption(fields.school, spell.school?.name || "Custom");
+        const castingTime = formatCastingTime(spell.casting_time).replaceAll("-", " ");
+        setEditorOption(fields.casting_time, CASTING_TIMES.find(time => time.toLowerCase() === castingTime.toLowerCase()) || castingTime);
+        fields.attack.value = spell.custom_attack || spell.saving_throw_ability || "none";
+        fields.damage_type.value = spell.damage_types?.[0] || "";
+        fields.shape_type.value = spell.shape_type || "";
+        for (const field of ["verbal", "somatic", "material", "concentration", "ritual"]) fields[field].checked = Boolean(spell[field]);
+    }
+    customEditor.dialog.showModal();
+    updateCustomPreview();
+    customEditor.form.elements.name.focus();
+}
+
+function storeCustomCards(spells) {
+    try {
+        localStorage.setItem(CUSTOM_CARDS_STORAGE_KEY, JSON.stringify(spells));
+        return true;
+    } catch (error) {
+        console.warn("Could not save custom cards.", error);
+        return false;
+    }
+}
+
+function refreshCustomLibrary() {
+    state.spells.sort((first, second) => first.name.localeCompare(second.name));
+    populateFilters();
+    renderSelectedCards();
+}
+
+function deleteCustomCard(spell) {
+    if (!window.confirm(`Delete custom card "${spell.name}"?`)) return;
+    const remaining = state.customSpells.filter(item => item.key !== spell.key);
+    if (!storeCustomCards(remaining)) {
+        window.alert("Could not delete the card. Browser storage is unavailable or full.");
+        return;
+    }
+    state.customSpells = remaining;
+    state.spells = state.spells.filter(item => item.key !== spell.key);
+    state.selected.delete(spell.key);
+    saveSelection();
+    refreshCustomLibrary();
+}
+
+function isCustomSpell(spell) {
+    return spell && typeof spell.key === "string" && spell.key.startsWith("custom-")
+        && typeof spell.name === "string" && Boolean(spell.name.trim()) && spell.name.length <= 80
+        && typeof spell.desc === "string" && spell.desc.length <= 20000
+        && typeof spell.school?.name === "string" && spell.school.name.length <= 40
+        && Number.isInteger(spell.level) && spell.level >= 0 && spell.level <= 9
+        && Array.isArray(spell.classes) && spell.classes.every(item => item && typeof item.name === "string" && item.name.length <= 40)
+        && Array.isArray(spell.damage_types) && spell.damage_types.every(type => DAMAGE_ICONS.has(type))
+        && typeof spell.higher_level === "string" && spell.higher_level.length <= 5000
+        && ["casting_time", "range_text", "duration", "damage_roll", "material_specified"].every(field => typeof spell[field] === "string")
+        && ["verbal", "somatic", "material", "concentration", "ritual", "attack_roll"].every(field => typeof spell[field] === "boolean")
+        && Number.isFinite(spell.range)
+        && (spell.shape_type === null || AREA_ICONS.has(spell.shape_type))
+        && (spell.shape_size === null || (Number.isFinite(spell.shape_size) && spell.shape_size > 0))
+        && (spell.saving_throw_ability === "" || Object.hasOwn(ABILITY_ABBREVIATIONS, spell.saving_throw_ability))
+        && (spell.custom_attack === undefined || ["none", "ranged", "melee", ...Object.keys(ABILITY_ABBREVIATIONS)].includes(spell.custom_attack));
+}
+
+async function restoreCustomCards() {
+    try {
+        let stored = null;
+        try {
+            stored = localStorage.getItem(CUSTOM_CARDS_STORAGE_KEY);
+        } catch (error) {
+            console.warn("Could not read custom card storage.", error);
+        }
+        const response = stored === null ? await fetch(CUSTOM_CARDS_DATA_URL) : null;
+        const saved = stored === null ? (response.ok ? await response.json() : []) : JSON.parse(stored);
+        if (!Array.isArray(saved)) return;
+        const seen = new Set(state.spells.map(spell => spell.key));
+        state.customSpells = saved.filter(spell => {
+            if (!isCustomSpell(spell) || seen.has(spell.key)) return false;
+            seen.add(spell.key);
+            return true;
+        });
+        state.spells.push(...state.customSpells);
+    } catch (error) {
+        console.warn("Could not restore custom cards.", error);
+    }
+}
+
+function setCustomFileStatus(message, error = false) {
+    const status = document.querySelector("#custom-file-status");
+    status.textContent = message;
+    status.style.color = error ? "#9b2828" : "";
+}
+
+function importCustomSpells(text) {
+    const imported = JSON.parse(text.replace(/^\uFEFF/, ""));
+    if (!Array.isArray(imported) || !imported.every(isCustomSpell)) {
+        throw new Error("The file must contain an array of valid custom spells.");
+    }
+    const keys = new Set(imported.map(spell => spell.key));
+    if (keys.size !== imported.length) throw new Error("The file contains duplicate spell IDs.");
+    const existingKeys = new Set(state.customSpells.map(spell => spell.key));
+    const replacements = imported.filter(spell => existingKeys.has(spell.key)).length;
+    if (replacements && !window.confirm(`Replace ${replacements} existing custom spell(s) with the versions in this file?`)) return;
+    const merged = [...state.customSpells.filter(spell => !keys.has(spell.key)), ...imported];
+    if (!storeCustomCards(merged)) throw new Error("Could not save imported spells. Browser storage is unavailable or full.");
+    const oldCustomKeys = new Set(state.customSpells.map(spell => spell.key));
+    state.spells = [...state.spells.filter(spell => !oldCustomKeys.has(spell.key)), ...merged];
+    state.customSpells = merged;
+    for (const spell of imported) {
+        if (state.selected.has(spell.key)) state.selected.set(spell.key, spell);
+    }
+    refreshCustomLibrary();
+    setCustomFileStatus(`Loaded ${imported.length} custom spell(s).`);
+}
+
+async function saveCustomSpellsFile() {
+    const json = `${JSON.stringify(state.customSpells, null, 2)}\n`;
+    try {
+        if ("showSaveFilePicker" in window) {
+            if (!customSpellsFileHandle) {
+                customSpellsFileHandle = await window.showSaveFilePicker({
+                    suggestedName: "custom-spells.json",
+                    types: [{ description: "JSON spells", accept: { "application/json": [".json"] } }]
+                });
+            }
+            const writer = await customSpellsFileHandle.createWritable();
+            await writer.write(json);
+            await writer.close();
+        } else {
+            const url = URL.createObjectURL(new Blob([json], { type: "application/json" }));
+            const link = document.createElement("a");
+            link.href = url;
+            link.download = "custom-spells.json";
+            link.click();
+            setTimeout(() => URL.revokeObjectURL(url), 1000);
+        }
+        setCustomFileStatus(`Saved ${state.customSpells.length} custom spell(s) to JSON.`);
+    } catch (error) {
+        customSpellsFileHandle = null;
+        if (error.name !== "AbortError") setCustomFileStatus("Could not save the JSON file. Try again or choose another location.", true);
+    }
+}
+
 function saveSelection() {
     try {
         localStorage.setItem(SELECTION_STORAGE_KEY, JSON.stringify([...state.selected.keys()]));
@@ -615,6 +950,7 @@ async function loadSpells() {
         state.spells = spells.filter(spell => spell && spell.key && spell.name && Number.isInteger(spell.level));
         const knownNames = new Set(state.spells.map(spell => spell.name));
         state.spells.push(...TEMPLATE_ONLY_SPELLS.filter(spell => !knownNames.has(spell.name)));
+        await restoreCustomCards();
         state.spells.sort((a, b) => a.name.localeCompare(b.name));
         populateFilters();
         restoreSelection();
@@ -630,6 +966,9 @@ async function loadSpells() {
         ]);
         await document.fonts.ready;
         renderSelectedCards();
+        customEditor.createButton.disabled = false;
+        document.querySelector("#load-custom-json").disabled = false;
+        document.querySelector("#save-custom-json").disabled = false;
     } catch (error) {
         elements.list.setAttribute("aria-busy", "false");
         elements.resultCount.textContent = "Spell data unavailable";
@@ -641,7 +980,84 @@ async function loadSpells() {
     }
 }
 
-for (const filter of [elements.search, elements.level, elements.school, elements.className]) {
+for (const [name, options] of Object.entries({
+    level: Array.from({ length: 10 }, (_, level) => [String(level), levelLabel(level)]),
+    school: SPELL_SCHOOLS.map(name => [name, name]),
+    casting_time: CASTING_TIMES.map(time => [time, time]),
+    attack: [["none", "None"], ["ranged", "Ranged spell attack"], ["melee", "Melee spell attack"],
+        ...Object.keys(ABILITY_ABBREVIATIONS).map(ability => [ability, `${titleCase(ability)} save`])],
+    damage_type: [["", "None"], ...[...DAMAGE_ICONS].map(type => [type, titleCase(type)])],
+    shape_type: [["", "None"], ...[...AREA_ICONS].map(shape => [shape, titleCase(shape)])]
+})) {
+    for (const [value, label] of options) customEditor.form.elements[name].add(new Option(label, value));
+}
+customEditor.form.elements.school.value = "Evocation";
+customEditor.form.elements.school.querySelector('option[value="Evocation"]').defaultSelected = true;
+customEditor.classSearch.addEventListener("focus", () => setClassPickerOpen(true));
+customEditor.classSearch.addEventListener("click", () => setClassPickerOpen(true));
+customEditor.classSearch.addEventListener("input", () => {
+    renderClassPicker();
+    setClassPickerOpen(true);
+});
+customEditor.classSearch.addEventListener("keydown", event => {
+    if (event.key === "ArrowDown" || event.key === "Enter") {
+        event.preventDefault();
+        setClassPickerOpen(true);
+        customEditor.classOptions.querySelector('[role="option"]')?.focus();
+    } else if (event.key === "Escape" && !customEditor.classOptions.hidden) {
+        event.preventDefault();
+        event.stopPropagation();
+        setClassPickerOpen(false);
+    }
+});
+customEditor.dialog.addEventListener("focusin", event => {
+    if (!event.target.closest(".class-picker")) setClassPickerOpen(false);
+});
+document.querySelector("#save-custom-json").addEventListener("click", saveCustomSpellsFile);
+document.querySelector("#load-custom-json").addEventListener("click", () => document.querySelector("#custom-json-input").click());
+document.querySelector("#custom-json-input").addEventListener("change", async event => {
+    const file = event.target.files[0];
+    if (!file) return;
+    try {
+        if (file.size > 5000000) throw new Error("Choose a JSON file smaller than 5 MB.");
+        importCustomSpells(await file.text());
+    } catch (error) {
+        setCustomFileStatus(error instanceof SyntaxError ? "The file is not valid JSON." : error.message, true);
+    } finally {
+        event.target.value = "";
+    }
+});
+customEditor.createButton.addEventListener("click", () => openCustomEditor());
+for (const id of ["close-custom-card", "cancel-custom-card"]) {
+    document.querySelector(`#${id}`).addEventListener("click", () => customEditor.dialog.close());
+}
+customEditor.form.addEventListener("input", updateCustomPreview);
+customEditor.form.addEventListener("submit", event => {
+    event.preventDefault();
+    const spell = readCustomCard();
+    if (!customEditor.form.elements.name.value.trim() || !spell.desc) {
+        customEditor.error.textContent = "Enter a name and description.";
+        customEditor.error.hidden = false;
+        return;
+    }
+    spell.key = customEditor.key || `custom-${crypto.randomUUID()}`;
+    const updated = state.customSpells.filter(item => item.key !== spell.key);
+    updated.push(spell);
+    if (!storeCustomCards(updated)) {
+        customEditor.error.textContent = "Could not save the card. Browser storage is unavailable or full.";
+        customEditor.error.hidden = false;
+        return;
+    }
+    state.customSpells = updated;
+    state.spells = state.spells.filter(item => item.key !== spell.key);
+    state.spells.push(spell);
+    state.selected.set(spell.key, spell);
+    saveSelection();
+    refreshCustomLibrary();
+    customEditor.dialog.close();
+});
+
+for (const filter of [elements.search, elements.level, elements.school, elements.className, elements.source]) {
     filter.addEventListener(filter === elements.search ? "input" : "change", renderSpellList);
 }
 
