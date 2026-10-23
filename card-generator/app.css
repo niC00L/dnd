@@ -497,7 +497,6 @@ p {
     background-size: 100% 100%;
     background-repeat: no-repeat;
     color: #171716;
-    box-shadow: inset 0 0 0 1px rgb(255 255 255 / 55%);
     print-color-adjust: exact;
     -webkit-print-color-adjust: exact;
 }
@@ -520,7 +519,7 @@ p {
     max-width: 100%;
     margin: 0;
     font-family: var(--card-title-font);
-    font-size: clamp(20px, 10.5cqw, 48px);
+    font-size: 10.5cqw;
     font-weight: 400;
     line-height: 0.98;
     text-align: center;
@@ -528,12 +527,12 @@ p {
 }
 
 .spell-card.is-long-title .card-title {
-    font-size: clamp(15px, 8cqw, 34px);
+    font-size: 8cqw;
 }
 
 .level-badge {
     position: absolute;
-    top: -5px;
+    top: -1.87cqw;
     right: 4.2%;
     display: flex;
     width: 11.7%;
@@ -553,7 +552,7 @@ p {
 }
 
 .level-badge strong {
-    margin-top: 2px;
+    margin-top: 0.75cqw;
     font-size: 7cqw;
     font-weight: 500;
 }
@@ -568,7 +567,7 @@ p {
 }
 
 .spell-card.is-cantrip .level-badge strong {
-    margin-top: 9px;
+    margin-top: 3.36cqw;
     font-size: 6cqw;
 }
 
@@ -586,7 +585,7 @@ p {
     display: flex;
     min-width: 0;
     flex-direction: column;
-    gap: 1px;
+    gap: 0.37cqw;
     line-height: 1.08;
 }
 
@@ -732,13 +731,18 @@ p {
     height: 6%;
     align-items: center;
     justify-content: space-between;
-    gap: 5px;
+    gap: 1.87cqw;
     padding: 0 4%;
     background: #2872c7;
     color: #fff;
     font-family: var(--label-font);
     font-size: 4.5cqw;
     line-height: 1;
+}
+
+.card-footer>span {
+    text-box-trim: trim-both;
+    text-box-edge: cap alphabetic;
 }
 
 .card-school {
