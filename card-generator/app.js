@@ -82,7 +82,7 @@ const CONDITION_ICONS = [
     "blinded", "charmed", "deafened", "exhaustion", "frightened", "invisible",
     "paralyzed", "petrified", "poisoned", "prone", "restrained", "unconscious"
 ];
-const AREA_ICONS = new Set(["cone", "cube", "cylinder", "emanation", "square"]);
+const AREA_ICONS = new Set(["cone", "cube", "cylinder", "emanation", "sphere", "square"]);
 const ABILITY_ABBREVIATIONS = {
     strength: "STR", dexterity: "DEX", constitution: "CON",
     intelligence: "INT", wisdom: "WIS", charisma: "CHA"
