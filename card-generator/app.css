@@ -568,14 +568,14 @@ p {
 }
 
 .spell-card.is-cantrip .level-badge strong {
-    margin-top: 0;
+    margin-top: 9px;
     font-size: 6cqw;
 }
 
 .card-keywords {
     display: grid;
     height: 17%;
-    grid-template-columns: 1.08fr 0.92fr 1fr;
+    grid-template-columns: 0.95fr 1.05fr 1fr;
     grid-template-rows: repeat(2, minmax(0, 1fr));
     column-gap: 3%;
     row-gap: 2%;
