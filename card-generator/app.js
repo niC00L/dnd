@@ -121,8 +121,6 @@ function cardSizeSettings() {
     return {
         cardsPerPage: standard ? 9 : 16,
         maxTextLength: 900,
-        inlineDescriptionLength: 350,
-        inlineUpgradeLength: 225,
         label: standard ? "Standard" : "Half size",
         dimensions: standard ? "63.5 x 88.9 mm" : "44.5 x 63.5 mm"
     };
@@ -377,7 +375,10 @@ function descriptionFits(spell, part) {
     const card = buildCard(spell, part);
     cardMeasurementRoot.append(card);
     const description = card.querySelector(".card-description");
-    const fits = description.scrollHeight <= description.clientHeight;
+    const upgrade = card.querySelector(".card-upgrade");
+    const fits = description.scrollHeight <= description.clientHeight + 1
+        && (upgrade.hidden || (upgrade.scrollHeight <= upgrade.clientHeight + 1
+            && description.getBoundingClientRect().bottom <= upgrade.getBoundingClientRect().top));
     card.remove();
     return fits;
 }
@@ -411,7 +412,6 @@ function fitCardParts(spell, parts) {
 }
 
 function getSpellCardParts(spell) {
-    const size = cardSizeSettings();
     const sizeKey = document.body.dataset.cardSize || "half";
     const cachedParts = cardPartsCache.get(spell)?.get(sizeKey);
     if (cachedParts) return cachedParts;
@@ -424,17 +424,19 @@ function getSpellCardParts(spell) {
         upgrade: ""
     }));
 
+    const fittedParts = fitCardParts(spell, parts);
     if (spell.higher_level) {
-        if (parts.length === 1 && parts[0].description.length <= size.inlineDescriptionLength
-            && spell.higher_level.length <= size.inlineUpgradeLength) {
-            parts[0].upgrade = spell.higher_level;
+        const lastPart = fittedParts[fittedParts.length - 1];
+        const upgradedPart = { ...lastPart, upgrade: spell.higher_level };
+        if (descriptionFits(spell, upgradedPart)) {
+            fittedParts[fittedParts.length - 1] = upgradedPart;
         } else {
             const label = spell.level === 0 ? "Cantrip Upgrade:" : "Using a Higher-Level Spell Slot:";
-            const upgradeParts = splitText(`${label} ${spell.higher_level}`);
-            for (const text of upgradeParts) parts.push({ description: text, continuation: true, upgrade: "" });
+            const upgradeParts = splitText(`${label} ${spell.higher_level}`)
+                .map(description => ({ description, continuation: true, upgrade: "" }));
+            fittedParts.push(...fitCardParts(spell, upgradeParts));
         }
     }
-    const fittedParts = fitCardParts(spell, parts);
     const sizeCache = cardPartsCache.get(spell) || new Map();
     sizeCache.set(sizeKey, fittedParts);
     cardPartsCache.set(spell, sizeCache);
@@ -616,6 +618,17 @@ async function loadSpells() {
         state.spells.sort((a, b) => a.name.localeCompare(b.name));
         populateFilters();
         restoreSelection();
+        const fontStyles = getComputedStyle(document.body);
+        const bodyFont = fontStyles.getPropertyValue("--body-font");
+        const labelFont = fontStyles.getPropertyValue("--label-font");
+        const titleFont = fontStyles.getPropertyValue("--card-title-font");
+        await Promise.allSettled([
+            ...["400", "700", "italic 400", "italic 700"]
+                .map(style => document.fonts.load(`${style} 16px ${bodyFont}`)),
+            ...["400", "500"].map(weight => document.fonts.load(`${weight} 16px ${labelFont}`)),
+            document.fonts.load(`400 16px ${titleFont}`)
+        ]);
+        await document.fonts.ready;
         renderSelectedCards();
     } catch (error) {
         elements.list.setAttribute("aria-busy", "false");
