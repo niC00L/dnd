@@ -30662,6 +30662,74 @@
                             }
     },
     {
+        "key":  "phb-2024_witch-bolt",
+        "document":  {
+                         "name":  "Player's Handbook (2024)",
+                         "key":  "phb-2024",
+                         "type":  "SOURCE",
+                         "display_name":  "5e 2024 Rules",
+                         "publisher":  {
+                                           "name":  "Wizards of the Coast",
+                                           "key":  "wizards-of-the-coast"
+                                       },
+                         "gamesystem":  {
+                                            "name":  "5th Edition 2024",
+                                            "key":  "5e-2024"
+                                        }
+                     },
+        "casting_options":  [],
+        "school":  {
+                       "name":  "Evocation",
+                       "key":  "evocation"
+                   },
+        "classes":  [
+                        {
+                            "name":  "Sorcerer",
+                            "key":  "srd-2024_sorcerer"
+                        },
+                        {
+                            "name":  "Warlock",
+                            "key":  "srd-2024_warlock"
+                        },
+                        {
+                            "name":  "Wizard",
+                            "key":  "srd-2024_wizard"
+                        }
+                    ],
+        "range_unit":  "feet",
+        "shape_size_unit":  "feet",
+        "name":  "Witch Bolt",
+        "desc":  "Make a ranged spell attack against a creature within range: 2d12 Lightning damage on a hit. On later turns, a Bonus Action deals 1d12 Lightning damage automatically, even if the attack missed. The spell ends if the target is ever over 60 feet away or has Total Cover from you.",
+        "level":  1,
+        "higher_level":  "Initial damage increases by 1d12 per slot level above 1; ongoing damage stays 1d12.",
+        "target_type":  "creature",
+        "range_text":  "60 feet",
+        "range":  60,
+        "ritual":  false,
+        "casting_time":  "action",
+        "reaction_condition":  null,
+        "verbal":  true,
+        "somatic":  true,
+        "material":  true,
+        "material_specified":  "a twig struck by lightning",
+        "material_cost":  null,
+        "material_consumed":  false,
+        "target_count":  1,
+        "saving_throw_ability":  "",
+        "attack_roll":  true,
+        "damage_roll":  "2d12",
+        "damage_types":  [
+                             "lightning"
+                         ],
+        "duration":  "1 minute",
+        "shape_type":  null,
+        "shape_size":  null,
+        "concentration":  true,
+        "crossreferences":  {
+                                "to":  []
+                            }
+    },
+    {
         "key":  "srd-2024_word-of-recall",
         "document":  {
                          "name":  "System Reference Document 5.2",
