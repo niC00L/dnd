@@ -1,4 +1,5 @@
 const DATA_URL = "./data/spells-2024-srd.json";
+const SELECTION_STORAGE_KEY = "card-generator.selected-spells";
 const TEMPLATE_ONLY_SPELLS = [{
     key: "local-word-of-radiance",
     name: "Word of Radiance",
@@ -560,9 +561,32 @@ function renderSelectedCards() {
     renderSpellList();
 }
 
+function saveSelection() {
+    try {
+        localStorage.setItem(SELECTION_STORAGE_KEY, JSON.stringify([...state.selected.keys()]));
+    } catch (error) {
+        console.warn("Could not save the spell selection.", error);
+    }
+}
+
+function restoreSelection() {
+    try {
+        const keys = JSON.parse(localStorage.getItem(SELECTION_STORAGE_KEY) || "[]");
+        if (!Array.isArray(keys)) return;
+        const spellsByKey = new Map(state.spells.map(spell => [spell.key, spell]));
+        for (const key of keys) {
+            const spell = spellsByKey.get(key);
+            if (spell) state.selected.set(key, spell);
+        }
+    } catch (error) {
+        console.warn("Could not restore the spell selection.", error);
+    }
+}
+
 function toggleSpell(spell) {
     if (state.selected.has(spell.key)) state.selected.delete(spell.key);
     else state.selected.set(spell.key, spell);
+    saveSelection();
     renderSelectedCards();
 }
 
@@ -591,7 +615,8 @@ async function loadSpells() {
         state.spells.push(...TEMPLATE_ONLY_SPELLS.filter(spell => !knownNames.has(spell.name)));
         state.spells.sort((a, b) => a.name.localeCompare(b.name));
         populateFilters();
-        renderSpellList();
+        restoreSelection();
+        renderSelectedCards();
     } catch (error) {
         elements.list.setAttribute("aria-busy", "false");
         elements.resultCount.textContent = "Spell data unavailable";
@@ -609,11 +634,13 @@ for (const filter of [elements.search, elements.level, elements.school, elements
 
 elements.selectVisible.addEventListener("click", () => {
     for (const spell of state.filtered) state.selected.set(spell.key, spell);
+    saveSelection();
     renderSelectedCards();
 });
 
 elements.clearSelection.addEventListener("click", () => {
     state.selected.clear();
+    saveSelection();
     renderSelectedCards();
 });
 
