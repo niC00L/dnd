@@ -450,6 +450,20 @@ p {
     white-space: nowrap;
 }
 
+.back-picker .size-options {
+    grid-template-columns: 1fr;
+}
+
+.back-picker .size-option+.size-option {
+    border-left: 0;
+    border-top: 1px solid #cbd2cb;
+}
+
+.print-error {
+    color: #a51c30;
+    font-size: 14px;
+}
+
 .selected-cards {
     display: grid;
     max-height: calc(100vh - 258px);
@@ -510,6 +524,181 @@ p {
     inset: 0;
     container-type: inline-size;
     padding: 5.5% 5.4% 4.6%;
+}
+
+.back-title {
+    position: absolute;
+    top: 3%;
+    left: 3%;
+    width: 94%;
+    height: 12%;
+    display: grid;
+    place-items: center;
+    font-size: 10cqw;
+}
+
+.back-art {
+    position: absolute;
+    inset: 16% 4% 34%;
+    display: grid;
+    place-items: center;
+}
+
+.back-art>img,
+.back-art>svg {
+    width: 100%;
+    height: 100%;
+    min-height: 0;
+    object-fit: contain;
+}
+
+.back-summary {
+    position: absolute;
+    right: 2.8%;
+    bottom: 12%;
+    left: 2.8%;
+    display: flex;
+    align-items: flex-end;
+    gap: 3%;
+    min-height: 16%;
+}
+
+.back-range {
+    flex: 0 0 26%;
+    border-radius: 0 8cqw 0 8cqw;
+    padding: 2.5% 3%;
+    background: linear-gradient(110deg, #be1e35, #ff292f);
+    color: #fff;
+    text-align: center;
+}
+
+.back-range>div+div {
+    margin-top: 1cqw;
+    border-top: 1px solid #fff;
+    padding-top: 1cqw;
+}
+
+.back-range span,
+.back-range strong {
+    display: block;
+}
+
+.back-range span {
+    font-family: var(--label-font);
+    font-size: 3cqw;
+    letter-spacing: .3cqw;
+    text-transform: uppercase;
+}
+
+.back-range strong {
+    font-size: 4.4cqw;
+    line-height: 1.05;
+    overflow-wrap: anywhere;
+}
+
+.back-range.has-area strong {
+    font-size: 3.8cqw;
+}
+
+.back-keywords {
+    display: flex;
+    flex: 1;
+    min-width: 0;
+    justify-content: space-around;
+    gap: 1cqw;
+    padding-bottom: 1cqw;
+}
+
+.back-keywords>div {
+    display: flex;
+    flex: 1;
+    min-width: 0;
+    align-items: center;
+    flex-direction: column;
+    gap: 1cqw;
+    font-size: 3.6cqw;
+    line-height: 1.05;
+    text-align: center;
+    overflow-wrap: anywhere;
+}
+
+.back-keywords img {
+    width: 5.6cqw;
+    height: 5.6cqw;
+    object-fit: contain;
+}
+
+.back-keywords .keyword-icon {
+    width: 3.8cqw;
+    height: 3.8cqw;
+    flex: none;
+}
+
+.back-keyword-value {
+    display: inline-flex;
+    max-width: 100%;
+    align-items: center;
+    justify-content: center;
+    gap: .6cqw;
+}
+
+.back-keyword-value>span {
+    min-width: 0;
+}
+
+.back-keyword-icons {
+    display: inline-flex;
+    flex: 0 0 auto;
+    max-width: 45%;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: .6cqw;
+}
+
+.back-keyword-value.has-many-icons {
+    font-size: 2.8cqw;
+}
+
+.back-keyword-value.has-many-icons .back-keyword-icons {
+    gap: .3cqw;
+}
+
+.back-keyword-value.has-many-icons .keyword-icon {
+    width: 2.5cqw;
+    height: 2.5cqw;
+}
+
+.back-footer {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    height: 10%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    background: var(--blue);
+    color: #fff;
+    font-size: 4cqw;
+    line-height: 1.1;
+}
+
+.back-footer::before {
+    position: absolute;
+    right: 0;
+    bottom: calc(100% - 1cqw);
+    left: 0;
+    height: 7cqw;
+    background: var(--blue);
+    mask: url("./img/back-footer-curve.svg") center / 100% 100% no-repeat;
+    content: "";
+}
+
+.back-footer strong {
+    font-family: var(--label-font);
+    font-size: 5.2cqw;
+    font-weight: 600;
 }
 
 .card-header {
@@ -746,7 +935,7 @@ p {
     justify-content: space-between;
     gap: 1.87cqw;
     padding: 0 4%;
-    background: #2872c7;
+    background: var(--blue);
     color: #fff;
     font-family: var(--label-font);
     font-size: 4.5cqw;
@@ -1235,6 +1424,29 @@ p {
     .print-page:last-child {
         break-after: auto;
         page-break-after: auto;
+    }
+
+    .print-page-fold {
+        grid-template-columns: repeat(2, calc(2 * var(--card-print-width)));
+    }
+
+    body[data-card-size="standard"] .print-page-fold {
+        grid-template-columns: calc(2 * var(--card-print-width));
+    }
+
+    .print-card-pair {
+        display: flex;
+        width: calc(2 * var(--card-print-width));
+        height: var(--card-print-height);
+        break-inside: avoid;
+    }
+
+    .print-card-pair>.spell-card {
+        flex: none;
+    }
+
+    .print-card-pair>.card-back {
+        border-left: .15mm dashed #69726d;
     }
 
     .spell-card {

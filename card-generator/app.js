@@ -87,7 +87,7 @@ const CONDITION_ICONS = [
     "blinded", "charmed", "deafened", "exhaustion", "frightened", "invisible",
     "paralyzed", "petrified", "poisoned", "prone", "restrained", "unconscious"
 ];
-const AREA_ICONS = new Set(["cone", "cube", "cylinder", "emanation", "sphere", "square"]);
+const AREA_ICONS = new Set(["cone", "cube", "cylinder", "emanation", "sphere", "square", "line"]);
 const ABILITY_ABBREVIATIONS = {
     strength: "STR", dexterity: "DEX", constitution: "CON",
     intelligence: "INT", wisdom: "WIS", charisma: "CHA"
@@ -111,7 +111,11 @@ const elements = {
     printCount: document.querySelector("#print-count"),
     printRoot: document.querySelector("#print-root"),
     cardTemplate: document.querySelector("#spell-card-template"),
-    cardSizeInputs: [...document.querySelectorAll('input[name="card-size"]')]
+    cardSizeInputs: [...document.querySelectorAll('input[name="card-size"]')],
+    backInputs: [...document.querySelectorAll('input[name="card-backs"]')],
+    backTemplate: document.querySelector("#spell-back-template"),
+    printHelp: document.querySelector("#print-help"),
+    printError: document.querySelector("#print-error")
 };
 
 const state = {
@@ -139,12 +143,47 @@ let cardMeasurementRoot;
 
 function cardSizeSettings() {
     const standard = document.body.dataset.cardSize === "standard";
+    const columns = standard ? 3 : 4;
+    const rows = standard ? 3 : 4;
+    const mode = document.querySelector('input[name="card-backs"]:checked').value;
+    const pairsPerRow = Math.floor(columns / 2);
     return {
-        cardsPerPage: standard ? 9 : 16,
+        columns,
+        rows,
+        mode,
+        pairsPerRow,
+        cardsPerPage: mode === "fold" ? pairsPerRow * rows : columns * rows,
         maxTextLength: 900,
         label: standard ? "Standard" : "Half size",
         dimensions: standard ? "63.5 x 88.9 mm" : "44.5 x 63.5 mm"
     };
+}
+
+function spellArea(spell) {
+    let type = String(spell.shape_type || "").toLowerCase();
+    let size = Number(spell.shape_size);
+    const opening = String(spell.desc || "").split(/[.!?](?:\s|$)/)[0];
+    // Some SRD entries omit area metadata, notably Emanations and Cylinders.
+    const inferred = opening.match(/(\d+)[- ]foot(?:[- ](radius|diameter|wide|high|tall))?[- ]+(emanation|sphere|cube|cylinder|cone|square|line)\b/i);
+    if (!type && inferred) {
+        type = inferred[3].toLowerCase();
+        size = Number(inferred[1]);
+    }
+    if (!AREA_ICONS.has(type) || !Number.isFinite(size) || !(size > 0)) return null;
+    const unit = spell.shape_size_unit || "feet";
+    const radius = opening.match(/(\d+)[- ]foot[- ]radius/i);
+    const diameter = opening.match(/(\d+)[- ]foot[- ]diameter/i);
+    const length = opening.match(/(\d+)[- ]foot[- ]long/i);
+    if (["sphere", "cylinder"].includes(type) && radius) size = Number(radius[1]);
+    if (["sphere", "cylinder"].includes(type) && diameter) size = Number(diameter[1]) / 2;
+    return { type, size, unit, length: type === "line" && length ? Number(length[1]) : null };
+}
+
+function areaLabel(area) {
+    const unit = area.unit === "feet" ? "ft" : area.unit;
+    const size = area.length ? `${area.length} x ${area.size}` : area.size;
+    const radius = ["sphere", "emanation", "cylinder"].includes(area.type) ? " radius" : "";
+    return `${size} ${unit}${radius} ${titleCase(area.type)}`;
 }
 
 function levelLabel(level) {
@@ -242,13 +281,14 @@ function keywordContent(card, field, text, icons = []) {
 
 function formatRangeArea(spell) {
     const range = String(spell.range_text || "Special").replace(/\bfeet\b/gi, "ft").replace(/\bfoot\b/gi, "ft");
-    if (spell.shape_type && spell.shape_size) {
+    const area = spellArea(spell);
+    if (area) {
         return {
             text: range,
             area: {
-                size: `${spell.shape_size} ft`,
-                icon: AREA_ICONS.has(spell.shape_type) ? spell.shape_type : "",
-                label: titleCase(spell.shape_type)
+                size: `${area.length ? `${area.length} x ` : ""}${area.size} ${area.unit === "feet" ? "ft" : area.unit}`,
+                icon: area.type,
+                label: titleCase(area.type)
             }
         };
     }
@@ -581,6 +621,163 @@ function buildCard(spell, part = getSpellCardParts(spell)[0]) {
     return card;
 }
 
+function buildAreaDiagram(area) {
+    const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+    svg.setAttribute("viewBox", "0 0 600 540");
+    svg.setAttribute("role", "img");
+    svg.setAttribute("aria-label", areaLabel(area));
+    const add = (tag, attributes, parent = svg) => {
+        const node = document.createElementNS(svg.namespaceURI, tag);
+        for (const [key, value] of Object.entries(attributes)) node.setAttribute(key, String(value));
+        parent.append(node);
+        return node;
+    };
+    const defs = add("defs", {});
+    const pattern = add("pattern", { id: "area-wave", width: 40, height: 32, patternUnits: "userSpaceOnUse" }, defs);
+    add("rect", { width: 40, height: 32, fill: "#3f8aa6" }, pattern);
+    add("path", { d: "M-10 8 L10 24 L30 8 L50 24", fill: "none", stroke: "#7fbad2", "stroke-width": 7 }, pattern);
+    // A local ID keeps multiple inline diagrams independent on the same sheet.
+    const patternId = `area-wave-${crypto.randomUUID()}`;
+    pattern.id = patternId;
+    const circular = ["sphere", "emanation", "cylinder"].includes(area.type);
+    const extent = area.length || (circular ? area.size * 2 : area.size);
+    const gridUnit = area.unit === "feet" ? Math.max(5, Math.ceil(extent / 40) * 5) : Math.max(1, Math.ceil(extent / 8));
+    const scale = 320 / extent;
+    const grid = gridUnit * scale;
+    const origin = { x: area.type === "cone" || area.type === "line" ? 140 : 300, y: 270 };
+    const fillId = `area-fill-${crypto.randomUUID()}`;
+    const fill = add("pattern", { id: fillId, width: grid, height: grid, x: origin.x, y: origin.y, patternUnits: "userSpaceOnUse" }, defs);
+    add("rect", { width: grid, height: grid, fill: `url(#${patternId})` }, fill);
+    add("path", { d: `M0 ${grid} V0 H${grid}`, fill: "none", stroke: "#d4e4ea", "stroke-width": 3 }, fill);
+    const lines = add("g", { stroke: "#b9b7b4", "stroke-width": 2 });
+    for (let x = origin.x % grid; x <= 600; x += grid) add("line", { x1: x, y1: 15, x2: x, y2: 510 }, lines);
+    for (let y = origin.y % grid; y <= 510; y += grid) add("line", { x1: 20, y1: y, x2: 580, y2: y }, lines);
+    const attributes = { fill: `url(#${fillId})`, stroke: "#2b2526", "stroke-width": 5, "stroke-linejoin": "round" };
+    if (circular) {
+        if (area.type === "cylinder") {
+            add("path", { ...attributes, d: "M140 210 V330 A160 65 0 0 0 460 330 V210 Z" });
+            add("ellipse", { ...attributes, cx: 300, cy: 210, rx: 160, ry: 65 });
+            origin.y = 210;
+        } else add("circle", { ...attributes, cx: 300, cy: 270, r: 160 });
+    } else if (area.type === "cone") {
+        add("path", { ...attributes, d: "M140 270 L460 110 Q500 270 460 430 Z" });
+    } else if (area.type === "line") {
+        const width = area.size * scale;
+        add("rect", { ...attributes, x: 140, y: 270 - width / 2, width: 320, height: width });
+    } else {
+        add("rect", { ...attributes, x: 140, y: 110, width: 320, height: 320 });
+        if (area.type === "cube") origin.x = 140;
+    }
+    add("circle", { cx: origin.x, cy: origin.y, r: 9, fill: "#fff", stroke: "#0a5c73", "stroke-width": 3 });
+    const label = add("text", { x: origin.x + 14, y: origin.y - 16, fill: "#202622", stroke: "#f8f6ee", "stroke-width": 5, "paint-order": "stroke", "font-size": 23, "font-family": "sans-serif" });
+    label.textContent = area.type === "emanation" ? "You / Origin" : "Point of Origin";
+    const legend = add("text", { x: 300, y: 535, "text-anchor": "middle", "font-size": 20, fill: "#202622", "font-family": "sans-serif" });
+    legend.textContent = `Grid: ${gridUnit} ${area.unit} / square${area.type === "cylinder" ? " (radius shown above)" : ""}`;
+    return svg;
+}
+
+function areaImage(area) {
+    if (area.unit !== "feet") return null;
+    if (["sphere", "emanation"].includes(area.type) && [5, 10].includes(area.size)) return `aoe-sphere-${area.size * 2}.svg`;
+    if (area.type === "cube" && [15, 20].includes(area.size)) return `aoe-cube-${area.size}.svg`;
+    if (area.type === "cone" && area.size === 15) return "aoe-cone.svg";
+    if (area.type === "square" && area.size === 10) return "aoe-square.svg";
+    return null;
+}
+
+function backTargetCount(spell) {
+    if (/^self$/i.test(spell.range_text || "")) return "Self";
+    const count = String(spell.desc || "").match(/\bup to (a|one|two|three|four|five|six|seven|eight|nine|ten|\d+) (?:creatures|objects|targets)\b/i);
+    const numbers = ["a", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten"];
+    if (count) {
+        const wordIndex = numbers.indexOf(count[1].toLowerCase());
+        return String(wordIndex >= 0 ? Math.max(1, wordIndex) : Number(count[1]));
+    }
+    return String(spell.target_count || 1);
+}
+
+function backKeywordText(keyword) {
+    let text = keyword.text;
+    for (const icon of keyword.icons) {
+        const label = titleCase(icon.replaceAll("_", " "));
+        text = text.replace(new RegExp(`\\b${label}\\b`, "gi"), "");
+    }
+    return text.replace(/^[,\s]+|[,\s]+$/g, "")
+        .replace(/\s*,\s*(?=,|$)/g, "")
+        .trim()
+        .replace(/ Save$/, " sv")
+        .replace(/^Instantaneous$/i, "Instant")
+        .replace(/\bminutes?\b/gi, "min");
+}
+
+function buildBack(spell, part) {
+    const card = elements.backTemplate.content.firstElementChild.cloneNode(true);
+    const name = `${spell.name}${part.continuation ? " (CONT.)" : ""}`;
+    card.classList.toggle("is-long-title", name.length > 18);
+    const title = card.querySelector('[data-field="name"]');
+    title.textContent = name;
+    if (name.length > 25) title.style.fontSize = `${Math.max(5, 200 / name.length)}cqw`;
+    card.querySelector('[data-field="level"]').textContent = spell.level === 0 ? "Cantrip" : `Level ${spell.level}`;
+    const area = spellArea(spell);
+    const art = card.querySelector('[data-field="art"]');
+    const existingDiagram = area && areaImage(area);
+    if (area && !existingDiagram) {
+        art.append(buildAreaDiagram(area));
+    } else {
+        const image = document.createElement("img");
+        const range = spell.range_text || "";
+        const emblem = /^self$/i.test(range) ? "self" : /touch/i.test(range) ? "touch" : "ranged";
+        image.src = `./img/${existingDiagram || `emblem-${emblem}.png`}`;
+        image.alt = area ? areaLabel(area) : `${titleCase(emblem)} spell`;
+        art.append(image);
+    }
+    const rangeBox = card.querySelector('[data-field="range"]');
+    const addRange = (label, value) => {
+        const item = document.createElement("div");
+        const heading = document.createElement("span");
+        heading.textContent = label;
+        const text = document.createElement("strong");
+        text.textContent = value;
+        item.append(heading, text);
+        rangeBox.append(item);
+    };
+    const self = /^self$/i.test(spell.range_text || "");
+    if (!self || area) addRange("Range", spell.range_text || "Special");
+    if (area) rangeBox.classList.add("has-area");
+    const areaText = area && `${area.length ? `${area.length} x ` : ""}${area.size} ${area.unit === "feet" ? "ft" : area.unit} ${titleCase(area.type)}`;
+    addRange(area ? "Area" : "Targets", area ? areaText : backTargetCount(spell));
+    const keywords = spellKeywords(spell);
+    const keywordRoot = card.querySelector('[data-field="keywords"]');
+    const fields = [
+        ["casting-time", "time.png"],
+        ...(keywords["attack-save"].text === "None" ? [] : [["attack-save", "heart.png"]]),
+        ["effect", "effect.png"],
+        ["duration", "duration.png"]
+    ];
+    for (const [field, icon] of fields) {
+        const item = document.createElement("div");
+        const image = document.createElement("img");
+        image.src = `${ICON_URL}${icon}`;
+        image.alt = { "casting-time": "Casting time", "attack-save": "Attack/Save", effect: "Effect", duration: "Duration" }[field];
+        const text = document.createElement("span");
+        text.textContent = backKeywordText(keywords[field]);
+        const value = document.createElement("span");
+        value.className = "back-keyword-value";
+        value.setAttribute("aria-label", keywords[field].text);
+        value.classList.toggle("has-many-icons", keywords[field].icons.length > 2);
+        if (keywords[field].icons.length) {
+            const icons = document.createElement("span");
+            icons.className = "back-keyword-icons";
+            icons.append(...keywords[field].icons.map(createKeywordIcon));
+            value.append(icons);
+        }
+        if (text.textContent) value.append(text);
+        item.append(image, value);
+        keywordRoot.append(item);
+    }
+    return card;
+}
+
 function updateSelectionSummary() {
     const size = cardSizeSettings();
     const spellCount = state.selected.size;
@@ -592,7 +789,13 @@ function updateSelectionSummary() {
     const spellLabel = spellCount === 1 ? "spell" : "spells";
     const cardLabel = cardCount === 1 ? "card" : "cards";
     elements.selectionSummary.textContent = `${spellCount} ${spellLabel} selected · ${cardCount} ${cardLabel}`;
-    elements.selectionNote.textContent = `${size.label} · ${size.dimensions} · up to ${size.cardsPerPage} cards per A4 page`;
+    elements.selectionNote.textContent = `${size.label} · ${size.dimensions} · up to ${size.cardsPerPage} ${size.mode === "fold" ? "card pairs" : "cards"} per A4 ${size.mode === "duplex" ? "sheet (2 pages)" : "page"}`;
+    const instructions = {
+        none: "",
+        fold: " Cut around each front/back pair, fold along the shared edge, then glue. Print single-sided.",
+        duplex: " Print double-sided, flipping on the long edge. Each front page is followed by its mirrored back page. Test one sheet first."
+    };
+    elements.printHelp.textContent = `Print A4 at 100% / actual size with backgrounds enabled and headers/footers off.${instructions[size.mode]}`;
 }
 
 function renderSelectedCards() {
@@ -612,7 +815,10 @@ function renderSelectedCards() {
     } else {
         const fragment = document.createDocumentFragment();
         for (const spell of selected) {
-            for (const part of getSpellCardParts(spell)) fragment.append(buildCard(spell, part));
+            for (const part of getSpellCardParts(spell)) {
+                fragment.append(buildCard(spell, part));
+                if (cardSizeSettings().mode !== "none") fragment.append(buildBack(spell, part));
+            }
         }
         elements.selectedCards.append(fragment);
     }
@@ -929,15 +1135,40 @@ function toggleSpell(spell) {
 
 function renderPrintPages() {
     elements.printRoot.replaceChildren();
-    const cardsPerPage = cardSizeSettings().cardsPerPage;
+    const { cardsPerPage, columns, mode, pairsPerRow } = cardSizeSettings();
     const selected = [...state.selected.values()].flatMap(spell =>
         getSpellCardParts(spell).map(part => ({ spell, part })));
     for (let start = 0; start < selected.length; start += cardsPerPage) {
         const page = document.createElement("section");
         page.className = "print-page";
         page.setAttribute("aria-label", `Print page ${Math.floor(start / cardsPerPage) + 1}`);
-        for (const { spell, part } of selected.slice(start, start + cardsPerPage)) page.append(buildCard(spell, part));
+        page.classList.toggle("print-page-fold", mode === "fold");
+        const batch = selected.slice(start, start + cardsPerPage);
+        batch.forEach(({ spell, part }, index) => {
+            if (mode === "fold") {
+                const pair = document.createElement("div");
+                pair.className = "print-card-pair";
+                pair.style.gridColumn = String(index % pairsPerRow + 1);
+                pair.style.gridRow = String(Math.floor(index / pairsPerRow) + 1);
+                pair.append(buildCard(spell, part), buildBack(spell, part));
+                page.append(pair);
+            } else {
+                page.append(buildCard(spell, part));
+            }
+        });
         elements.printRoot.append(page);
+        if (mode === "duplex") {
+            const backPage = document.createElement("section");
+            backPage.className = "print-page print-page-backs";
+            backPage.setAttribute("aria-label", `Backs for ${page.getAttribute("aria-label")}`);
+            batch.forEach(({ spell, part }, index) => {
+                const back = buildBack(spell, part);
+                back.style.gridColumn = String(columns - index % columns);
+                back.style.gridRow = String(Math.floor(index / columns) + 1);
+                backPage.append(back);
+            });
+            elements.printRoot.append(backPage);
+        }
     }
 }
 
@@ -1081,11 +1312,30 @@ for (const input of elements.cardSizeInputs) {
     });
 }
 
+for (const input of elements.backInputs) {
+    input.addEventListener("change", renderSelectedCards);
+}
+
+window.addEventListener("beforeprint", renderPrintPages);
+
 elements.printButton.addEventListener("click", async () => {
-    renderPrintPages();
-    await document.fonts.ready;
-    await Promise.all([...elements.printRoot.querySelectorAll("img")].map(image => image.decode().catch(() => {})));
-    window.print();
+    elements.printError.hidden = true;
+    try {
+        renderPrintPages();
+        await document.fonts.ready;
+        await Promise.all([...elements.printRoot.querySelectorAll("img")].map(async image => {
+            try {
+                await image.decode();
+            } catch (error) {
+                throw new Error(`Could not load the print image: ${image.getAttribute("src")}`, { cause: error });
+            }
+        }));
+        window.print();
+    } catch (error) {
+        console.error("Could not prepare the print sheet.", error);
+        elements.printError.textContent = `${error.message}. Please reload and try again.`;
+        elements.printError.hidden = false;
+    }
 });
 
 loadSpells();
