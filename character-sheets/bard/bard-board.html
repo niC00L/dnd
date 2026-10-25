@@ -1,0 +1,443 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Bard Class Board</title>
+    <link rel="stylesheet" href="../board.css">
+</head>
+
+<body>
+    <main class="page" aria-label="A4 landscape Bard class board">
+        <article class="board themed-board theme-bard" aria-label="Level 1 Bard">
+            <header class="masthead">
+                <div class="masthead-title">
+                    <img class="masthead-wordmark" src="assets/bard-wordmark.png"
+                        alt="Bard emblem and wordmark">
+                    <div class="character-details">                        
+                    </div>
+
+                    <!-- <div class="character-details" aria-label="Character details">
+                        <label>Character name<input type="text" name="character-name"></label>
+                        <label>Race<input type="text" name="race"></label>
+                        <label>Background<input type="text" name="background"></label>
+                        <label>Alignment<input type="text" name="alignment"></label>
+                    </div> -->
+                    <section class="level">
+                        <h3>LEVEL</h3>
+                        <p class="modifier proficiency"></p>
+                    </section>
+                </div>
+            </header>
+            <div class="character-columns">
+                <div class="board-column identity-column">
+
+                    <section class="abilities panel" aria-labelledby="abilities-title">
+                        <h2 id="abilities-title">
+                            <span>Ability Modifiers</span>
+                            <span>Saving Throws &amp; Skills</span>
+                        </h2>
+                        <div class="ability-columns">
+                            <div class="ability-column">
+                                <section class="ability">
+                                    <h3>STRENGTH</h3>
+                                    <div class="modifier-row">
+                                        <p class="modifier"></p>
+                                        <span class="modifier-small" aria-hidden="true"></span>
+                                    </div>
+                                    <p class="save"><b></b> STR Save</p>
+                                    <ul>
+                                        <li><b></b> Athletics</li>
+                                    </ul>
+                                </section>
+                                <section class="ability">
+                                    <h3>CONSTITUTION</h3>
+                                    <div class="modifier-row">
+                                        <p class="modifier"></p>
+                                        <span class="modifier-small" aria-hidden="true"></span>
+                                    </div>
+                                    <p class="save"><b></b> CON Save</p>
+                                </section>
+                                <section class="ability">
+                                    <h3>WISDOM</h3>
+                                    <div class="modifier-row">
+                                        <p class="modifier"></p>
+                                        <span class="modifier-small" aria-hidden="true"></span>
+                                    </div>
+                                    <p class="save"><b></b> WIS Save</p>
+                                    <ul>
+                                        <li><b></b> Animal Handling</li>
+                                        <li><b></b> Insight</li>
+                                        <li><b></b> Medicine</li>
+                                        <li><b></b> Perception</li>
+                                        <li><b></b> Survival</li>
+                                    </ul>
+                                </section>
+                                <section class="inspiration passive-checks">
+                                    <div>
+                                        <h3>PASSIVE WIS<br>(PERCEPTION)</h3>
+                                        <p class="modifier proficiency"></p>
+                                    </div>
+                                    <div>
+                                        <h3>PASSIVE WIS<br>(INSIGHT)</h3>
+                                        <p class="modifier proficiency"></p>
+                                    </div>
+                                </section>
+                                <section class="inspiration">
+                                    <h3>PROFICIENCY<br>BONUS</h3>
+                                    <p class="modifier proficiency"></p>
+                                </section>
+                            </div>
+                            <div class="ability-column">
+                                <section class="ability">
+                                    <h3>DEXTERITY</h3>
+                                    <div class="modifier-row">
+                                        <p class="modifier"></p>
+                                        <span class="modifier-small" aria-hidden="true"></span>
+                                    </div>
+                                    <p class="save selected"><b></b> DEX Save</p>
+                                    <ul>
+                                        <li><b></b> Acrobatics</li>
+                                        <li><b></b> Sleight of Hand</li>
+                                        <li><b></b> Stealth</li>
+                                    </ul>
+                                </section>
+                                <section class="ability">
+                                    <h3>INTELLIGENCE</h3>
+                                    <div class="modifier-row">
+                                        <p class="modifier"></p>
+                                        <span class="modifier-small" aria-hidden="true"></span>
+                                    </div>
+                                    <p class="save"><b></b> INT Save</p>
+                                    <ul>
+                                        <li><b></b> Arcana</li>
+                                        <li><b></b> History</li>
+                                        <li><b></b> Investigation</li>
+                                        <li><b></b> Nature</li>
+                                        <li><b></b> Religion</li>
+                                    </ul>
+                                </section>
+                                <section class="ability">
+                                    <h3>CHARISMA</h3>
+                                    <div class="modifier-row">
+                                        <p class="modifier"></p>
+                                        <span class="modifier-small" aria-hidden="true"></span>
+                                    </div>
+                                    <p class="save selected"><b></b> CHA Save</p>
+                                    <ul>
+                                        <li><b></b> Deception</li>
+                                        <li><b></b> Intimidation</li>
+                                        <li><b></b> Performance</li>
+                                        <li><b></b> Persuasion</li>
+                                    </ul>
+                                </section>
+                                <section class="inspiration">
+                                    <h3>INSPIRATION</h3>
+                                    <p class="modifier proficiency"></p>
+                                </section>
+                            </div>
+                        </div>
+                    </section>
+                </div>
+
+                <div class="board-column combat-column stats-column">
+
+                    <section class="hit-points panel" aria-label="Initiative, speed, and hit points">
+                        <div class="combat-stats">
+                            <div>
+                                <h2>ARMOR CLASS</h2>
+                                <p>&nbsp;</p>
+                            </div>
+                            <div>
+                                <h2>INITIATIVE</h2>
+                                <p>&nbsp;</p>
+                            </div>
+                            <div>
+                                <h2>SPEED</h2>
+                                <p>&nbsp;</p>
+                            </div>
+                        </div>
+                        <h2 class="hp-label">Hit Points</h2>
+                        <div class="hp-trio combat-stats">
+                            <div>
+                                <h2>CURRENT HP</h2>
+                                <p>&nbsp;</p>
+                            </div>
+                            <div>
+                                <h2>TEMP HP</h2>
+                                <p>&nbsp;</p>
+                            </div>
+                            <div>
+                                <h2>MAX HP</h2>
+                                <p>&nbsp;</p>
+                            </div>
+                        </div>
+                        <h2 class="hp-label">Hit Dice</h2>
+                        <div class="combat-stats">
+                            <div>
+                                <h2>USED</h2>
+                                <p>&nbsp;</p>
+                            </div>
+                            <div>
+                                <h2>TOTAL</h2>
+                                <p>&nbsp;</p>
+                            </div>
+                            <div>
+                                <h2>DIE</h2>
+                                <p>&nbsp;</p>
+                            </div>
+                        </div>
+                        <div class="death-saves" aria-label="Death saving throws">
+                            <h2>DEATH SAVES</h2>
+                            <div class="death-saves-group" aria-label="Successes">
+                                <strong>SUCCESS</strong><span></span><span></span><span></span>
+                            </div>
+                            <div class="death-saves-group" aria-label="Failures">
+                                <strong>FAILURE</strong><span></span><span></span><span></span>
+                            </div>
+                        </div>
+                    </section>
+                    <section class="hit-points panel" aria-label="Initiative, speed, and hit points">
+                        <h2>Spellcasting</h2>
+                        <p class="margin-bottom shared-copy">
+                            Spellcasting focus: a musical instrument, if desired.
+                        </p>
+                        <div class="combat-stats">
+                            <div>
+                                <h2>SPELLCASTING ABILITY</h2>
+                                <p>CHA</p>
+                            </div>
+                            <div>
+                                <h2>SPELL SAVE DC</h2>
+                                <p>&nbsp;</p>
+                            </div>
+                            <div>
+                                <h2>SPELL ATTACK BONUS</h2>
+                                <p>&nbsp;</p>
+                            </div>
+                        </div>
+                        <table class="spell-progression full-caster">
+                            <colgroup>
+                                <col><col><col><col><col><col><col><col><col><col>
+                            </colgroup>
+                            <thead>
+                                <tr>
+                                    <th scope="col">SLOTS</th>
+                                    <th scope="col">1</th><th scope="col">2</th><th scope="col">3</th>
+                                    <th scope="col">4</th><th scope="col">5</th><th scope="col">6</th>
+                                    <th scope="col">7</th><th scope="col">8</th><th scope="col">9</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <th scope="row">USED</th>
+                                    <td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td>
+                                    <td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td>
+                                </tr>
+                                <tr>
+                                    <th scope="row">MAX</th>
+                                    <td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td>
+                                    <td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </section>
+                    <section class="hit-points panel proficiency-lines" aria-label="Initiative, speed, and hit points">
+                        <h2>Proficiencies &amp; Languages</h2>
+                        <p class="small-text shared-copy">
+                            Saving Throws: Dexterity, Charisma.<br>
+                            Skills: choose any three.<br>
+                            Proficiencies: Light armor, simple weapons, hand crossbows, longswords, rapiers, shortswords; three musical instruments.<br>
+                            Languages: two of your choice.
+                        </p>
+                        <div class="shared-writing-lines proficiency-writing-lines">
+                            <p>&nbsp;</p>
+                            <p>&nbsp;</p>
+                            <p>&nbsp;</p>
+                            <p>&nbsp;</p>
+                            <p>&nbsp;</p>
+                            <p>&nbsp;</p>
+                        </div>
+                    </section>
+
+
+
+                </div>
+            </div>
+            <div class="board-column cards-column">
+
+
+                <section class="hit-points panel" aria-label="Initiative, speed, and hit points">
+                    <h2>Inventory</h2>
+                    <div class="combat-stats">
+                        <div>
+                            <h2>GOLD</h2>
+                            <p>&nbsp;</p>
+                        </div>
+                        <div>
+                            <h2>SILVER</h2>
+                            <p>&nbsp;</p>
+                        </div>
+                        <div>
+                            <h2>COPPER</h2>
+                            <p>&nbsp;</p>
+                        </div>
+                    </div>
+                    <div class="shared-writing-lines inventory-writing-lines">
+                        <p>&nbsp;</p>
+                        <p>&nbsp;</p>
+                        <p>&nbsp;</p>
+                        <p>&nbsp;</p>
+                        <p>&nbsp;</p>
+                        <p>&nbsp;</p>
+                        <p>&nbsp;</p>
+                        <p>&nbsp;</p>
+                        <p>&nbsp;</p>
+                        <p>&nbsp;</p>
+                        <p>&nbsp;</p>
+                    </div>
+                </section>
+
+
+                <section class="feature-tracker-panel panel" aria-labelledby="features-panel-title">
+                    <div class="feature-block">
+                        <div class="level-badge" role="img" aria-label="Level 1"><span>LVL</span><b>1</b></div>
+                        <h2 class="hp-label" id="features-panel-title">Bardic Inspiration</h2>
+                        <p class="shared-copy">Die: d6 (d8 at 5, d10 at 10, d12 at 15). Uses: Charisma modifier (minimum 1).</p>
+                        <div class="combat-stats">
+                            <div><h2>USED</h2><p>&nbsp;</p></div>
+                            <div><h2>MAX</h2><p>&nbsp;</p></div>
+                        </div>
+                        <div class="feature-tracker"><b class="shared-writing-field"></b></div>
+                    </div>
+
+                    <div class="feature-block">
+                        <div class="level-badge" role="img" aria-label="Level 1"><span>LVL</span><b>1</b></div>
+                        <h2>Spells Known</h2>
+                        <p class="shared-copy">Record your known spells.</p>
+                        <div class="feature-tracker"><b class="shared-writing-field"></b></div>
+                    </div>
+
+                    <div class="feature-block">
+                        <div class="level-badge" role="img" aria-label="Level 2"><span>LVL</span><b>2</b></div>
+                        <h2>Expertise</h2>
+                        <p class="shared-copy">Choose two proficient skills at level 2; two more at level 9.</p>
+                        <div class="feature-tracker"><b class="shared-writing-field"></b></div>
+                    </div>
+
+                    <div class="feature-block">
+                        <div class="level-badge" role="img" aria-label="Level 3"><span>LVL</span><b>3</b></div>
+                        <h2 class="hp-label">Bard Spells</h2>
+                        <p class="shared-copy">Record known spells and cantrips.</p>
+                        <div class="feature-tracker"><b class="shared-writing-field"></b></div>
+                    </div>
+                    <div class="shared-writing-lines features-writing-lines">
+                        <p>&nbsp;</p>
+                        <p>&nbsp;</p>
+                        <p>&nbsp;</p>
+                        <p>&nbsp;</p>
+                        <p>&nbsp;</p>
+                        <p>&nbsp;</p>
+                        <p>&nbsp;</p>
+                        <p>&nbsp;</p>
+                        <p>&nbsp;</p>
+                    </div>
+                </section>
+            </div>
+            <div class="board-column class-column">
+                <section class="class-features panel class-feature" aria-labelledby="subclass-features-title">
+                    <h2 class="hp-label" id="subclass-features-title">Bard College</h2>
+                    <div class="subclass-name-field shared-writing-field" aria-label="Bard College name"></div>
+                    <h3 class="subclass-feature-heading">College Features</h3>
+
+                    <div class="class-feature-entry">
+                        <div class="class-feature-lines shared-writing-lines">
+                            <h4 class="class-feature-label">Bard College</h4>
+                            <p>&nbsp;</p>
+                            <p>&nbsp;</p>
+                        </div>
+                        <div class="level-badge" role="img" aria-label="Level 3"><span>LVL</span><b>3</b></div>
+                    </div>
+                    <div class="class-feature-entry">
+                        <div class="class-feature-lines shared-writing-lines">
+                            <h4 class="class-feature-label">College Feature</h4>
+                            <p>&nbsp;</p>
+                            <p>&nbsp;</p>
+                        </div>
+                        <div class="level-badge" role="img" aria-label="Level 6"><span>LVL</span><b>6</b></div>
+                    </div>
+                    <div class="class-feature-entry">
+                        <div class="class-feature-lines shared-writing-lines">
+                            <h4 class="class-feature-label">College Feature</h4>
+                            <p>&nbsp;</p>
+                            <p>&nbsp;</p>
+                        </div>
+                        <div class="level-badge" role="img" aria-label="Level 14"><span>LVL</span><b>14</b></div>
+                    </div>
+                </section>
+                <section class="hit-points panel proficiency-lines" aria-label="Initiative, speed, and hit points">
+
+                    <div class="shared-writing-lines proficiency-writing-lines">
+                        <p>&nbsp;</p>
+                        <p>&nbsp;</p>
+                        <p>&nbsp;</p>
+                        <p>&nbsp;</p>
+
+                        <p>&nbsp;</p>
+                        <p>&nbsp;</p>
+                        <p>&nbsp;</p>
+                    </div>
+                </section>
+                <!-- <section class="class-feature progression-card panel">
+                    <div class="shared-writing-lines">
+                            <p>&nbsp;</p>
+                            <p>&nbsp;</p>
+                            <p>&nbsp;</p>
+                            <p>&nbsp;</p>
+                            <p>&nbsp;</p>
+                            <p>&nbsp;</p>
+                            <p>&nbsp;</p>
+                            <p>&nbsp;</p>
+                            <p>&nbsp;</p>
+                            <p>&nbsp;</p>
+                            <p>&nbsp;</p>
+                            <p>&nbsp;</p>
+                            <p>&nbsp;</p>
+                            <p>&nbsp;</p>
+                            <p>&nbsp;</p>
+                            <p>&nbsp;</p>
+                            <p>&nbsp;</p>
+                            <p>&nbsp;</p>
+                            <p>&nbsp;</p>
+                            <p>&nbsp;</p>
+                            <p>&nbsp;</p>
+                        </div>
+                </section> -->
+                <section class="class-feature progression-card panel">
+                    <h2>Class Progression</h2>
+                    <ul class="progression-list shared-copy">
+                        <li><b>1.</b><span>Spellcasting; Bardic Inspiration</span></li>
+                        <li><b>2.</b><span>Jack of All Trades; Expertise</span></li>
+                        <li><b>3.</b><span>Bard College</span></li>
+                        <li><b>5.</b><span>Font of Inspiration</span></li>
+                        <li><b>7.</b><span>Countercharm</span></li>
+                        <li><b>9.</b><span>Expertise</span></li>
+                        <li><b>10.</b><span>Magical Secrets; Expertise</span></li>
+                        <li><b>18.</b><span>Superior Inspiration</span></li>
+                        <li><b>20.</b><span>Words of Creation</span></li>
+                    </ul>
+                    <div class="progression-rest-divider" aria-hidden="true"></div>
+                    <p class="shared-copy">Bardic Inspiration uses return after a Long Rest, or a Short Rest once you reach level 5.</p>
+                </section>
+            </div>
+            <footer class="legal">
+                This is unofficial Fan Content permitted under the Fan Content Policy. Portions of this work are ©
+                Wizards of the Coast LLC and used under the System Reference Document 5.2.1 (CC-BY-4.0). Not endorsed by
+                Wizards of the Coast.
+            </footer>
+        </article>
+    </main>
+</body>
+
+</html>

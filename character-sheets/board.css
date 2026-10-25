@@ -6,7 +6,7 @@
 
 @font-face {
     font-family: "Molengo";
-    src: url("../../fonts/Molengo/Molengo-Regular.ttf") format("truetype");
+    src: url("../fonts/Molengo/Molengo-Regular.ttf") format("truetype");
     font-style: normal;
     font-weight: 400;
     font-display: swap;
@@ -14,7 +14,7 @@
 
 @font-face {
     font-family: "Oswald";
-    src: url("../../fonts/Oswald/Oswald-VariableFont_wght.ttf") format("truetype");
+    src: url("../fonts/Oswald/Oswald-VariableFont_wght.ttf") format("truetype");
     font-style: normal;
     font-weight: 200 700;
     font-display: swap;
@@ -97,11 +97,29 @@ body {
     justify-content: center;
     padding: 0 calc(var(--reference-unit) * 40);
     container-type: inline-size;
-    background-color: var(--earth);
-    background-image: url("paladin-board-assets/board-texture.jpg");
+    background-color: var(--board-color, var(--earth));
+    background-image: var(--board-texture, url("assets/board-texture.jpg"));
     background-size: calc(var(--reference-unit) * 256) calc(var(--reference-unit) * 256);
     font-size: calc(var(--reference-unit) * 30);
     line-height: 1.22;
+}
+
+.board.theme-warlock {
+    --board-color: #2b0c14;
+    --board-texture: url("assets/warlock-board-texture.png");
+    --heading-texture: none;
+}
+
+.board.theme-bard {
+    --board-color: #3d112e;
+    --board-texture: url("assets/bard-board-texture.png");
+    --heading-texture: none;
+}
+
+.board.theme-cleric {
+    --board-color: #072d3e;
+    --board-texture: url("assets/cleric-board-texture.png");
+    --heading-texture: none;
 }
 
 .board p,
@@ -160,6 +178,19 @@ body {
     height: auto;
     flex: none;
     object-fit: contain;
+}
+
+.masthead-title .class-name {
+    font-family: var(--font-label);
+    font-size: calc(var(--reference-unit) * 105);
+    font-weight: 700;
+    line-height: 1;
+    white-space: nowrap;
+}
+
+.masthead-title .masthead-wordmark {
+    width: min(100%, calc(var(--reference-unit) * 800));
+    margin: 0;
 }
 
 .character-details {
@@ -270,8 +301,9 @@ body {
     margin-left: calc(var(--reference-unit) * -7);
     margin-bottom: calc(var(--reference-unit) * 20);
     background-color: var(--earth);
-    background-image: url("paladin-board-assets/ability-heading-frame.png"),
-        url("paladin-board-assets/board-texture.jpg");
+    background-color: var(--board-color, var(--earth));
+    background-image: url("assets/ability-heading-frame.png"),
+        var(--heading-texture, url("assets/board-texture.jpg"));
     background-position: center, calc(var(--reference-unit) * -54) calc(var(--reference-unit) * -249);
     background-size: 100% 100%, calc(var(--reference-unit) * 256) calc(var(--reference-unit) * 256);
     background-repeat: no-repeat, repeat;
@@ -279,6 +311,18 @@ body {
     font-size: calc(var(--reference-unit) * 39);
     font-weight: 700;
     line-height: 1.1;
+}
+
+.themed-board .abilities > h2 {
+    background-image: url("assets/ability-heading-frame-overlay.png");
+}
+
+.themed-board .character-details {
+    margin-right: 0;
+}
+
+.themed-board .masthead-title {
+    grid-template-columns: minmax(0, calc(var(--reference-unit) * 800)) minmax(0, 1fr) auto;
 }
 
 .abilities > h2 > span {
@@ -672,8 +716,8 @@ p.hp-value {
 /* Right-hand class text, rests, and card tabs */
 
 
-.paladin-feature > h2,
-.lay-on-hands .feature-block > h2 {
+.class-feature > h2,
+.feature-tracker-panel .feature-block > h2 {
     padding: calc(var(--reference-unit) * 5);
     background: transparent;
     color: #784b00;
@@ -682,8 +726,8 @@ p.hp-value {
     text-align: center;
 }
 
-.paladin-feature > p,
-.lay-on-hands .feature-block > .feature-copy {
+.class-feature > p,
+.feature-tracker-panel .feature-block > .feature-copy {
     margin-top: calc(var(--reference-unit) * 8);
 }
 
@@ -850,6 +894,35 @@ p.hp-value {
     text-align: center;
 }
 
+.death-saves {
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    margin-top: calc(var(--reference-unit) * 10);
+    color: #784b00;
+    font-size: calc(var(--reference-unit) * 25);
+    font-weight: 700;
+}
+
+.death-saves-group {
+    display: flex;
+    align-items: center;
+    gap: calc(var(--reference-unit) * 8);
+}
+
+.death-saves-group span {
+    display: inline-block;
+    width: calc(var(--reference-unit) * 30);
+    height: calc(var(--reference-unit) * 30);
+    border: calc(var(--reference-unit) * 3) solid var(--gold);
+    border-radius: 50%;
+    background: #fff;
+}
+
+.death-saves-group strong {
+    font-size: calc(var(--reference-unit) * 20);
+}
+
 
 .spell-progression {
     width: 100%;
@@ -871,6 +944,18 @@ p.hp-value {
 
 .spell-progression col:not(:first-child) {
     width: 16%;
+}
+
+.spell-progression.full-caster {
+    font-size: calc(var(--reference-unit) * 25);
+}
+
+.spell-progression.full-caster col:first-child {
+    width: 13%;
+}
+
+.spell-progression.full-caster col:not(:first-child) {
+    width: 9.6667%;
 }
 
 .spell-progression caption {
@@ -925,7 +1010,7 @@ p.hp-value {
 }
 
 .cards-column .character-fields,
-.cards-column .oath-features {
+.cards-column .class-features {
     padding: calc(var(--reference-unit) * 18) calc(var(--reference-unit) * 22);
 }
 
@@ -934,17 +1019,17 @@ p.hp-value {
     font-size: calc(var(--reference-unit) * 32);
 }
 
-.cards-column .oath-features > h2 {
+.cards-column .class-features > h2 {
     margin-bottom: calc(var(--reference-unit) * 10);
     font-size: calc(var(--reference-unit) * 37);
     line-height: 1.35;
 }
 
-.class-column .oath-name-field {
+.class-column .subclass-name-field {
     margin-bottom: calc(var(--reference-unit) * 8);
 }
 
-.class-column .oath-feature-heading {
+.class-column .subclass-feature-heading {
     margin-bottom: calc(var(--reference-unit) * 8);
     color: #784b00;
     font-size: calc(var(--reference-unit) * 29);
@@ -974,17 +1059,17 @@ p.hp-value {
     background: white;
 }
 
-.oath-feature-entry {
+.class-feature-entry {
     position: relative;
     display: flex;
     align-items: center;
     gap: calc(var(--reference-unit) * 20);
 }
-.oath-feature-entry:not(:last-child) {
+.class-feature-entry:not(:last-child) {
     margin-bottom: calc(var(--reference-unit) * 20);
 }
 
-.oath-feature-entry:not(:last-child)::after {
+.class-feature-entry:not(:last-child)::after {
     position: absolute;
     bottom: calc(var(--reference-unit) * -11);
     left: 50%;
@@ -1015,7 +1100,7 @@ p.hp-value {
     pointer-events: none;
 }
 
-.cards-column .lay-on-hands .feature-block {
+.cards-column .feature-tracker-panel .feature-block {
     display: grid;
     min-height: calc(var(--reference-unit) * 82);
     grid-template-columns: minmax(0, 1fr) calc(var(--reference-unit) * 82);
@@ -1023,7 +1108,7 @@ p.hp-value {
     align-items: center;
 }
 
-.cards-column .lay-on-hands .feature-block + .feature-block {
+.cards-column .feature-tracker-panel .feature-block + .feature-block {
     margin-top: calc(var(--reference-unit) * 18);
 }
 
@@ -1037,22 +1122,29 @@ p.hp-value {
     font-weight: 700;
 }
 
-.oath-feature-entry > .level-badge {
+.class-feature-entry > .level-badge {
     position: relative;
     top: auto;
     right: auto;
     flex: none;
 }
 
-.oath-feature-lines {
+.class-feature-lines {
     display: grid;
     min-width: 0;
     flex: 1;
     gap: 0
 }
 
-.class-column .lay-on-hands .feature-block > h2,
-.class-column .paladin-feature > h2 {
+.class-feature-label {
+    margin: 0 0 calc(var(--reference-unit) * 4);
+    color: #784b00;
+    font-size: calc(var(--reference-unit) * 25);
+    line-height: 1.1;
+}
+
+.class-column .feature-tracker-panel .feature-block > h2,
+.class-column .class-feature > h2 {
     display: grid;
     min-height: calc(var(--reference-unit) * 82);
     align-items: center;
@@ -1137,13 +1229,13 @@ p.hp-value {
     margin: 0;
 }
 
-.cards-column .paladin-feature,
-.class-column .paladin-feature {
+.cards-column .class-feature,
+.class-column .class-feature {
     position: relative;
 }
 
-.cards-column .paladin-feature > h2,
-.class-column .paladin-feature > h2 {
+.cards-column .class-feature > h2,
+.class-column .class-feature > h2 {
     display: grid;
     min-height: calc(var(--reference-unit) * 82);
     align-items: center;
@@ -1152,8 +1244,8 @@ p.hp-value {
     line-height: 1.1;
 }
 
-.cards-column .paladin-feature > p,
-.class-column .paladin-feature > p {
+.cards-column .class-feature > p,
+.class-column .class-feature > p {
     margin-top: calc(var(--reference-unit) * 2);
 }
 
@@ -1187,47 +1279,47 @@ p.hp-value {
     background: var(--gold);
 }
 
-.cards-column .paladin-feature .combat-stats {
+.cards-column .class-feature .combat-stats {
     gap: calc(var(--reference-unit) * 10);
 }
 
-.cards-column .paladin-feature .combat-stats div {
+.cards-column .class-feature .combat-stats div {
     background: white;
 }
 
 
-.cards-column .lay-on-hands,
+.cards-column .feature-tracker-panel,
 .cards-column .divine-sense {
     position: relative;
     text-align: center;
 }
 
-.cards-column .lay-on-hands .combat-stats,
+.cards-column .feature-tracker-panel .combat-stats,
 .cards-column .divine-sense .combat-stats {
     gap: calc(var(--reference-unit) * 10);
 }
 
-.cards-column .lay-on-hands .combat-stats div,
+.cards-column .feature-tracker-panel .combat-stats div,
 .cards-column .divine-sense .combat-stats div {
     background: white;
 }
 
-.cards-column .lay-on-hands .combat-stats p,
+.cards-column .feature-tracker-panel .combat-stats p,
 .cards-column .divine-sense .combat-stats p {
     min-height: calc(var(--reference-unit) * 70);
     font-size: calc(var(--reference-unit) * 38);
 }
 
-.cards-column .lay-on-hands > .feature-copy,
+.cards-column .feature-tracker-panel > .feature-copy,
 .cards-column .divine-sense > .feature-copy,
-.cards-column .lay-on-hands .feature-block > .feature-copy {
+.cards-column .feature-tracker-panel .feature-block > .feature-copy {
     margin-top: calc(var(--reference-unit) * 10);
 }
 
-.cards-column .lay-on-hands .feature-block > h2,
+.cards-column .feature-tracker-panel .feature-block > h2,
 .cards-column .divine-sense > h2,
-.cards-column .paladin-feature > h2,
-.class-column .paladin-feature > h2 {
+.cards-column .class-feature > h2,
+.class-column .class-feature > h2 {
     display: block;
     min-height: 0;
     padding: calc(var(--reference-unit) * 5);
@@ -1236,12 +1328,12 @@ p.hp-value {
     text-align: center;
 }
 
-.cards-column .lay-on-hands .feature-block > h2 {
+.cards-column .feature-tracker-panel .feature-block > h2 {
     font-size: calc(var(--reference-unit) * 37);
     line-height: 1.2;
 }
 
-.cards-column .lay-on-hands .feature-block > .level-badge {
+.cards-column .feature-tracker-panel .feature-block > .level-badge {
     position: static;
     grid-column: 2;
     grid-row: 1 / span 4;
@@ -1249,12 +1341,12 @@ p.hp-value {
     align-self: center;
 }
 
-.cards-column .lay-on-hands .feature-block > :not(.level-badge) {
+.cards-column .feature-tracker-panel .feature-block > :not(.level-badge) {
     grid-column: 1;
 }
 
-.paladin-feature .feature-tracker,
-.paladin-feature .feature-tracker {
+.class-feature .feature-tracker,
+.class-feature .feature-tracker {
     margin-top: calc(var(--reference-unit) * 3);
 }
 

@@ -4,24 +4,25 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Paladin Class Board</title>
-    <link rel="stylesheet" href="base-board.css">
+    <title>Class Board Template</title>
+    <link rel="stylesheet" href="../board.css">
 </head>
 
 <body>
-    <main class="page" aria-label="A4 landscape Paladin class board">
-        <article class="board" aria-label="Level 1 Paladin">
+    <main class="page" aria-label="A4 landscape class board">
+        <article class="board" aria-label="Level 1 character class board">
             <header class="masthead">
                 <div class="masthead-title">
-                    <span class="crest-mark">
-                        <img class="crest" src="board-assets/paladin-crest-background.png" alt="">
-                        <span class="default-crest" aria-hidden="true"><img src="board-assets/dnd-ampersand-gold.png" alt=""></span>
-                    </span>
-                    <h1>PALADIN</h1>
+                    <h1 class="class-name">CLASS NAME</h1>
                     <div class="character-details">
-                        <h2>Character name</h2>
-                        <h2>Race, background</h2>
                     </div>
+
+                    <!-- <div class="character-details" aria-label="Character details">
+                        <label>Character name<input type="text" name="character-name"></label>
+                        <label>Race<input type="text" name="race"></label>
+                        <label>Background<input type="text" name="background"></label>
+                        <label>Alignment<input type="text" name="alignment"></label>
+                    </div> -->
                     <section class="level">
                         <h3>LEVEL</h3>
                         <p class="modifier proficiency"></p>
@@ -32,7 +33,10 @@
                 <div class="board-column identity-column">
 
                     <section class="abilities panel" aria-labelledby="abilities-title">
-                        <h2 id="abilities-title">Ability modifiers<br>saving throws &amp; skills</h2>
+                        <h2 id="abilities-title">
+                            <span>Ability Modifiers</span>
+                            <span>Saving Throws &amp; Skills</span>
+                        </h2>
                         <div class="ability-columns">
                             <div class="ability-column">
                                 <section class="ability">
@@ -69,9 +73,15 @@
                                         <li><b></b> Survival</li>
                                     </ul>
                                 </section>
-                                <section class="inspiration">
-                                    <h3>PASSIVE WIS<br>(PERCEPTION)</h3>
-                                    <p class="modifier proficiency"></p>
+                                <section class="inspiration passive-checks">
+                                    <div>
+                                        <h3>PASSIVE WIS<br>(PERCEPTION)</h3>
+                                        <p class="modifier proficiency"></p>
+                                    </div>
+                                    <div>
+                                        <h3>PASSIVE WIS<br>(INSIGHT)</h3>
+                                        <p class="modifier proficiency"></p>
+                                    </div>
                                 </section>
                                 <section class="inspiration">
                                     <h3>PROFICIENCY<br>BONUS</h3>
@@ -87,7 +97,7 @@
                                     </div>
                                     <p class="save"><b></b> DEX Save</p>
                                     <ul>
-                                        <li><b></b> Athletics</li>
+                                        <li><b></b> Acrobatics</li>
                                         <li><b></b> Sleight of Hand</li>
                                         <li><b></b> Stealth</li>
                                     </ul>
@@ -131,6 +141,7 @@
                 </div>
 
                 <div class="board-column combat-column stats-column">
+
                     <section class="hit-points panel" aria-label="Initiative, speed, and hit points">
                         <div class="combat-stats">
                             <div>
@@ -146,11 +157,12 @@
                                 <p>&nbsp;</p>
                             </div>
                         </div>
-                    </section>
-                    <section class="hit-points panel" aria-label="Initiative, speed, and hit points">
-                        <h2 class="hp-label">Current hit points</h2>
-                        <p class="hp-value">&nbsp;</p>
-                        <div class="combat-stats">
+                        <h2 class="hp-label">Hit Points</h2>
+                        <div class="hp-trio combat-stats">
+                            <div>
+                                <h2>CURRENT HP</h2>
+                                <p>&nbsp;</p>
+                            </div>
                             <div>
                                 <h2>TEMP HP</h2>
                                 <p>&nbsp;</p>
@@ -159,21 +171,32 @@
                                 <h2>MAX HP</h2>
                                 <p>&nbsp;</p>
                             </div>
+                        </div>
+                        <h2 class="hp-label">Hit Dice</h2>
+                        <div class="combat-stats">
                             <div>
-                                <h2>HIT DICE</h2>
+                                <h2>USED</h2>
+                                <p>&nbsp;</p>
+                            </div>
+                            <div>
+                                <h2>TOTAL</h2>
+                                <p>&nbsp;</p>
+                            </div>
+                            <div>
+                                <h2>DIE</h2>
                                 <p>&nbsp;</p>
                             </div>
                         </div>
                     </section>
                     <section class="hit-points panel" aria-label="Initiative, speed, and hit points">
-                        <h2 class="hp-label">Spellcasting</h2>
-                        <p class="margin-bottom">
-                            Holy symbol is your spellcasting focus.
+                        <h2>Spellcasting</h2>
+                        <p class="margin-bottom shared-copy">
+                            Spellcasting focus: ____________________
                         </p>
                         <div class="combat-stats">
                             <div>
                                 <h2>SPELLCASTING ABILITY</h2>
-                                <p>&nbsp;</p>
+                                <p>CHA</p>
                             </div>
                             <div>
                                 <h2>SPELL SAVE DC</h2>
@@ -189,56 +212,58 @@
                                 <col>
                                 <col>
                                 <col>
+                                <col>
+                                <col>
+                                <col>
                             </colgroup>
                             <thead>
                                 <tr>
-                                    <th scope="col">SPELL<br>LEVEL</th>
-                                    <th scope="col">REMAINING<br>SLOTS</th>
-                                    <th scope="col">MAX<br>SLOTS</th>
+                                    <th scope="col">SLOTS</th>
+                                    <th scope="col">1st</th>
+                                    <th scope="col">2nd</th>
+                                    <th scope="col">3rd</th>
+                                    <th scope="col">4th</th>
+                                    <th scope="col">5th</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 <tr>
-                                    <th scope="row">1</th>
+                                    <th scope="row">LEFT</th>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
                                     <td>&nbsp;</td>
                                     <td>&nbsp;</td>
                                 </tr>
                                 <tr>
-                                    <th scope="row">2</th>
+                                    <th scope="row">MAX</th>
                                     <td>&nbsp;</td>
                                     <td>&nbsp;</td>
-                                </tr>
-                                <tr>
-                                    <th scope="row">3</th>
                                     <td>&nbsp;</td>
-                                    <td>&nbsp;</td>
-                                </tr>
-                                <tr>
-                                    <th scope="row">4</th>
-                                    <td>&nbsp;</td>
-                                    <td>&nbsp;</td>
-                                </tr>
-                                <tr>
-                                    <th scope="row">5</th>
                                     <td>&nbsp;</td>
                                     <td>&nbsp;</td>
                                 </tr>
                             </tbody>
                         </table>
                     </section>
-                    <section class="hit-points panel writing-lines proficiency-lines"
-                        aria-label="Initiative, speed, and hit points">
-                        <h2 class="hp-label">Proficiencies</h2>
-                        <p class="small-text">
-                            Simple and Martial weapons. </br>
-                            Light, Medium, Heavy armor. Shields.
+                    <section class="hit-points panel proficiency-lines" aria-label="Initiative, speed, and hit points">
+                        <h2>Proficiencies</h2>
+                        <p class="small-text shared-copy">
+                            Weapon, armor, and tool proficiencies
                         </p>
-                        <p>&nbsp;</p>
-                        <p>&nbsp;</p>
-                        <p>&nbsp;</p>
-                        <p>&nbsp;</p>
-                        <p>&nbsp;</p>
-                        <p>&nbsp;</p>
+                        <div class="shared-writing-lines proficiency-writing-lines">
+                            <p>&nbsp;</p>
+                            <p>&nbsp;</p>
+                            <p>&nbsp;</p>
+                            <p>&nbsp;</p>
+                            <p>&nbsp;</p>
+                            <p>&nbsp;</p>
+                            <p>&nbsp;</p>
+                            <p>&nbsp;</p>
+                            <p>&nbsp;</p>
+                            <p>&nbsp;</p>
+                        </div>
                     </section>
 
 
@@ -248,8 +273,8 @@
             <div class="board-column cards-column">
 
 
-                <section class="hit-points panel writing-lines" aria-label="Initiative, speed, and hit points">
-                    <h2 class="hp-label">Inventory</h2>
+                <section class="hit-points panel" aria-label="Initiative, speed, and hit points">
+                    <h2>Inventory</h2>
                     <div class="combat-stats">
                         <div>
                             <h2>GOLD</h2>
@@ -264,120 +289,169 @@
                             <p>&nbsp;</p>
                         </div>
                     </div>
-                    <p>&nbsp;</p>
-                    <p>&nbsp;</p>
-                    <p>&nbsp;</p>
-                    <p>&nbsp;</p>
-                    <p>&nbsp;</p>
-                    <p>&nbsp;</p>
-                    <p>&nbsp;</p>
-                    <p>&nbsp;</p>
-                    <p>&nbsp;</p>
-                    <p>&nbsp;</p>
+                    <div class="shared-writing-lines inventory-writing-lines">
+                        <p>&nbsp;</p>
+                        <p>&nbsp;</p>
+                        <p>&nbsp;</p>
+                        <p>&nbsp;</p>
+                        <p>&nbsp;</p>
+                        <p>&nbsp;</p>
+                        <p>&nbsp;</p>
+                        <p>&nbsp;</p>
+                        <p>&nbsp;</p>
+                        <p>&nbsp;</p>
+                        <p>&nbsp;</p>
+                    </div>
                 </section>
 
-                <section class="hit-points panel writing-lines" aria-label="Initiative, speed, and hit points">
-                    <h2 class="hp-label">Features</h2>
-                    <p>&nbsp;</p>
-                    <p>&nbsp;</p>
-                    <p>&nbsp;</p>
-                    <p>&nbsp;</p>
-                    <p>&nbsp;</p>
-                    <p>&nbsp;</p>
-                    <p>&nbsp;</p>
-                    <p>&nbsp;</p>
-                    <p>&nbsp;</p>
-                    <p>&nbsp;</p>
-                    <p>&nbsp;</p>
-                    <p>&nbsp;</p>
-                    <p>&nbsp;</p>
-                    <p>&nbsp;</p>
-                    <p>&nbsp;</p>
-                    <p>&nbsp;</p>
-                    <p>&nbsp;</p>
-                    <p>&nbsp;</p>
-                    <p>&nbsp;</p>
-                    <p>&nbsp;</p>
-                    <p>&nbsp;</p>
-                    <p>&nbsp;</p>
-                    <p>&nbsp;</p>
-                    <p>&nbsp;</p>
-                    <p>&nbsp;</p>
-                    <p>&nbsp;</p>
-                    <p>&nbsp;</p>
-                    <p>&nbsp;</p>
-                    <p>&nbsp;</p>
-                    <p>&nbsp;</p>
-                    <p>&nbsp;</p>
-                    <p>&nbsp;</p>
-                    <p>&nbsp;</p>
-                    <p>&nbsp;</p>
-                    <p>&nbsp;</p>
+
+                <section class="feature-tracker-panel panel" aria-labelledby="features-panel-title">
+                    <div class="feature-block">
+                        <div class="level-badge" role="img" aria-label="Level 1"><span>LVL</span><b>1</b></div>
+                        <h2 class="hp-label" id="features-panel-title">Class Feature</h2>
+                        <p class="shared-copy">Feature name and notes</p>
+                        <div class="feature-tracker"><b class="shared-writing-field"></b></div>
+                    </div>
+
+                    <div class="feature-block">
+                        <div class="level-badge" role="img" aria-label="Level 1"><span>LVL</span><b>1</b></div>
+                        <h2>Class Feature</h2>
+                        <p class="shared-copy">Feature name and notes</p>
+                        <div class="feature-tracker"><b class="shared-writing-field"></b></div>
+                    </div>
+
+                    <div class="feature-block">
+                        <div class="level-badge" role="img" aria-label="Level 2"><span>LVL</span><b>2</b></div>
+                        <h2>Class Feature</h2>
+                        <p class="shared-copy">Feature name and notes</p>
+                        <div class="feature-tracker"><b class="shared-writing-field"></b></div>
+                    </div>
+
+                    <div class="feature-block">
+                        <div class="level-badge" role="img" aria-label="Level 3"><span>LVL</span><b>3</b></div>
+                        <h2 class="hp-label">Class Feature</h2>
+                        <div class="combat-stats">
+                            <div>
+                                <h2>USED</h2>
+                                <p>&nbsp;</p>
+                            </div>
+                            <div>
+                                <h2>TOTAL</h2>
+                                <p>&nbsp;</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="shared-writing-lines features-writing-lines">
+                        <p>&nbsp;</p>
+                        <p>&nbsp;</p>
+                        <p>&nbsp;</p>
+                        <p>&nbsp;</p>
+                        <p>&nbsp;</p>
+                        <p>&nbsp;</p>
+                        <p>&nbsp;</p>
+                        <p>&nbsp;</p>
+                        <p>&nbsp;</p>
+                    </div>
                 </section>
             </div>
             <div class="board-column class-column">
-                <section class="hit-points panel prepared-spells writing-lines"
-                    aria-label="Initiative, speed, and hit points">
-                    <h2 class="hp-label">Prepared spells & cantrips</h2>
-                    <p>&nbsp;</p>
-                    <p>&nbsp;</p>
-                    <p>&nbsp;</p>
-                    <p>&nbsp;</p>
-                    <p>&nbsp;</p>
-                    <p>&nbsp;</p>
-                    <p>&nbsp;</p>
-                    <p>&nbsp;</p>
-                    <p>&nbsp;</p>
+                <section class="class-features panel class-feature" aria-labelledby="subclass-features-title">
+                    <h2 class="hp-label" id="subclass-features-title">Subclass</h2>
+                    <div class="subclass-name-field shared-writing-field" aria-label="Subclass name"></div>
+                    <h3 class="subclass-feature-heading">Subclass Features</h3>
 
-                    <p>&nbsp;</p>
-                    <p>&nbsp;</p>
-                    <p>&nbsp;</p>
-                    <p>&nbsp;</p>
-                    <p>&nbsp;</p>
-                    <p>&nbsp;</p>
-                    <p>&nbsp;</p>
-                    <p>&nbsp;</p>
-                    <p>&nbsp;</p>
-                    <p>&nbsp;</p>
-                    <p>&nbsp;</p>
-                    <p>&nbsp;</p>
-                    <p>&nbsp;</p>
-                    <p>&nbsp;</p>
-                    <p>&nbsp;</p>
-                    <p>&nbsp;</p>
-                    <p>&nbsp;</p>
-                    <p>&nbsp;</p>
-                    <p>&nbsp;</p>
-                    <p>&nbsp;</p>
-                    <p>&nbsp;</p>
-                    <p>&nbsp;</p>
-                    <p>&nbsp;</p>
-                    <p>&nbsp;</p>
-                    <p>&nbsp;</p>
-                    <p>&nbsp;</p>
-                    <p>&nbsp;</p>
-                    <p>&nbsp;</p>
-                    <p>&nbsp;</p>
-                    <p>&nbsp;</p>
-                    <p>&nbsp;</p>
-                    <p>&nbsp;</p>
+                    <div class="class-feature-entry">
+                        <div class="class-feature-lines shared-writing-lines">
+                            <p>&nbsp;</p>
+                            <p>&nbsp;</p>
+                            <p>&nbsp;</p>
+                        </div>
+                        <div class="level-badge" role="img" aria-label="Level 3"><span>LVL</span><b>3</b></div>
+                    </div>
+                    <div class="class-feature-entry">
+                        <div class="class-feature-lines shared-writing-lines">
+                            <p>&nbsp;</p>
+                            <p>&nbsp;</p>
+                            <p>&nbsp;</p>
+                        </div>
+                        <div class="level-badge" role="img" aria-label="Level 7"><span>LVL</span><b>7</b></div>
+                    </div>
+                    <div class="class-feature-entry">
+                        <div class="class-feature-lines shared-writing-lines">
+                            <p>&nbsp;</p>
+                            <p>&nbsp;</p>
+                            <p>&nbsp;</p>
+                        </div>
+                        <div class="level-badge" role="img" aria-label="Level 15"><span>LVL</span><b>15</b></div>
+                    </div>
+                    <div class="class-feature-entry">
+                        <div class="class-feature-lines shared-writing-lines">
+                            <p>&nbsp;</p>
+                            <p>&nbsp;</p>
+                            <p>&nbsp;</p>
+                        </div>
+                        <div class="level-badge" role="img" aria-label="Level 20"><span>LVL</span><b>20</b></div>
+                    </div>
                 </section>
+                <section class="hit-points panel proficiency-lines" aria-label="Initiative, speed, and hit points">
 
-                <section class="rest-reminders panel">
-                    <p>After a <b>Short Rest:</b></p>
-                    <ul>
-                        <li>Channel Divinity: regain one expended use.</li>
+                    <div class="shared-writing-lines proficiency-writing-lines">
+                        <p>&nbsp;</p>
+                        <p>&nbsp;</p>
+                        <p>&nbsp;</p>
+                        <p>&nbsp;</p>
+
+                        <p>&nbsp;</p>
+                        <p>&nbsp;</p>
+                        <p>&nbsp;</p>
+                    </div>
+                </section>
+                <!-- <section class="class-feature progression-card panel">
+                    <div class="shared-writing-lines">
+                            <p>&nbsp;</p>
+                            <p>&nbsp;</p>
+                            <p>&nbsp;</p>
+                            <p>&nbsp;</p>
+                            <p>&nbsp;</p>
+                            <p>&nbsp;</p>
+                            <p>&nbsp;</p>
+                            <p>&nbsp;</p>
+                            <p>&nbsp;</p>
+                            <p>&nbsp;</p>
+                            <p>&nbsp;</p>
+                            <p>&nbsp;</p>
+                            <p>&nbsp;</p>
+                            <p>&nbsp;</p>
+                            <p>&nbsp;</p>
+                            <p>&nbsp;</p>
+                            <p>&nbsp;</p>
+                            <p>&nbsp;</p>
+                            <p>&nbsp;</p>
+                            <p>&nbsp;</p>
+                            <p>&nbsp;</p>
+                        </div>
+                </section> -->
+                <section class="class-feature progression-card panel">
+                    <h2>Class Progression</h2>
+                    <ul class="progression-list shared-copy">
+                        <li><b>1.</b><span>Class feature</span></li>
+                        <li><b>2.</b><span>Class feature</span></li>
+                        <li><b>3.</b><span>Subclass feature</span></li>
+                        <li><b>5.</b><span>Class feature</span></li>
+                        <li><b>6.</b><span>Class feature</span></li>
+                        <li><b>9.</b><span>Class feature</span></li>
+                        <li><b>10.</b><span>Class feature</span></li>
+                        <li><b>11.</b><span>Class feature</span></li>
+                        <li><b>14.</b><span>Subclass feature</span></li>
                     </ul>
-                    <p>After a <b>Long Rest:</b></p>
-                    <ul>
-                        <li>Lay on Hands pool fully replenishes.</li>
-                        <li>All expended spell slots are regained.</li>
-                        <li>Divine Smite cast becomes available again.</li>
-                        <li>Find Steed cast returns.</li>
-                        <li>Channel Divinity: all expended uses regained.</li>
-                        <li>Change 1 spell on your prepared spell list</li>
-                        <li>Change Weapon Mastery properties.</li>
-                    </ul>
+                    <div class="progression-rest-divider" aria-hidden="true"></div>
+                    <p class="shared-copy">Rest and recovery notes</p>
+                    <div class="shared-writing-lines">
+                        <p>&nbsp;</p>
+                        <p>&nbsp;</p>
+                        <p>&nbsp;</p>
+                        <p>&nbsp;</p>
+                    </div>
                 </section>
             </div>
             <footer class="legal">
