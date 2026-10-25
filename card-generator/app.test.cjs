@@ -1,5 +1,5 @@
 const assert = require("node:assert/strict");
-const { readFileSync } = require("node:fs");
+const { readFileSync, existsSync } = require("node:fs");
 const { join } = require("node:path");
 const { runInNewContext } = require("node:vm");
 const { webcrypto } = require("node:crypto");
@@ -31,12 +31,14 @@ function app(size = "half", mode = "none") {
     const source = readFileSync(join(__dirname, "app.js"), "utf8");
     const initialization = source.indexOf('\nfor (const [name, options] of Object.entries(');
     assert.ok(initialization > 0, "Locate app initialization after the function declarations");
-    return runInNewContext(`${source.slice(0, initialization)}
+    const equipment = readFileSync(join(__dirname, "equipment.js"), "utf8");
+    return runInNewContext(`${equipment}\n${source.slice(0, initialization)}
         getSpellCardParts = spell => spell.parts;
         buildCard = (spell, part) => Object.assign(document.createElement("front"), { key: spell.key, part });
         buildBack = (spell, part) => Object.assign(document.createElement("back"), { key: spell.key, part });
         ({ state, printRoot: elements.printRoot, cardSizeSettings, renderPrintPages,
-           spellArea, areaImage, areaLabel, buildAreaDiagram, backTargetCount, backKeywordText });
+           spellArea, areaImage, areaLabel, buildAreaDiagram, backTargetCount, backKeywordText,
+           isCustomEquipment, isEquipment, equipmentStats, equipmentImage });
     `, { document, crypto: webcrypto, console });
 }
 
@@ -152,4 +154,54 @@ test("Back keyword icons replace redundant names but retain numeric and save inf
     ]) {
         assert.equal(backKeywordText({ text, icons }), expected);
     }
+});
+
+test("All built-in equipment records are valid, unique, licensed, and have local artwork", () => {
+    const { isCustomEquipment, equipmentImage } = app();
+    const cards = JSON.parse(readFileSync(join(__dirname, "data", "equipment-2024-srd.json"), "utf8"));
+    assert.equal(cards.length, 963);
+    assert.equal(new Set(cards.map(card => card.key)).size, cards.length);
+    assert.equal(cards.filter(card => card.source.url.includes("/items/")).length, 203);
+    assert.equal(cards.filter(card => card.source.url.includes("/magicitems/")).length, 760);
+    for (const card of cards) {
+        assert.equal(isCustomEquipment({ ...card, key: `custom-${card.key}` }), true, card.name);
+        assert.equal(card.source.license, "CC BY 4.0", card.name);
+        assert.ok(card.source.url.includes("srd-2024"), card.name);
+        assert.ok(existsSync(join(__dirname, equipmentImage(card))), `${card.name}: missing artwork`);
+    }
+});
+
+test("Equipment profiles retain range, properties, mastery, armor, and magic item rules", () => {
+    const { equipmentStats } = app();
+    const cards = JSON.parse(readFileSync(join(__dirname, "data", "equipment-2024-srd.json"), "utf8"));
+    const sword = cards.find(card => card.name === "Longsword");
+    assert.equal(sword.damage_roll, "1d8");
+    assert.equal(sword.mastery, "Sap");
+    assert.match(sword.properties, /Versatile \(1d10\)/);
+    assert.match(sword.desc, /Disadvantage/);
+    const bow = cards.find(card => card.name === "Longbow");
+    assert.equal(bow.range_text, "150/600 ft");
+    const armor = cards.find(card => card.name === "Breastplate");
+    assert.match(armor.armor_class, /14/);
+    assert.equal(equipmentStats(armor).find(([label]) => label === "Armor Class")[1], armor.armor_class);
+    const magic = cards.find(card => card.magic && card.attunement);
+    assert.equal(equipmentStats(magic).find(([label]) => label === "Attunement")[1], "Required");
+    assert.ok(magic.desc.length > 0);
+    assert.equal(cards.find(card => card.name === "Potion of Healing").rarity, "Common");
+    assert.equal(cards.find(card => card.name === "Spell Scroll").rarity, "Varies");
+});
+
+test("Equipment validation rejects unsafe uploads and malformed custom cards", () => {
+    const { isCustomEquipment, equipmentImage } = app();
+    const source = JSON.parse(readFileSync(join(__dirname, "data", "equipment-2024-srd.json"), "utf8"))[0];
+    const card = { ...source, key: "custom-equipment-test" };
+    assert.equal(isCustomEquipment(card), true);
+    for (const change of [
+        { kind: "spell" }, { name: "" }, { desc: "" }, { image: "../other" },
+        { image_data: "https://example.com/image.png" }, { image_data: "data:image/svg+xml;base64,PHN2Zz4=" },
+        { damage_types: ["not-a-type"] }, { attunement: "yes" }
+    ]) assert.equal(isCustomEquipment({ ...card, ...change }), false, JSON.stringify(change));
+    const upload = { ...card, image_data: "data:image/png;base64,aGVsbG8=" };
+    assert.equal(isCustomEquipment(upload), true);
+    assert.equal(equipmentImage(upload), upload.image_data);
 });

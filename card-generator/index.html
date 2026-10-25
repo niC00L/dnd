@@ -4,18 +4,19 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="theme-color" content="#243c36">
-    <title>Spell Card Press</title>
+    <title>Adventure Card Press</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Alegreya+Sans:ital,wght@0,400;0,500;0,700;1,400;1,700&family=Girassol&family=Jost:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="app.css?v=card-backs-1">
-    <script src="app.js?v=card-backs-1" defer></script>
+    <link rel="stylesheet" href="app.css?v=equipment-1">
+    <script src="equipment.js?v=equipment-1" defer></script>
+    <script src="app.js?v=equipment-1" defer></script>
 </head>
 <body data-card-size="half">
     <header class="topbar">
-        <a class="brand" href="./" aria-label="Spell Card Press home">
+        <a class="brand" href="./" aria-label="Adventure Card Press home">
             <span class="brand-mark" aria-hidden="true">S</span>
-            <span class="brand-copy"><strong>Spell Card Press</strong><span>5e 2024 rules</span></span>
+            <span class="brand-copy"><strong>Adventure Card Press</strong><span>5e 2024 rules</span></span>
         </a>
         <div class="topbar-meta">
             <span class="edition-tag">SRD 5.2</span>
@@ -23,18 +24,26 @@
         </div>
     </header>
 
+    <nav class="library-tabs" role="tablist" aria-label="Card library">
+        <button id="tab-spells" type="button" role="tab" aria-selected="true" aria-controls="library-panel" data-library="spells">Spells</button>
+        <button id="tab-weapons" type="button" role="tab" aria-selected="false" aria-controls="library-panel" tabindex="-1" data-library="weapons">Weapons</button>
+        <button id="tab-items" type="button" role="tab" aria-selected="false" aria-controls="library-panel" tabindex="-1" data-library="items">Items</button>
+    </nav>
     <main class="workspace">
         <section class="library" aria-labelledby="library-title">
+            <div id="library-panel" role="tabpanel" aria-labelledby="tab-spells">
             <div class="section-heading">
-                <div><p class="eyebrow">SPELL LIBRARY</p><h1 id="library-title">Choose your cards</h1></div>
+                <div><p class="eyebrow" id="library-eyebrow">SPELLS LIBRARY</p><h1 id="library-title">Choose your cards</h1></div>
                 <p class="result-count" id="result-count" aria-live="polite">Loading spells...</p>
             </div>
-            <div class="filters" aria-label="Filter spells">
+            <div class="filters" aria-label="Filter cards">
                 <label class="search-field"><span>Search</span><input id="search-input" type="search" placeholder="Spell name or description" autocomplete="off"></label>
-                <label><span>Level</span><select id="level-filter"><option value="">All levels</option></select></label>
-                <label><span>School</span><select id="school-filter"><option value="">All schools</option></select></label>
-                <label><span>Class</span><select id="class-filter"><option value="">All classes</option></select></label>
-                <label><span>Source</span><select id="source-filter"><option value="">All spells</option><option value="builtin">Built-in spells</option><option value="custom">Custom spells</option></select></label>
+                <label data-spell-filter><span>Level</span><select id="level-filter"><option value="">All levels</option></select></label>
+                <label data-spell-filter><span>School</span><select id="school-filter"><option value="">All schools</option></select></label>
+                <label data-spell-filter><span>Class</span><select id="class-filter"><option value="">All classes</option></select></label>
+                <label data-equipment-filter hidden><span>Category</span><select id="category-filter"><option value="">All categories</option></select></label>
+                <label data-equipment-filter hidden><span>Rarity</span><select id="rarity-filter"><option value="">All rarities</option><option>Mundane</option><option>Common</option><option>Uncommon</option><option>Rare</option><option>Very Rare</option><option>Legendary</option><option>Artifact</option><option>Varies</option></select></label>
+                <label><span>Source</span><select id="source-filter"><option value="">All cards</option><option value="builtin">Built-in cards</option><option value="custom">Custom cards</option></select></label>
             </div>
             <div class="list-toolbar">
                 <span id="selection-summary">No cards selected</span>
@@ -44,16 +53,17 @@
                     <button class="text-button" id="clear-selection" type="button" disabled>Clear selection</button>
                 </div>
             </div>
-            <div class="custom-library-toolbar" aria-label="Custom spell files">
+            <div class="custom-library-toolbar" aria-label="Custom card files">
                 <span id="custom-file-status" role="status"></span>
                 <div class="toolbar-actions">
-                    <button class="text-button" id="load-custom-json" type="button" title="Import custom spells from a JSON file" disabled>Load JSON</button>
-                    <button class="text-button" id="save-custom-json" type="button" title="Export all custom spells as a JSON backup" disabled>Save JSON</button>
+                    <button class="text-button" id="load-custom-json" type="button" title="Import custom cards from a JSON file" disabled>Load JSON</button>
+                    <button class="text-button" id="save-custom-json" type="button" title="Export all custom cards as a JSON backup" disabled>Save JSON</button>
                 </div>
                 <input id="custom-json-input" type="file" accept=".json,application/json" hidden>
             </div>
-            <div class="spell-list" id="spell-list" aria-label="Available spells" aria-busy="true">
+            <div class="spell-list" id="spell-list" aria-label="Available cards" aria-busy="true">
                 <p class="list-message">Loading the 2024 SRD spell list...</p>
+            </div>
             </div>
         </section>
 
@@ -102,8 +112,8 @@
     </main>
 
     <footer class="app-footer">
-        <span>Spell data: Open5e · System Reference Document 5.2</span>
-        <a href="https://open5e.com/sources/srd-2024" target="_blank" rel="noreferrer">CC BY 4.0 attribution</a>
+        <span>Rules: Open5e / SRD 5.2 · Art: Ravenmore / Game-icons.net</span>
+        <a href="./credits.html" target="_blank" rel="noreferrer">Sources, artwork &amp; licenses</a>
     </footer>
 
     <dialog class="custom-dialog" id="custom-card-dialog" aria-labelledby="custom-card-title">
@@ -162,7 +172,56 @@
         </form>
     </dialog>
 
+    <dialog class="custom-dialog" id="equipment-dialog" aria-labelledby="equipment-dialog-title">
+        <form id="equipment-form">
+            <header class="custom-dialog-heading">
+                <h2 id="equipment-dialog-title">New custom equipment</h2>
+                <button class="icon-button" id="equipment-close" type="button" aria-label="Close editor">&#215;</button>
+            </header>
+            <div class="custom-editor">
+                <div class="custom-fields">
+                    <label class="wide-field">Name<input name="name" required maxlength="80"></label>
+                    <label>Card type<select name="kind"><option value="weapon">Weapon</option><option value="item">Item</option></select></label>
+                    <label>Category<input name="category" required maxlength="60" value="Adventuring Gear"></label>
+                    <label>Rarity<select name="rarity"></select></label>
+                    <label class="equipment-check"><input name="attunement" type="checkbox">Requires attunement</label>
+                    <label>Cost<input name="cost" maxlength="100" placeholder="15 gp"></label>
+                    <label>Weight<input name="weight" maxlength="100" placeholder="3 lb"></label>
+                    <label data-weapon-field>Damage dice<input name="damage_roll" maxlength="100" placeholder="1d8 + 1"></label>
+                    <label data-weapon-field>Damage type<select name="damage_type"><option value="">None</option></select></label>
+                    <label data-weapon-field>Range / reach<input name="range_text" maxlength="100" placeholder="5 ft or 80/320 ft"></label>
+                    <label data-weapon-field>Weapon type<input name="weapon_type" maxlength="100" placeholder="Simple / Martial"></label>
+                    <label data-weapon-field>Mastery<input name="mastery" maxlength="100" placeholder="Sap"></label>
+                    <label>Armor Class<input name="armor_class" maxlength="100" placeholder="14 + Dex (max 2)"></label>
+                    <label class="wide-field">Properties / charges<input name="properties" maxlength="300" placeholder="Versatile (1d10), or 3 charges"></label>
+                    <label class="wide-field">Description<textarea name="desc" required rows="7" maxlength="20000"></textarea></label>
+                    <label class="wide-field">Library illustration<select name="image"></select></label>
+                    <label class="wide-field">Your illustration (PNG, JPEG, WebP; up to 2 MB)<input name="illustration" type="file" accept="image/png,image/jpeg,image/webp"></label>
+                    <div class="wide-field"><span id="equipment-image-status" role="status"></span> <button class="text-button" id="equipment-remove-image" type="button">Use library artwork</button></div>
+                    <p class="wide-field selection-note">Upload only artwork you have permission to use. Custom images are saved in your browser and included in JSON exports.</p>
+                </div>
+                <div class="custom-preview" id="equipment-preview" aria-label="Equipment card preview"></div>
+            </div>
+            <p class="custom-error" id="equipment-error" role="alert" hidden></p>
+            <footer class="custom-dialog-actions">
+                <button class="button" id="equipment-cancel" type="button">Cancel</button>
+                <button class="button button-primary" type="submit">Save card</button>
+            </footer>
+        </form>
+    </dialog>
+
     <div class="print-root" id="print-root" aria-hidden="true"></div>
+
+    <template id="equipment-card-template">
+        <article class="spell-card equipment-card">
+            <h2 class="card-title equipment-title"></h2>
+            <div class="equipment-stats"></div>
+            <img class="equipment-illustration" alt="">
+            <p class="card-description"></p>
+            <div class="card-upgrade" hidden></div>
+            <footer class="card-footer"><span class="equipment-category"></span><span class="equipment-source"></span></footer>
+        </article>
+    </template>
 
     <template id="spell-card-template">
         <article class="spell-card">

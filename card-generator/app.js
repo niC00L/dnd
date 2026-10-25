@@ -122,7 +122,8 @@ const state = {
     spells: [],
     filtered: [],
     customSpells: [],
-    selected: new Map()
+    selected: new Map(),
+    activeTab: "spells"
 };
 const customEditor = {
     dialog: document.querySelector("#custom-card-dialog"),
@@ -211,14 +212,16 @@ function displayDuration(spell) {
 }
 
 function populateFilters() {
+    const library = state.spells.filter(card => state.activeTab === "spells"
+        ? !isEquipment(card) : card.kind === (state.activeTab === "weapons" ? "weapon" : "item"));
     const previousValues = [elements.level.value, elements.school.value, elements.className.value];
     for (const filter of [elements.level, elements.school, elements.className]) {
         filter.replaceChildren(filter.firstElementChild);
     }
-    const levels = [...new Set(state.spells.map(spell => spell.level))].sort((a, b) => a - b);
-    const schools = [...new Set(state.spells.map(spell => spell.school?.name).filter(Boolean))]
+    const levels = [...new Set(library.map(spell => spell.level))].filter(Number.isInteger).sort((a, b) => a - b);
+    const schools = [...new Set(library.map(spell => spell.school?.name).filter(Boolean))]
         .sort((a, b) => a.localeCompare(b));
-    const classes = [...new Set(state.spells.flatMap(spell => spell.classes || []).map(item => item.name))]
+    const classes = [...new Set(library.flatMap(spell => spell.classes || []).map(item => item.name))]
         .sort((a, b) => a.localeCompare(b));
 
     for (const level of levels) {
@@ -243,9 +246,18 @@ function populateFilters() {
         filter.value = [...filter.options].some(option => option.value === previousValues[index])
             ? previousValues[index] : "";
     });
+    const category = document.querySelector("#category-filter");
+    const previousCategory = category.value;
+    category.replaceChildren(new Option("All categories", ""));
+    for (const name of [...new Set(library.map(card => card.category).filter(Boolean))].sort()) {
+        category.add(new Option(name, name));
+    }
+    category.value = [...category.options].some(option => option.value === previousCategory) ? previousCategory : "";
 }
 
 function matchesFilters(spell) {
+    const equipment = isEquipment(spell);
+    if (state.activeTab === "spells" ? equipment : spell.kind !== (state.activeTab === "weapons" ? "weapon" : "item")) return false;
     const searchText = elements.search.value.trim().toLocaleLowerCase();
     const description = (spell.desc || "").toLocaleLowerCase();
     const matchesSearch = !searchText
@@ -257,10 +269,16 @@ function matchesFilters(spell) {
         || (spell.classes || []).some(item => item.name === elements.className.value);
     const isCustom = state.customSpells.some(custom => custom.key === spell.key);
     const matchesSource = elements.source.value === "" || isCustom === (elements.source.value === "custom");
+    if (equipment) {
+        const category = document.querySelector("#category-filter").value;
+        const rarity = document.querySelector("#rarity-filter").value;
+        return matchesSearch && matchesSource && (!category || spell.category === category) && (!rarity || spell.rarity === rarity);
+    }
     return matchesSearch && matchesLevel && matchesSchool && matchesClass && matchesSource;
 }
 
 function spellDetails(spell) {
+    if (isEquipment(spell)) return [spell.category, spell.rarity, spell.attunement ? "Attunement" : "", spell.damage_roll].filter(Boolean).join(" · ");
     const classes = (spell.classes || []).map(item => item.name).join(", ");
     return `${levelLabel(spell.level)} · ${spell.school?.name || "Unlisted"} · ${classes}`;
 }
@@ -489,7 +507,9 @@ function getSpellCardParts(spell) {
     const cachedParts = cardPartsCache.get(spell)?.get(sizeKey);
     if (cachedParts) return cachedParts;
 
-    const description = normalizeDescription(spell.desc || "Description unavailable in this data source.");
+    const customProperties = isEquipment(spell) && spell.key.startsWith("custom-") && spell.properties
+        ? `\n\n**Properties / charges.** ${spell.properties}` : "";
+    const description = normalizeDescription((spell.desc || "Description unavailable in this data source.") + customProperties);
     const descriptionParts = splitText(description);
     const parts = descriptionParts.map((text, index) => ({
         description: text,
@@ -520,12 +540,14 @@ function renderSpellList() {
     state.filtered = state.spells.filter(matchesFilters);
     elements.list.replaceChildren();
     elements.list.setAttribute("aria-busy", "false");
-    elements.resultCount.textContent = `${state.filtered.length} of ${state.spells.length} spells`;
+    const libraryCount = state.spells.filter(card => state.activeTab === "spells" ? !isEquipment(card)
+        : card.kind === (state.activeTab === "weapons" ? "weapon" : "item")).length;
+    elements.resultCount.textContent = `${state.filtered.length} of ${libraryCount} ${state.activeTab}`;
 
     if (state.filtered.length === 0) {
         const message = document.createElement("p");
         message.className = "list-message";
-        message.textContent = "No spells match these filters.";
+        message.textContent = "No cards match these filters.";
         elements.list.append(message);
         return;
     }
@@ -552,16 +574,18 @@ function renderSpellList() {
         details.textContent = spellDetails(spell);
         content.append(name, details);
         label.append(checkbox, content);
-        if (state.customSpells.some(custom => custom.key === spell.key)) {
-            details.textContent += " · Custom";
+        const custom = state.customSpells.some(custom => custom.key === spell.key);
+        if (custom || isEquipment(spell)) {
+            if (custom) details.textContent += " · Custom";
             const row = document.createElement("div");
             row.className = "spell-entry";
             const actions = document.createElement("div");
             actions.className = "custom-card-actions";
-            for (const [symbol, action, handler] of [
+            const rowActions = custom ? [
                 ["\u270e", "Edit", () => openCustomEditor(spell)],
                 ["\u00d7", "Delete", () => deleteCustomCard(spell)]
-            ]) {
+            ] : [["\u270e", "Customize", () => openEquipmentEditor(spell)]];
+            for (const [symbol, action, handler] of rowActions) {
                 const button = document.createElement("button");
                 button.type = "button";
                 button.className = "icon-button";
@@ -581,6 +605,7 @@ function renderSpellList() {
 }
 
 function buildCard(spell, part = getSpellCardParts(spell)[0]) {
+    if (isEquipment(spell)) return buildEquipmentCard(spell, part);
     const card = elements.cardTemplate.content.firstElementChild.cloneNode(true);
     const cantrip = spell.level === 0;
     const descriptionLength = part.description.length;
@@ -711,6 +736,7 @@ function backKeywordText(keyword) {
 }
 
 function buildBack(spell, part) {
+    if (isEquipment(spell)) return buildEquipmentBack(spell, part);
     const card = elements.backTemplate.content.firstElementChild.cloneNode(true);
     const name = `${spell.name}${part.continuation ? " (CONT.)" : ""}`;
     card.classList.toggle("is-long-title", name.length > 18);
@@ -786,7 +812,7 @@ function updateSelectionSummary() {
     elements.printCount.textContent = String(cardCount);
     elements.printButton.disabled = spellCount === 0;
     elements.clearSelection.disabled = spellCount === 0;
-    const spellLabel = spellCount === 1 ? "spell" : "spells";
+    const spellLabel = spellCount === 1 ? "entry" : "entries";
     const cardLabel = cardCount === 1 ? "card" : "cards";
     elements.selectionSummary.textContent = `${spellCount} ${spellLabel} selected · ${cardCount} ${cardLabel}`;
     elements.selectionNote.textContent = `${size.label} · ${size.dimensions} · up to ${size.cardsPerPage} ${size.mode === "fold" ? "card pairs" : "cards"} per A4 ${size.mode === "duplex" ? "sheet (2 pages)" : "page"}`;
@@ -809,7 +835,7 @@ function renderSelectedCards() {
         mark.setAttribute("aria-hidden", "true");
         mark.textContent = "+";
         const message = document.createElement("p");
-        message.textContent = "Your selected cards will appear here.";
+        message.textContent = "Your selected cards will appear here. You can mix spells, weapons, and items.";
         empty.append(mark, message);
         elements.selectedCards.append(empty);
     } else {
@@ -951,6 +977,10 @@ function setEditorOption(select, value) {
 }
 
 function openCustomEditor(spell = null) {
+    if (isEquipment(spell) || (!spell && state.activeTab !== "spells")) {
+        openEquipmentEditor(spell);
+        return;
+    }
     customEditor.form.reset();
     customEditor.classes = new Set((spell?.classes || []).map(item => item.name));
     customEditor.classSearch.value = "";
@@ -1038,7 +1068,7 @@ async function restoreCustomCards() {
         if (!Array.isArray(saved)) return;
         const seen = new Set(state.spells.map(spell => spell.key));
         state.customSpells = saved.filter(spell => {
-            if (!isCustomSpell(spell) || seen.has(spell.key)) return false;
+            if (!(isCustomSpell(spell) || isCustomEquipment(spell)) || seen.has(spell.key)) return false;
             seen.add(spell.key);
             return true;
         });
@@ -1056,16 +1086,16 @@ function setCustomFileStatus(message, error = false) {
 
 function importCustomSpells(text) {
     const imported = JSON.parse(text.replace(/^\uFEFF/, ""));
-    if (!Array.isArray(imported) || !imported.every(isCustomSpell)) {
-        throw new Error("The file must contain an array of valid custom spells.");
+    if (!Array.isArray(imported) || !imported.every(card => isCustomSpell(card) || isCustomEquipment(card))) {
+        throw new Error("The file must contain an array of valid custom spell, weapon, or item cards.");
     }
     const keys = new Set(imported.map(spell => spell.key));
-    if (keys.size !== imported.length) throw new Error("The file contains duplicate spell IDs.");
+    if (keys.size !== imported.length) throw new Error("The file contains duplicate card IDs.");
     const existingKeys = new Set(state.customSpells.map(spell => spell.key));
     const replacements = imported.filter(spell => existingKeys.has(spell.key)).length;
-    if (replacements && !window.confirm(`Replace ${replacements} existing custom spell(s) with the versions in this file?`)) return;
+    if (replacements && !window.confirm(`Replace ${replacements} existing custom card(s) with the versions in this file?`)) return;
     const merged = [...state.customSpells.filter(spell => !keys.has(spell.key)), ...imported];
-    if (!storeCustomCards(merged)) throw new Error("Could not save imported spells. Browser storage is unavailable or full.");
+    if (!storeCustomCards(merged)) throw new Error("Could not save imported cards. Browser storage is unavailable or full.");
     const oldCustomKeys = new Set(state.customSpells.map(spell => spell.key));
     state.spells = [...state.spells.filter(spell => !oldCustomKeys.has(spell.key)), ...merged];
     state.customSpells = merged;
@@ -1073,7 +1103,7 @@ function importCustomSpells(text) {
         if (state.selected.has(spell.key)) state.selected.set(spell.key, spell);
     }
     refreshCustomLibrary();
-    setCustomFileStatus(`Loaded ${imported.length} custom spell(s).`);
+    setCustomFileStatus(`Loaded ${imported.length} custom card(s).`);
 }
 
 async function saveCustomSpellsFile() {
@@ -1082,8 +1112,8 @@ async function saveCustomSpellsFile() {
         if ("showSaveFilePicker" in window) {
             if (!customSpellsFileHandle) {
                 customSpellsFileHandle = await window.showSaveFilePicker({
-                    suggestedName: "custom-spells.json",
-                    types: [{ description: "JSON spells", accept: { "application/json": [".json"] } }]
+                    suggestedName: "custom-cards.json",
+                    types: [{ description: "JSON cards", accept: { "application/json": [".json"] } }]
                 });
             }
             const writer = await customSpellsFileHandle.createWritable();
@@ -1093,11 +1123,11 @@ async function saveCustomSpellsFile() {
             const url = URL.createObjectURL(new Blob([json], { type: "application/json" }));
             const link = document.createElement("a");
             link.href = url;
-            link.download = "custom-spells.json";
+            link.download = "custom-cards.json";
             link.click();
             setTimeout(() => URL.revokeObjectURL(url), 1000);
         }
-        setCustomFileStatus(`Saved ${state.customSpells.length} custom spell(s) to JSON.`);
+        setCustomFileStatus(`Saved ${state.customSpells.length} custom card(s) to JSON.`);
     } catch (error) {
         customSpellsFileHandle = null;
         if (error.name !== "AbortError") setCustomFileStatus("Could not save the JSON file. Try again or choose another location.", true);
@@ -1181,6 +1211,7 @@ async function loadSpells() {
         state.spells = spells.filter(spell => spell && spell.key && spell.name && Number.isInteger(spell.level));
         const knownNames = new Set(state.spells.map(spell => spell.name));
         state.spells.push(...TEMPLATE_ONLY_SPELLS.filter(spell => !knownNames.has(spell.name)));
+        state.spells.push(...await loadEquipment());
         await restoreCustomCards();
         state.spells.sort((a, b) => a.name.localeCompare(b.name));
         populateFilters();
@@ -1202,10 +1233,10 @@ async function loadSpells() {
         document.querySelector("#save-custom-json").disabled = false;
     } catch (error) {
         elements.list.setAttribute("aria-busy", "false");
-        elements.resultCount.textContent = "Spell data unavailable";
+        elements.resultCount.textContent = "Card data unavailable";
         const message = document.createElement("p");
         message.className = "list-message";
-        message.textContent = "Could not load the spell list. Open this tool through a local web server so it can read its JSON file.";
+        message.textContent = `Could not load the card library: ${error.message} Open this tool through a local web server and reload.`;
         elements.list.replaceChildren(message);
         console.error(error);
     }
@@ -1288,8 +1319,38 @@ customEditor.form.addEventListener("submit", event => {
     customEditor.dialog.close();
 });
 
-for (const filter of [elements.search, elements.level, elements.school, elements.className, elements.source]) {
+for (const filter of [elements.search, elements.level, elements.school, elements.className, elements.source,
+    document.querySelector("#category-filter"), document.querySelector("#rarity-filter")]) {
     filter.addEventListener(filter === elements.search ? "input" : "change", renderSpellList);
+}
+
+for (const tab of document.querySelectorAll('[role="tab"]')) {
+    tab.addEventListener("click", () => {
+        state.activeTab = tab.dataset.library;
+        for (const other of document.querySelectorAll('[role="tab"]')) {
+            other.setAttribute("aria-selected", String(other === tab));
+            other.tabIndex = other === tab ? 0 : -1;
+        }
+        const equipment = state.activeTab !== "spells";
+        document.querySelectorAll("[data-spell-filter]").forEach(label => { label.hidden = equipment; });
+        document.querySelectorAll("[data-equipment-filter]").forEach(label => { label.hidden = !equipment; });
+        document.querySelector("#library-eyebrow").textContent = `${state.activeTab.toUpperCase()} LIBRARY`;
+        document.querySelector("#library-panel").setAttribute("aria-labelledby", tab.id);
+        elements.search.placeholder = equipment ? "Equipment name or description" : "Spell name or description";
+        elements.search.value = "";
+        for (const filter of [elements.level, elements.school, elements.className, elements.source,
+            document.querySelector("#category-filter"), document.querySelector("#rarity-filter")]) filter.value = "";
+        populateFilters();
+        renderSpellList();
+    });
+    tab.addEventListener("keydown", event => {
+        const tabs = [...document.querySelectorAll('[role="tab"]')];
+        const index = tabs.indexOf(tab);
+        const next = event.key === "ArrowRight" ? tabs[(index + 1) % tabs.length]
+            : event.key === "ArrowLeft" ? tabs[(index + tabs.length - 1) % tabs.length]
+            : event.key === "Home" ? tabs[0] : event.key === "End" ? tabs[tabs.length - 1] : null;
+        if (next) { event.preventDefault(); next.focus(); next.click(); }
+    });
 }
 
 elements.selectVisible.addEventListener("click", () => {
@@ -1338,4 +1399,5 @@ elements.printButton.addEventListener("click", async () => {
     }
 });
 
+initializeEquipmentEditor();
 loadSpells();

@@ -9,6 +9,9 @@
     --green-hover: #31564c;
     --gold: #bb842e;
     --blue: #0A5C73;
+    --spell-footer-color: #0A5C73;
+    --weapon-footer-color: #843c32;
+    --item-footer-color: #49643b;
     --body-font: "Alegreya Sans", sans-serif;
     --label-font: "Jost", sans-serif;
     --card-title-font: "Girassol", Georgia, serif;
@@ -16,6 +19,35 @@
 
 * {
     box-sizing: border-box;
+}
+
+[hidden] {
+    display: none !important;
+}
+
+.library-tabs {
+    display: flex;
+    gap: 4px;
+    padding: 12px clamp(18px, 4vw, 58px) 0;
+    border-bottom: 1px solid #cbd2cb;
+    background: #fffefa;
+}
+
+.library-tabs button {
+    min-height: 44px;
+    border: 0;
+    border-bottom: 3px solid transparent;
+    padding: 8px 24px;
+    background: transparent;
+    color: var(--muted);
+    font-family: var(--label-font);
+    cursor: pointer;
+}
+
+.library-tabs button[aria-selected="true"] {
+    border-bottom-color: var(--blue);
+    color: var(--blue);
+    font-weight: 600;
 }
 
 body {
@@ -669,6 +701,18 @@ p {
     height: 2.5cqw;
 }
 
+.spell-card {
+    --card-footer-color: var(--spell-footer-color);
+}
+
+.spell-card[data-card-kind="weapon"] {
+    --card-footer-color: var(--weapon-footer-color);
+}
+
+.spell-card[data-card-kind="item"] {
+    --card-footer-color: var(--item-footer-color);
+}
+
 .back-footer {
     position: absolute;
     bottom: 0;
@@ -678,7 +722,7 @@ p {
     align-items: center;
     justify-content: center;
     flex-direction: column;
-    background: var(--blue);
+    background: var(--card-footer-color);
     color: #fff;
     font-size: 4cqw;
     line-height: 1.1;
@@ -690,7 +734,7 @@ p {
     bottom: calc(100% - 1cqw);
     left: 0;
     height: 7cqw;
-    background: var(--blue);
+    background: var(--card-footer-color);
     mask: url("./img/back-footer-curve.svg") center / 100% 100% no-repeat;
     content: "";
 }
@@ -699,6 +743,121 @@ p {
     font-family: var(--label-font);
     font-size: 5.2cqw;
     font-weight: 600;
+}
+
+.equipment-title {
+    position: absolute;
+    inset: 3% 4% auto;
+    height: 10%;
+    display: grid;
+    place-items: center;
+}
+
+.equipment-illustration {
+    position: absolute;
+    top: 15%;
+    right: 4%;
+    width: 27%;
+    height: 24%;
+    object-fit: contain;
+}
+
+.equipment-stats,
+.equipment-back-stats {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1.5cqw 2cqw;
+}
+
+.equipment-stats {
+    position: absolute;
+    top: 15%;
+    left: 5%;
+    width: 61%;
+    height: 24%;
+    align-content: start;
+    overflow: hidden;
+}
+
+.equipment-stats>div,
+.equipment-back-stats>div {
+    min-width: 0;
+    font-size: 3.3cqw;
+    line-height: 1.1;
+    overflow-wrap: anywhere;
+}
+
+.equipment-stats strong,
+.equipment-back-stats strong {
+    display: block;
+    color: var(--blue);
+    font-family: var(--label-font);
+    font-size: 2.8cqw;
+    font-weight: 500;
+    text-transform: uppercase;
+}
+
+.equipment-stats .keyword-icon,
+.equipment-back-stats .keyword-icon {
+    width: 3.3cqw;
+    height: 3.3cqw;
+    margin-right: .5cqw;
+    vertical-align: middle;
+}
+
+.equipment-card .card-description {
+    position: absolute;
+    inset: 42% 5% 8%;
+    max-height: none;
+    margin: 0;
+    font-size: 4.3cqw;
+    line-height: 1.2;
+}
+
+.equipment-card.is-equipment-continuation .equipment-stats,
+.equipment-card.is-equipment-continuation .equipment-illustration {
+    display: none;
+}
+
+.equipment-card.is-equipment-continuation .card-description {
+    top: 15%;
+}
+
+.equipment-category {
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-size: 3.5cqw;
+}
+
+.equipment-source {
+    flex: none;
+    font-size: 3.5cqw;
+}
+
+.equipment-back .back-art {
+    bottom: 39%;
+}
+
+.equipment-back-stats {
+    position: absolute;
+    inset: 64% 5% 13%;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    align-content: center;
+    text-align: center;
+}
+
+.equipment-back-stats>div {
+    font-size: 3.1cqw;
+}
+
+.equipment-check {
+    align-content: center;
+}
+
+.equipment-check input {
+    width: auto;
 }
 
 .card-header {
@@ -935,7 +1094,7 @@ p {
     justify-content: space-between;
     gap: 1.87cqw;
     padding: 0 4%;
-    background: var(--blue);
+    background: var(--card-footer-color);
     color: #fff;
     font-family: var(--label-font);
     font-size: 4.5cqw;
@@ -1398,6 +1557,7 @@ p {
     }
 
     .topbar,
+    .library-tabs,
     .workspace,
     .app-footer,
     .custom-dialog {

@@ -1,12 +1,63 @@
-# Spell Card Press
+# Adventure Card Press
 
 Serve the repository with a local web server and open `card-generator/`.
 For example, run `python -m http.server 8000` from the repository root and open
 <http://localhost:8000/card-generator/>.
 
+## Libraries and custom cards
+
+Choose **Spells**, **Weapons**, or **Items** from the top tabs. The built-in
+equipment library includes 203 standard SRD 5.2 equipment entries and 760
+magic-item variants (963 entries total). Weapons include mundane and magic
+weapons; Items includes armor, shields, gear, tools, and other magic items.
+Use category, rarity, source, and text filters to narrow equipment results.
+Selections are shared across tabs, so all three types can be printed together.
+
+Use **+ Custom card** on a tab to create that kind of card. Equipment supports
+damage, range, properties/charges, mastery, armor class, rarity, attunement,
+cost, weight, descriptions, and illustrations. **Customize** beside built-in
+equipment creates an editable custom copy without modifying the library.
+Long descriptions are split into continuation cards, just like spells.
+
+Illustrations use hand-painted artwork by Ravenmore where available and
+Game-icons.net SVGs otherwise. Artwork is representative, not an exact image of
+every weapon or magic-item variant. Upload PNG, JPEG, or WebP illustrations
+(up to 2 MB) in the equipment editor to replace them. Only use artwork you have
+permission to use; official rulebook art is not included.
+
+Custom cards, uploaded images, and the shared print selection persist in this
+browser. **Save JSON** backs up all custom card types and their images;
+**Load JSON** restores or merges them. Existing custom-spell files still work.
+Large uploads can fill browser storage; save a JSON backup and use smaller
+images if storage is full.
+
+### Data and artwork sources
+
+See [Sources and licenses](./credits.html) for attribution and license links.
+Rules are sourced from Open5e's SRD 2024 data under CC BY 4.0. Equipment data
+and artwork are local files: printing does not depend on live source APIs.
+Magic-item compact weapon stats show the underlying weapon profile; consult
+the description for magical bonuses and additional rules. Unlisted magic-item
+prices are shown as "Not listed".
+
+To refresh equipment data and SVGs, run
+`python card-generator\sync-equipment.py` from the repository root. The script
+explicitly filters every returned record by its source document, including
+endpoints that do not honor the server-side document filter.
+
+Hand-painted artwork comes from the CC BY 3.0 Ravenmore Icon Pack 2.0 linked
+on the credits page. Download its ZIP and run
+`python card-generator\sync-equipment.py C:\path\to\RavenmoreIconPack.02.2014.zip`
+to extract only the illustrations used by this app.
+
 ## Printing
 
-Select spells, choose a card size, and choose **Card backs**:
+Footer colors are configurable in the `:root` section of [app.css](./app.css):
+`--spell-footer-color` (blue), `--weapon-footer-color` (rust), and
+`--item-footer-color` (green). Each applies to both card sides, including the
+curved edge on the back, in previews and printing.
+
+Select cards from any library, choose a card size, and choose **Card backs**:
 
 - **Fronts only** preserves the original layout: 16 half-size or 9 standard cards
   per A4 page.
