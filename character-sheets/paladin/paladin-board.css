@@ -162,6 +162,14 @@ body {
     object-fit: contain;
 }
 
+.character-details {
+    background-color: white;
+    margin-right: calc(var(--reference-unit) * -100);
+    margin-top: calc(var(--reference-unit) * 41);
+    height: calc(var(--reference-unit) * 100);
+    border: calc(var(--reference-unit) * 9) solid var(--gold);
+    border-radius: calc(var(--reference-unit) * 45);
+}
 /* .character-details {
     display: grid;
     min-width: 0;
@@ -1229,7 +1237,7 @@ p.hp-value {
 }
 
 .cards-column .lay-on-hands .feature-block > h2 {
-    font-size: calc(var(--reference-unit) * 29);
+    font-size: calc(var(--reference-unit) * 37);
     line-height: 1.2;
 }
 
