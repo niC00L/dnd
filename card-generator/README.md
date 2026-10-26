@@ -2,7 +2,8 @@
 
 Serve the repository with a local web server and open `card-generator/`.
 For example, run `python -m http.server 8000` from the repository root and open
-<http://localhost:8000/card-generator/>.
+<http://localhost:8000/card-generator/>. 
+Or use githubpages version <https://nic00l.github.io/dnd/>
 
 ## Libraries and custom cards
 
@@ -17,7 +18,9 @@ Use **+ Custom card** on a tab to create that kind of card. Equipment supports
 damage, range, properties/charges, mastery, armor class, rarity, attunement,
 cost, weight, descriptions, and illustrations. **Customize** beside built-in
 equipment creates an editable custom copy without modifying the library.
-Long descriptions are split into continuation cards, just like spells.
+Descriptions are measured in the card layout before splitting. Near-fit spell
+descriptions use slightly tighter line spacing without reducing the font size;
+longer descriptions are split into continuation cards.
 
 Illustrations use hand-painted artwork by Ravenmore where available and
 Game-icons.net SVGs otherwise. Artwork is representative, not an exact image of
@@ -56,6 +59,8 @@ Footer colors are configurable in the `:root` section of [app.css](./app.css):
 `--spell-footer-color` (blue), `--weapon-footer-color` (rust), and
 `--item-footer-color` (green). Each applies to both card sides, including the
 curved edge on the back, in previews and printing.
+The three range emblem PNGs are color-matched to the spell footer's `#047EA1`
+blue; recolor these images separately when changing that footer color.
 
 Select cards from any library, choose a card size, and choose **Card backs**:
 
@@ -79,10 +84,25 @@ Back previews appear after their fronts in the selection panel when either
 back option is enabled. Keyword icons replace their redundant damage-type,
 condition, and melee/ranged attack names; dice, durations, and save abilities
 remain visible. Full keyword labels are retained for assistive technology.
+Front keyword rows grow to fit wrapped values, with each condition icon beside
+its own label. Multiple condition icons stay in a horizontal row on the back.
+Keyword icons stay beside their text rather than wrapping onto a line alone.
+Back icon/text groups are centered together, with multiline text left-aligned
+when accompanied by keyword icons. Text-only values are centered.
+Description fitting accounts for the space used by expanded keyword rows.
 Back designs use the supplied parchment, range emblems,
-keyword icons, and matching area diagrams. Missing area diagrams are generated
+keyword icons, and matching area diagrams. All area diagrams share a 600 by 540
+image frame and the same visible grid spacing. Areas up to 30 feet across use
+5-foot squares: a 30-foot area has half a square of grid around it, and smaller
+areas show more empty grid. Larger areas use coarser squares in 5-foot increments
+to fit the same frame. The cutoff uses full diameter for spheres, emanations,
+and cylinders, or side/length for other shapes. Labels remain visible beyond
+the grid where needed. Missing area diagrams are generated
 as inline SVG for cones, cubes, cylinders, emanations, spheres, squares, and
-lines. Generated grids include their scale; large areas use larger grid squares.
+lines. Both supplied and generated diagrams include their grid scale and a
+size heading above the grid. The red back-card Area frame uses the same size
+wording, including an explicit radius for spheres. Emanations use generated
+diagrams so their headings identify them as Emanations rather than Spheres.
 Sphere and cylinder sizes represent radii, cube/square sizes represent side
 lengths, and line dimensions show length and width when available.
 Some SRD spells lack area metadata; an area explicitly described in their opening

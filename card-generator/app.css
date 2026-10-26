@@ -9,7 +9,7 @@
     --green-hover: #31564c;
     --gold: #bb842e;
     --blue: #0A5C73;
-    --spell-footer-color: #0A5C73;
+    --spell-footer-color: #047EA1;
     --weapon-footer-color: #843c32;
     --item-footer-color: #49643b;
     --body-font: "Alegreya Sans", sans-serif;
@@ -606,7 +606,7 @@ p {
 
 .back-range>div+div {
     margin-top: 1cqw;
-    border-top: 1px solid #fff;
+    border-top: 0.1cqw solid #fff;
     padding-top: 1cqw;
 }
 
@@ -672,20 +672,31 @@ p {
     align-items: center;
     justify-content: center;
     gap: .6cqw;
+    text-align: left;
 }
 
 .back-keyword-value>span {
     min-width: 0;
 }
 
+.back-keyword-value>span:only-child:not(.back-keyword-icons) {
+    text-align: center;
+}
+
 .back-keyword-icons {
     display: inline-flex;
     flex: 0 0 auto;
-    max-width: 45%;
-    flex-wrap: wrap;
+    max-width: 100%;
+    flex-wrap: nowrap;
     align-items: center;
     justify-content: center;
-    gap: .6cqw;
+    gap: .3cqw;
+}
+
+.back-keyword-icons .keyword-icon {
+    width: min(3.8cqw, calc(12cqw / var(--keyword-icon-count) - .3cqw));
+    height: auto;
+    aspect-ratio: 1;
 }
 
 .back-keyword-value.has-many-icons {
@@ -697,8 +708,8 @@ p {
 }
 
 .back-keyword-value.has-many-icons .keyword-icon {
-    width: 2.5cqw;
-    height: 2.5cqw;
+    width: min(2.5cqw, calc(12cqw / var(--keyword-icon-count) - .3cqw));
+    height: auto;
 }
 
 .spell-card {
@@ -874,7 +885,6 @@ p {
     font-size: 10.5cqw;
     font-weight: 400;
     line-height: 0.98;
-    text-align: center;
     text-transform: uppercase;
 }
 
@@ -888,7 +898,6 @@ p {
 
 .spell-card.is-custom .card-title {
     overflow-wrap: anywhere;
-    text-align: left;
 }
 
 .level-badge {
@@ -934,11 +943,11 @@ p {
 
 .card-keywords {
     display: grid;
-    height: 17%;
+    min-height: 17%;
     grid-template-columns: 0.95fr 1.05fr 1fr;
-    grid-template-rows: repeat(2, minmax(0, 1fr));
+    grid-template-rows: repeat(2, auto);
     column-gap: 3%;
-    row-gap: 2%;
+    row-gap: .7cqw;
     padding: 0 0.4%;
 }
 
@@ -962,7 +971,7 @@ p {
     display: flex;
     min-width: 0;
     align-items: center;
-    flex-wrap: wrap;
+    flex-wrap: nowrap;
     gap: 0.12em;
     overflow-wrap: anywhere;
     font-family: var(--body-font);
@@ -974,6 +983,29 @@ p {
     width: 0.9em;
     height: 0.9em;
     flex: none;
+}
+
+.keyword-text {
+    min-width: 0;
+    text-align: left;
+}
+
+.keyword-conditions {
+    display: flex;
+    min-width: 0;
+    flex-direction: column;
+    gap: .12em;
+}
+
+.keyword-condition {
+    display: flex;
+    min-width: 0;
+    align-items: center;
+    gap: .12em;
+}
+
+.keyword-condition>span {
+    min-width: 0;
 }
 
 .range-layout {
@@ -1001,7 +1033,7 @@ p {
 
 .card-ornament {
     height: 5cqw;
-    margin: -1% 0 0;
+    margin: 0;
     background: url("./img/arrow.svg") center / 100% 100% no-repeat;
 }
 
@@ -1019,7 +1051,7 @@ p {
 }
 
 .spell-card.has-material-note:not(.has-upgrade) .card-description {
-    max-height: 62%;
+    max-height: 63%;
 }
 
 .spell-card.has-upgrade .card-description {
@@ -1046,6 +1078,10 @@ p {
 
 .spell-card.is-very-dense .card-description {
     line-height: 1.14;
+}
+
+.spell-card.is-compact .card-description {
+    line-height: 1.08;
 }
 
 .card-upgrade {

@@ -294,7 +294,24 @@ function createKeywordIcon(name) {
 
 function keywordContent(card, field, text, icons = []) {
     const value = card.querySelector(`[data-field="${field}"]`);
-    value.replaceChildren(...icons.map(createKeywordIcon), document.createTextNode(text || "None"));
+    if (icons.length > 1 && icons.every(icon => CONDITION_ICONS.includes(icon))) {
+        const conditions = document.createElement("span");
+        conditions.className = "keyword-conditions";
+        for (const icon of icons) {
+            const condition = document.createElement("span");
+            condition.className = "keyword-condition";
+            const label = document.createElement("span");
+            label.textContent = titleCase(icon);
+            condition.append(createKeywordIcon(icon), label);
+            conditions.append(condition);
+        }
+        value.replaceChildren(conditions);
+        return;
+    }
+    const label = document.createElement("span");
+    label.className = "keyword-text";
+    label.textContent = text || "None";
+    value.replaceChildren(...icons.map(createKeywordIcon), label);
 }
 
 function formatRangeArea(spell) {
@@ -467,7 +484,10 @@ function descriptionFits(spell, part) {
     cardMeasurementRoot.append(card);
     const description = card.querySelector(".card-description");
     const upgrade = card.querySelector(".card-upgrade");
-    const fits = description.scrollHeight <= description.clientHeight + 1
+    const lowerContent = isEquipment(spell) ? null
+        : part.upgrade ? upgrade : card.querySelector(spell.material_specified ? ".card-material-note" : ".card-footer");
+    const fits = description.scrollHeight <= description.clientHeight
+        && (!lowerContent || description.getBoundingClientRect().bottom <= lowerContent.getBoundingClientRect().top)
         && (upgrade.hidden || (upgrade.scrollHeight <= upgrade.clientHeight + 1
             && description.getBoundingClientRect().bottom <= upgrade.getBoundingClientRect().top));
     card.remove();
@@ -479,6 +499,11 @@ function fitCardParts(spell, parts) {
     for (const part of parts) {
         if (descriptionFits(spell, part)) {
             fittedParts.push(part);
+            continue;
+        }
+        const compactPart = { ...part, compact: true };
+        if (!isEquipment(spell) && part.description.length > 340 && descriptionFits(spell, compactPart)) {
+            fittedParts.push(compactPart);
             continue;
         }
 
@@ -510,12 +535,11 @@ function getSpellCardParts(spell) {
     const customProperties = isEquipment(spell) && spell.key.startsWith("custom-") && spell.properties
         ? `\n\n**Properties / charges.** ${spell.properties}` : "";
     const description = normalizeDescription((spell.desc || "Description unavailable in this data source.") + customProperties);
-    const descriptionParts = splitText(description);
-    const parts = descriptionParts.map((text, index) => ({
-        description: text,
-        continuation: index > 0,
+    const parts = [{
+        description,
+        continuation: false,
         upgrade: ""
-    }));
+    }];
 
     const fittedParts = fitCardParts(spell, parts);
     if (spell.higher_level) {
@@ -525,8 +549,7 @@ function getSpellCardParts(spell) {
             fittedParts[fittedParts.length - 1] = upgradedPart;
         } else {
             const label = spell.level === 0 ? "Cantrip Upgrade:" : "Using a Higher-Level Spell Slot:";
-            const upgradeParts = splitText(`${label} ${spell.higher_level}`)
-                .map(description => ({ description, continuation: true, upgrade: "" }));
+            const upgradeParts = [{ description: `${label} ${spell.higher_level}`, continuation: true, upgrade: "" }];
             fittedParts.push(...fitCardParts(spell, upgradeParts));
         }
     }
@@ -610,7 +633,7 @@ function buildCard(spell, part = getSpellCardParts(spell)[0]) {
     const cantrip = spell.level === 0;
     const descriptionLength = part.description.length;
     card.classList.toggle("is-cantrip", cantrip);
-    card.classList.toggle("is-long-title", spell.name.length > 22);
+    card.classList.toggle("is-long-title", spell.name.length > 19);
     card.classList.toggle("is-continuation", part.continuation);
     card.classList.toggle("is-custom", spell.key.startsWith("custom-"));
     card.classList.toggle("has-upgrade", Boolean(part.upgrade));
@@ -618,6 +641,7 @@ function buildCard(spell, part = getSpellCardParts(spell)[0]) {
     card.classList.toggle("has-no-lower-content", !part.upgrade && !spell.material_specified);
     card.classList.toggle("is-dense", descriptionLength > 200);
     card.classList.toggle("is-very-dense", descriptionLength > 340);
+    card.classList.toggle("is-compact", Boolean(part.compact));
 
     const setText = (field, value) => {
         card.querySelector(`[data-field="${field}"]`).textContent = value;
@@ -666,36 +690,47 @@ function buildAreaDiagram(area) {
     pattern.id = patternId;
     const circular = ["sphere", "emanation", "cylinder"].includes(area.type);
     const extent = area.length || (circular ? area.size * 2 : area.size);
-    const gridUnit = area.unit === "feet" ? Math.max(5, Math.ceil(extent / 40) * 5) : Math.max(1, Math.ceil(extent / 8));
-    const scale = 320 / extent;
-    const grid = gridUnit * scale;
-    const origin = { x: area.type === "cone" || area.type === "line" ? 140 : 300, y: 270 };
+    const gridUnit = area.unit === "feet" ? 5 * Math.max(1, Math.ceil(extent / 30)) : Math.max(1, Math.ceil(extent / 6));
+    const grid = 400 / 7;
+    const scale = grid / gridUnit;
+    const span = extent * scale;
+    const radius = span / 2;
+    const left = 300 - radius;
+    const top = 260 - radius;
+    const origin = { x: area.type === "cone" || area.type === "line" ? left : 300, y: 260 };
     const fillId = `area-fill-${crypto.randomUUID()}`;
-    const fill = add("pattern", { id: fillId, width: grid, height: grid, x: origin.x, y: origin.y, patternUnits: "userSpaceOnUse" }, defs);
+    const fill = add("pattern", { id: fillId, width: grid, height: grid, x: 300, y: 260, patternUnits: "userSpaceOnUse" }, defs);
     add("rect", { width: grid, height: grid, fill: `url(#${patternId})` }, fill);
     add("path", { d: `M0 ${grid} V0 H${grid}`, fill: "none", stroke: "#d4e4ea", "stroke-width": 3 }, fill);
     const lines = add("g", { stroke: "#b9b7b4", "stroke-width": 2 });
-    for (let x = origin.x % grid; x <= 600; x += grid) add("line", { x1: x, y1: 15, x2: x, y2: 510 }, lines);
-    for (let y = origin.y % grid; y <= 510; y += grid) add("line", { x1: 20, y1: y, x2: 580, y2: y }, lines);
+    for (let index = 0; index < 7; index++) {
+        const x = 300 + (index - 3) * grid;
+        const y = 260 + (index - 3) * grid;
+        add("line", { x1: x, y1: 60, x2: x, y2: 460 }, lines);
+        add("line", { x1: 100, y1: y, x2: 500, y2: y }, lines);
+    }
     const attributes = { fill: `url(#${fillId})`, stroke: "#2b2526", "stroke-width": 5, "stroke-linejoin": "round" };
     if (circular) {
         if (area.type === "cylinder") {
-            add("path", { ...attributes, d: "M140 210 V330 A160 65 0 0 0 460 330 V210 Z" });
-            add("ellipse", { ...attributes, cx: 300, cy: 210, rx: 160, ry: 65 });
-            origin.y = 210;
-        } else add("circle", { ...attributes, cx: 300, cy: 270, r: 160 });
+            add("path", { ...attributes, d: `M${left} ${260 - radius / 2} V${260 + radius / 2} A${radius} ${radius / 2} 0 0 0 ${300 + radius} ${260 + radius / 2} V${260 - radius / 2} Z` });
+            add("ellipse", { ...attributes, cx: 300, cy: 260 - radius / 2, rx: radius, ry: radius / 2 });
+            origin.y = 260 - radius / 2;
+        } else add("circle", { ...attributes, cx: 300, cy: 260, r: radius });
     } else if (area.type === "cone") {
-        add("path", { ...attributes, d: "M140 270 L460 110 Q500 270 460 430 Z" });
+        const curve = span / 16;
+        add("path", { ...attributes, d: `M${left} 260 L${300 + radius - curve} ${top} Q${300 + radius + curve} 260 ${300 + radius - curve} ${260 + radius} Z` });
     } else if (area.type === "line") {
         const width = area.size * scale;
-        add("rect", { ...attributes, x: 140, y: 270 - width / 2, width: 320, height: width });
+        add("rect", { ...attributes, x: left, y: 260 - width / 2, width: span, height: width });
     } else {
-        add("rect", { ...attributes, x: 140, y: 110, width: 320, height: 320 });
-        if (area.type === "cube") origin.x = 140;
+        add("rect", { ...attributes, x: left, y: top, width: span, height: span });
+        if (area.type === "cube") origin.x = left;
     }
     add("circle", { cx: origin.x, cy: origin.y, r: 9, fill: "#fff", stroke: "#0a5c73", "stroke-width": 3 });
     const label = add("text", { x: origin.x + 14, y: origin.y - 16, fill: "#202622", stroke: "#f8f6ee", "stroke-width": 5, "paint-order": "stroke", "font-size": 23, "font-family": "sans-serif" });
     label.textContent = area.type === "emanation" ? "You / Origin" : "Point of Origin";
+    const heading = add("text", { x: 300, y: 40, "text-anchor": "middle", fill: "#2b2526", stroke: "#f6f4ee", "stroke-width": 5, "paint-order": "stroke", "stroke-linejoin": "round", "font-size": 23, "font-family": "Molengo, 'Trebuchet MS', sans-serif", "font-weight": "bold" });
+    heading.textContent = areaLabel(area);
     const legend = add("text", { x: 300, y: 535, "text-anchor": "middle", "font-size": 20, fill: "#202622", "font-family": "sans-serif" });
     legend.textContent = `Grid: ${gridUnit} ${area.unit} / square${area.type === "cylinder" ? " (radius shown above)" : ""}`;
     return svg;
@@ -703,7 +738,7 @@ function buildAreaDiagram(area) {
 
 function areaImage(area) {
     if (area.unit !== "feet") return null;
-    if (["sphere", "emanation"].includes(area.type) && [5, 10].includes(area.size)) return `aoe-sphere-${area.size * 2}.svg`;
+    if (area.type === "sphere" && [5, 10].includes(area.size)) return `aoe-sphere-${area.size * 2}.svg`;
     if (area.type === "cube" && [15, 20].includes(area.size)) return `aoe-cube-${area.size}.svg`;
     if (area.type === "cone" && area.size === 15) return "aoe-cone.svg";
     if (area.type === "square" && area.size === 10) return "aoe-square.svg";
@@ -770,8 +805,7 @@ function buildBack(spell, part) {
     const self = /^self$/i.test(spell.range_text || "");
     if (!self || area) addRange("Range", spell.range_text || "Special");
     if (area) rangeBox.classList.add("has-area");
-    const areaText = area && `${area.length ? `${area.length} x ` : ""}${area.size} ${area.unit === "feet" ? "ft" : area.unit} ${titleCase(area.type)}`;
-    addRange(area ? "Area" : "Targets", area ? areaText : backTargetCount(spell));
+    addRange(area ? "Area" : "Targets", area ? areaLabel(area) : backTargetCount(spell));
     const keywords = spellKeywords(spell);
     const keywordRoot = card.querySelector('[data-field="keywords"]');
     const fields = [
@@ -794,6 +828,7 @@ function buildBack(spell, part) {
         if (keywords[field].icons.length) {
             const icons = document.createElement("span");
             icons.className = "back-keyword-icons";
+            icons.style.setProperty("--keyword-icon-count", keywords[field].icons.length);
             icons.append(...keywords[field].icons.map(createKeywordIcon));
             value.append(icons);
         }
