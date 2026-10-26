@@ -1,9 +1,54 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 580" width="600" height="580"><defs>
-<pattern id="chev" width="46" height="40" patternUnits="userSpaceOnUse">
-<rect width="46" height="40" fill="#4a93b8"/>
-<path d="M-11.500,20 L0,8 L11.500,20 L23,8 L34.500,20 L46,8 L57.500,20" fill="none" stroke="#7fbad2" stroke-width="10"/>
-<path d="M-11.500,20 L0,8 L11.500,20 L23,8 L34.500,20 L46,8 L57.500,20" fill="none" stroke="#a9d3e3" stroke-width="3" transform="translate(0,-3)"/>
-<path d="M-11.500,36 L0,24 L11.500,36 L23,24 L34.500,36 L46,24 L57.500,36" fill="none" stroke="#7fbad2" stroke-width="10"/>
-</pattern>
-<radialGradient id="glow"><stop offset="0" stop-color="#fff" stop-opacity=".9"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></radialGradient>
-</defs><g stroke="#b9b7b4" stroke-width="3"><line x1="-23" y1="-5" x2="-23" y2="585"/><line x1="57" y1="-5" x2="57" y2="585"/><line x1="137" y1="-5" x2="137" y2="585"/><line x1="217" y1="-5" x2="217" y2="585"/><line x1="297" y1="-5" x2="297" y2="585"/><line x1="377" y1="-5" x2="377" y2="585"/><line x1="457" y1="-5" x2="457" y2="585"/><line x1="537" y1="-5" x2="537" y2="585"/><line x1="617" y1="-5" x2="617" y2="585"/><line x1="-5" y1="-75" x2="605" y2="-75"/><line x1="-5" y1="5" x2="605" y2="5"/><line x1="-5" y1="85" x2="605" y2="85"/><line x1="-5" y1="165" x2="605" y2="165"/><line x1="-5" y1="245" x2="605" y2="245"/><line x1="-5" y1="325" x2="605" y2="325"/><line x1="-5" y1="405" x2="605" y2="405"/><line x1="-5" y1="485" x2="605" y2="485"/><line x1="-5" y1="565" x2="605" y2="565"/><line x1="-5" y1="645" x2="605" y2="645"/></g><clipPath id="k"><path d="M297,165 L179,408 A118,28 0 0 0 415,408 Z"/></clipPath><path d="M297,165 L179,408 A118,28 0 0 0 415,408 Z" fill="url(#chev)"/><g clip-path="url(#k)" stroke="#dbe9ef" stroke-width="3"><line x1="137" y1="165" x2="137" y2="436"/><line x1="217" y1="165" x2="217" y2="436"/><line x1="297" y1="165" x2="297" y2="436"/><line x1="377" y1="165" x2="377" y2="436"/><line x1="457" y1="165" x2="457" y2="436"/><line x1="0" y1="245" x2="600" y2="245"/><line x1="0" y1="325" x2="600" y2="325"/><line x1="0" y1="405" x2="600" y2="405"/><line x1="0" y1="485" x2="600" y2="485"/></g><path d="M179,408 L297,165 L415,408" fill="none" stroke="#2b2526" stroke-width="10" stroke-linejoin="round"/><ellipse cx="297" cy="408" rx="118" ry="28" fill="none" stroke="#2b2526" stroke-width="10"/><line x1="297" y1="185" x2="297" y2="404" stroke="#2b2526" stroke-width="10" stroke-dasharray="48 22"/><polygon points="297.0,108.0 298.7,123.9 304.8,120.2 301.1,126.3 317.0,128.0 301.1,129.7 304.8,135.8 298.7,132.1 297.0,148.0 295.3,132.1 289.2,135.8 292.9,129.7 277.0,128.0 292.9,126.3 289.2,120.2 295.3,123.9" fill="#2b2526"/><text x="297" y="90" font-size="36" text-anchor="middle" fill="#2b2526" stroke="#f6f4ee" stroke-width="6" paint-order="stroke" stroke-linejoin="round" font-family="Molengo, 'Trebuchet MS', sans-serif" font-weight="bold">You</text></svg>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 540" width="600" height="540" data-grid-unit="5" data-grid-step="57.142857142857146">
+  <defs>
+    <pattern id="chev" width="46" height="40" patternUnits="userSpaceOnUse">
+      <rect width="46" height="40" fill="#4a93b8" />
+      <path d="M-11.500,20 L0,8 L11.500,20 L23,8 L34.500,20 L46,8 L57.500,20" fill="none" stroke="#7fbad2" stroke-width="10" />
+      <path d="M-11.500,20 L0,8 L11.500,20 L23,8 L34.500,20 L46,8 L57.500,20" fill="none" stroke="#a9d3e3" stroke-width="3" transform="translate(0,-3)" />
+      <path d="M-11.500,36 L0,24 L11.500,36 L23,24 L34.500,36 L46,24 L57.500,36" fill="none" stroke="#7fbad2" stroke-width="10" />
+    </pattern>
+    <radialGradient id="glow">
+      <stop offset="0" stop-color="#fff" stop-opacity=".9" />
+      <stop offset="1" stop-color="#fff" stop-opacity="0" />
+    </radialGradient>
+  </defs>
+  <g stroke="#b9b7b4" stroke-width="2">
+    <line x1="128.57142857142856" y1="60" x2="128.57142857142856" y2="460" />
+    <line x1="100" y1="106.07142857142857" x2="500" y2="106.07142857142857" />
+    <line x1="185.71428571428572" y1="60" x2="185.71428571428572" y2="460" />
+    <line x1="100" y1="163.21428571428572" x2="500" y2="163.21428571428572" />
+    <line x1="242.85714285714286" y1="60" x2="242.85714285714286" y2="460" />
+    <line x1="100" y1="220.35714285714286" x2="500" y2="220.35714285714286" />
+    <line x1="300.0" y1="60" x2="300.0" y2="460" />
+    <line x1="100" y1="277.5" x2="500" y2="277.5" />
+    <line x1="357.1428571428571" y1="60" x2="357.1428571428571" y2="460" />
+    <line x1="100" y1="334.64285714285717" x2="500" y2="334.64285714285717" />
+    <line x1="414.28571428571433" y1="60" x2="414.28571428571433" y2="460" />
+    <line x1="100" y1="391.7857142857143" x2="500" y2="391.7857142857143" />
+    <line x1="471.42857142857144" y1="60" x2="471.42857142857144" y2="460" />
+    <line x1="100" y1="448.92857142857144" x2="500" y2="448.92857142857144" />
+  </g>
+  <g transform="translate(300 260) scale(0.7142857142857143) translate(-297 -300.5)">
+    <clipPath id="k">
+      <path d="M297,165 L179,408 A118,28 0 0 0 415,408 Z" />
+    </clipPath>
+    <path d="M297,165 L179,408 A118,28 0 0 0 415,408 Z" fill="url(#chev)" />
+    <g clip-path="url(#k)" stroke="#dbe9ef" stroke-width="3">
+      <line x1="137" y1="165" x2="137" y2="436" />
+      <line x1="217" y1="165" x2="217" y2="436" />
+      <line x1="297" y1="165" x2="297" y2="436" />
+      <line x1="377" y1="165" x2="377" y2="436" />
+      <line x1="457" y1="165" x2="457" y2="436" />
+      <line x1="0" y1="245" x2="600" y2="245" />
+      <line x1="0" y1="325" x2="600" y2="325" />
+      <line x1="0" y1="405" x2="600" y2="405" />
+      <line x1="0" y1="485" x2="600" y2="485" />
+    </g>
+    <path d="M179,408 L297,165 L415,408" fill="none" stroke="#2b2526" stroke-width="10" stroke-linejoin="round" />
+    <ellipse cx="297" cy="408" rx="118" ry="28" fill="none" stroke="#2b2526" stroke-width="10" />
+    <line x1="297" y1="185" x2="297" y2="404" stroke="#2b2526" stroke-width="10" stroke-dasharray="48 22" />
+    <polygon points="297.0,108.0 298.7,123.9 304.8,120.2 301.1,126.3 317.0,128.0 301.1,129.7 304.8,135.8 298.7,132.1 297.0,148.0 295.3,132.1 289.2,135.8 292.9,129.7 277.0,128.0 292.9,126.3 289.2,120.2 295.3,123.9" fill="#2b2526" />
+  </g>
+  <text x="300.0" y="109.64285714285714" font-size="23" text-anchor="middle" fill="#2b2526" stroke="#f6f4ee" stroke-width="5" paint-order="stroke" stroke-linejoin="round" font-family="Molengo, 'Trebuchet MS', sans-serif" font-weight="bold">You</text>
+  <text x="300" y="40" font-size="23" text-anchor="middle" fill="#2b2526" stroke="#f6f4ee" stroke-width="5" paint-order="stroke" stroke-linejoin="round" font-family="Molengo, 'Trebuchet MS', sans-serif" font-weight="bold">15 ft Cone</text>
+  <text x="300" y="535" text-anchor="middle" font-size="20" fill="#202622" font-family="sans-serif">Grid: 5 feet / square</text>
+</svg>

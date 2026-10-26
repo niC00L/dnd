@@ -1,9 +1,43 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 540" width="600" height="540"><defs>
-<pattern id="chev" width="46" height="40" patternUnits="userSpaceOnUse">
-<rect width="46" height="40" fill="#4a93b8"/>
-<path d="M-11.500,20 L0,8 L11.500,20 L23,8 L34.500,20 L46,8 L57.500,20" fill="none" stroke="#7fbad2" stroke-width="10"/>
-<path d="M-11.500,20 L0,8 L11.500,20 L23,8 L34.500,20 L46,8 L57.500,20" fill="none" stroke="#a9d3e3" stroke-width="3" transform="translate(0,-3)"/>
-<path d="M-11.500,36 L0,24 L11.500,36 L23,24 L34.500,36 L46,24 L57.500,36" fill="none" stroke="#7fbad2" stroke-width="10"/>
-</pattern>
-<radialGradient id="glow"><stop offset="0" stop-color="#fff" stop-opacity=".9"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></radialGradient>
-</defs><g stroke="#b9b7b4" stroke-width="3"><line x1="-40" y1="-5" x2="-40" y2="545"/><line x1="40" y1="-5" x2="40" y2="545"/><line x1="120" y1="-5" x2="120" y2="545"/><line x1="200" y1="-5" x2="200" y2="545"/><line x1="280" y1="-5" x2="280" y2="545"/><line x1="360" y1="-5" x2="360" y2="545"/><line x1="440" y1="-5" x2="440" y2="545"/><line x1="520" y1="-5" x2="520" y2="545"/><line x1="600" y1="-5" x2="600" y2="545"/><line x1="-5" y1="-60" x2="605" y2="-60"/><line x1="-5" y1="20" x2="605" y2="20"/><line x1="-5" y1="100" x2="605" y2="100"/><line x1="-5" y1="180" x2="605" y2="180"/><line x1="-5" y1="260" x2="605" y2="260"/><line x1="-5" y1="340" x2="605" y2="340"/><line x1="-5" y1="420" x2="605" y2="420"/><line x1="-5" y1="500" x2="605" y2="500"/><line x1="-5" y1="580" x2="605" y2="580"/></g><rect x="200" y="180" width="160" height="160" fill="url(#chev)"/><g stroke="#dbe9ef" stroke-width="3"><line x1="280" y1="180" x2="280" y2="340"/><line x1="200" y1="260" x2="360" y2="260"/></g><rect x="200" y="180" width="160" height="160" fill="none" stroke="#2b2526" stroke-width="12"/><circle cx="280" cy="260" r="38.400000000000006" fill="url(#glow)"/><polygon points="280.0,236.0 282.0,255.1 289.3,250.7 284.9,258.0 304.0,260.0 284.9,262.0 289.3,269.3 282.0,264.9 280.0,284.0 278.0,264.9 270.7,269.3 275.1,262.0 256.0,260.0 275.1,258.0 270.7,250.7 278.0,255.1" fill="#fff"/><text x="316" y="254" font-size="30" text-anchor="start" fill="#2b2526" stroke="#f6f4ee" stroke-width="6" paint-order="stroke" stroke-linejoin="round" font-family="Molengo, 'Trebuchet MS', sans-serif" font-weight="bold">Point of Origin</text></svg>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 540" width="600" height="540" data-grid-unit="5" data-grid-step="57.142857142857146">
+  <defs>
+    <pattern id="chev" width="46" height="40" patternUnits="userSpaceOnUse">
+      <rect width="46" height="40" fill="#4a93b8" />
+      <path d="M-11.500,20 L0,8 L11.500,20 L23,8 L34.500,20 L46,8 L57.500,20" fill="none" stroke="#7fbad2" stroke-width="10" />
+      <path d="M-11.500,20 L0,8 L11.500,20 L23,8 L34.500,20 L46,8 L57.500,20" fill="none" stroke="#a9d3e3" stroke-width="3" transform="translate(0,-3)" />
+      <path d="M-11.500,36 L0,24 L11.500,36 L23,24 L34.500,36 L46,24 L57.500,36" fill="none" stroke="#7fbad2" stroke-width="10" />
+    </pattern>
+    <radialGradient id="glow">
+      <stop offset="0" stop-color="#fff" stop-opacity=".9" />
+      <stop offset="1" stop-color="#fff" stop-opacity="0" />
+    </radialGradient>
+  </defs>
+  <g stroke="#b9b7b4" stroke-width="2">
+    <line x1="128.57142857142856" y1="60" x2="128.57142857142856" y2="460" />
+    <line x1="100" y1="88.57142857142856" x2="500" y2="88.57142857142856" />
+    <line x1="185.71428571428572" y1="60" x2="185.71428571428572" y2="460" />
+    <line x1="100" y1="145.71428571428572" x2="500" y2="145.71428571428572" />
+    <line x1="242.85714285714286" y1="60" x2="242.85714285714286" y2="460" />
+    <line x1="100" y1="202.85714285714286" x2="500" y2="202.85714285714286" />
+    <line x1="300.0" y1="60" x2="300.0" y2="460" />
+    <line x1="100" y1="260.0" x2="500" y2="260.0" />
+    <line x1="357.1428571428571" y1="60" x2="357.1428571428571" y2="460" />
+    <line x1="100" y1="317.1428571428571" x2="500" y2="317.1428571428571" />
+    <line x1="414.28571428571433" y1="60" x2="414.28571428571433" y2="460" />
+    <line x1="100" y1="374.28571428571433" x2="500" y2="374.28571428571433" />
+    <line x1="471.42857142857144" y1="60" x2="471.42857142857144" y2="460" />
+    <line x1="100" y1="431.42857142857144" x2="500" y2="431.42857142857144" />
+  </g>
+  <g transform="translate(300 260) scale(0.7142857142857143) translate(-280 -260)">
+    <rect x="200" y="180" width="160" height="160" fill="url(#chev)" />
+    <g stroke="#dbe9ef" stroke-width="3">
+      <line x1="280" y1="180" x2="280" y2="340" />
+      <line x1="200" y1="260" x2="360" y2="260" />
+    </g>
+    <rect x="200" y="180" width="160" height="160" fill="none" stroke="#2b2526" stroke-width="12" />
+    <circle cx="280" cy="260" r="38.400000000000006" fill="url(#glow)" />
+    <polygon points="280.0,236.0 282.0,255.1 289.3,250.7 284.9,258.0 304.0,260.0 284.9,262.0 289.3,269.3 282.0,264.9 280.0,284.0 278.0,264.9 270.7,269.3 275.1,262.0 256.0,260.0 275.1,258.0 270.7,250.7 278.0,255.1" fill="#fff" />
+  </g>
+  <text x="325.7142857142857" y="255.71428571428572" font-size="23" text-anchor="start" fill="#2b2526" stroke="#f6f4ee" stroke-width="5" paint-order="stroke" stroke-linejoin="round" font-family="Molengo, 'Trebuchet MS', sans-serif" font-weight="bold">Point of Origin</text>
+  <text x="300" y="40" font-size="23" text-anchor="middle" fill="#2b2526" stroke="#f6f4ee" stroke-width="5" paint-order="stroke" stroke-linejoin="round" font-family="Molengo, 'Trebuchet MS', sans-serif" font-weight="bold">10 ft Square</text>
+  <text x="300" y="535" text-anchor="middle" font-size="20" fill="#202622" font-family="sans-serif">Grid: 5 feet / square</text>
+</svg>
