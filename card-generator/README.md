@@ -40,10 +40,10 @@ See [Sources and licenses](./credits.html) for attribution and license links.
 SRD rules are sourced from Open5e's SRD 2024 data under CC BY 4.0.
 The separate [2024 PHB supplement](./data/spells-2024-phb-supplement.json)
 contains original rules summaries, not copied book text or SRD-licensed entries.
-Together the two spell files cover every cantrip and level-1 spell on the
+Together the two spell files cover every spell, from cantrips through level 9, on the
 2024 Player's Handbook base lists for Bard, Cleric, Paladin, and Warlock.
 Subclass spells, feats, older editions, and other supplements are outside this
-coverage check. Paladins have no cantrips on their base spell list.
+coverage check. Paladins have no cantrips or spells above level 5 on their base list.
 
 Coverage was checked against [5etools](https://5e.tools/spells.html) on October 27,
 2026, using its XPHB spell data and XPHB base-class lookup. Eight missing spells
@@ -51,7 +51,15 @@ were added: Armor of Agathys, Arms of Hadar, Blade Ward, Compelled Duel, Friends
 Mind Sliver, Thunderous Smite, and Wrathful Smite. Word of Radiance, Thunderclap,
 and Toll the Dead were moved from app code into the supplement, retaining their
 existing keys for saved selections. Thunderclap now uses the 2024 Emanation area.
-Tasha's Hideous Laughter is already included under its SRD name, **Hideous Laughter**.
+The supplement also adds 25 missing higher-level spells: two at level 2, eight at
+level 3, four at level 4, seven at level 5, three at level 6, and one at level 7.
+The level-8 and level-9 lists were already complete. Summon Aberration, Summon
+Celestial, Summon Fey, Summon Fiend, and Summon Undead reference the required
+2024 spirit stat blocks rather than reproducing them, matching Summon Dragon
+in the existing library.
+Named spells already available under SRD aliases are not duplicated; for example,
+Tasha's Hideous Laughter is **Hideous Laughter**, Leomund's Tiny Hut is **Tiny Hut**,
+and Mordenkainen's Sword is **Arcane Sword**.
 No live requests to 5etools are made by the app.
 
 Spell data, equipment data, and artwork are local files: printing does not depend
