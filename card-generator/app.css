@@ -571,7 +571,7 @@ p {
 
 .back-art {
     position: absolute;
-    inset: 16% 4% 34%;
+    inset: 16% 4% 29%;
     display: grid;
     place-items: center;
 }
@@ -582,6 +582,18 @@ p {
     height: 100%;
     min-height: 0;
     object-fit: contain;
+}
+
+.back-grid-legend {
+    position: absolute;
+    right: 0;
+    bottom: 9%;
+    left: 0;
+    color: #202622;
+    font-family: sans-serif;
+    font-size: 3cqw;
+    line-height: 1.2;
+    text-align: center;
 }
 
 .back-summary {

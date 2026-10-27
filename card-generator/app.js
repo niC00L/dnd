@@ -597,6 +597,12 @@ function buildCard(spell, part = getSpellCardParts(spell)[0]) {
     return card;
 }
 
+function areaGridUnit(area) {
+    const circular = ["sphere", "emanation", "cylinder"].includes(area.type);
+    const extent = area.length || (circular ? area.size * 2 : area.size);
+    return area.unit === "feet" ? 5 * Math.max(1, Math.ceil(extent / 30)) : Math.max(1, Math.ceil(extent / 6));
+}
+
 function buildAreaDiagram(area) {
     const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
     svg.setAttribute("viewBox", "0 0 600 540");
@@ -617,7 +623,7 @@ function buildAreaDiagram(area) {
     pattern.id = patternId;
     const circular = ["sphere", "emanation", "cylinder"].includes(area.type);
     const extent = area.length || (circular ? area.size * 2 : area.size);
-    const gridUnit = area.unit === "feet" ? 5 * Math.max(1, Math.ceil(extent / 30)) : Math.max(1, Math.ceil(extent / 6));
+    const gridUnit = areaGridUnit(area);
     const grid = 400 / 7;
     const scale = grid / gridUnit;
     const span = extent * scale;
@@ -658,8 +664,6 @@ function buildAreaDiagram(area) {
     label.textContent = area.type === "emanation" ? "You / Origin" : "Point of Origin";
     const heading = add("text", { x: 300, y: 40, "text-anchor": "middle", fill: "#2b2526", stroke: "#f6f4ee", "stroke-width": 5, "paint-order": "stroke", "stroke-linejoin": "round", "font-size": 23, "font-family": "Molengo, 'Trebuchet MS', sans-serif", "font-weight": "bold" });
     heading.textContent = areaLabel(area);
-    const legend = add("text", { x: 300, y: 535, "text-anchor": "middle", "font-size": 20, fill: "#202622", "font-family": "sans-serif" });
-    legend.textContent = `Grid: ${gridUnit} ${area.unit} / square${area.type === "cylinder" ? " (radius shown above)" : ""}`;
     return svg;
 }
 
@@ -708,6 +712,9 @@ function buildBack(spell, part) {
     card.querySelector('[data-field="level"]').textContent = spell.level === 0 ? "Cantrip" : `Level ${spell.level}`;
     const area = spellArea(spell);
     const art = card.querySelector('[data-field="art"]');
+    const legend = card.querySelector('[data-field="grid-legend"]');
+    legend.hidden = !area;
+    if (area) legend.textContent = `Grid: ${areaGridUnit(area)} ${area.unit} / square${area.type === "cylinder" ? " (radius shown above)" : ""}`;
     const existingDiagram = area && areaImage(area);
     if (area && !existingDiagram) {
         art.append(buildAreaDiagram(area));
@@ -715,7 +722,7 @@ function buildBack(spell, part) {
         const image = document.createElement("img");
         const range = spell.range_text || "";
         const emblem = /^self$/i.test(range) ? "self" : /touch/i.test(range) ? "touch" : "ranged";
-        image.src = `./img/${existingDiagram || `emblem-${emblem}.png`}`;
+        image.src = existingDiagram ? `./img/${existingDiagram}?v=html-grid-legend` : `./img/emblem-${emblem}.png`;
         image.alt = area ? areaLabel(area) : `${titleCase(emblem)} spell`;
         art.append(image);
     }

@@ -58,5 +58,4 @@
   </g>
   <text x="319.4805194805195" y="247.01298701298703" font-size="23" text-anchor="start" fill="#2b2526" stroke="#f6f4ee" stroke-width="5" paint-order="stroke" stroke-linejoin="round" font-family="Molengo, 'Trebuchet MS', sans-serif" font-weight="bold">Point of Origin</text>
   <text x="300" y="40" font-size="23" text-anchor="middle" fill="#2b2526" stroke="#f6f4ee" stroke-width="5" paint-order="stroke" stroke-linejoin="round" font-family="Molengo, 'Trebuchet MS', sans-serif" font-weight="bold">5 ft radius Sphere</text>
-  <text x="300" y="535" text-anchor="middle" font-size="20" fill="#202622" font-family="sans-serif">Grid: 5 feet / square</text>
 </svg>

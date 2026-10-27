@@ -55,13 +55,13 @@ function app(size = "half", mode = "none", measureFits = null, fetch = undefined
         const buildSpellBack = buildBack;
         buildBack = (spell, part) => Object.assign(document.createElement("back"), { key: spell.key, part });
         ({ state, printRoot: elements.printRoot, cardSizeSettings, renderPrintPages,
-           spellArea, areaImage, areaLabel, buildAreaDiagram, buildSpellBack, backTargetCount, backKeywordText,
+           spellArea, areaImage, areaLabel, areaGridUnit, buildAreaDiagram, buildSpellBack, backTargetCount, backKeywordText,
            isCustomEquipment, isEquipment, equipmentStats, equipmentImage, getSpellCardParts, keywordContent,
-           loadSpellLibrary });
+           loadSpellLibrary, spellKeywords });
     `, { document, crypto: webcrypto, console, measureFits, fetch });
 }
 
-test("Built-in database covers every 2024 PHB spell level for the four requested classes", () => {
+test("Built-in database covers every 2024 PHB spell level for all eight spellcasting classes", () => {
     // Checked against 5etools' XPHB spell and generated class lookup data, October 27, 2026.
     // Named spells use their existing SRD aliases where applicable.
     const expected = {
@@ -98,6 +98,39 @@ test("Built-in database covers every 2024 PHB spell level for the four requested
             "Banishing Smite|Circle of Power|Destructive Wave|Dispel Evil and Good|Geas|Greater Restoration|Raise Dead|Summon Celestial",
             "", "", "", ""
         ],
+        Druid: [
+            "Druidcraft|Elementalism|Guidance|Mending|Message|Poison Spray|Produce Flame|Resistance|Shillelagh|Spare the Dying|Starry Wisp|Thorn Whip|Thunderclap",
+            "Animal Friendship|Charm Person|Create or Destroy Water|Cure Wounds|Detect Magic|Detect Poison and Disease|Entangle|Faerie Fire|Fog Cloud|Goodberry|Healing Word|Ice Knife|Jump|Longstrider|Protection from Evil and Good|Purify Food and Drink|Speak with Animals|Thunderwave",
+            "Aid|Animal Messenger|Augury|Barkskin|Beast Sense|Continual Flame|Darkvision|Enhance Ability|Enlarge/Reduce|Find Traps|Flame Blade|Flaming Sphere|Gust of Wind|Heat Metal|Hold Person|Lesser Restoration|Locate Animals or Plants|Locate Object|Moonbeam|Pass without Trace|Protection from Poison|Spike Growth|Summon Beast",
+            "Aura of Vitality|Call Lightning|Conjure Animals|Daylight|Dispel Magic|Elemental Weapon|Feign Death|Meld into Stone|Plant Growth|Protection from Energy|Revivify|Sleet Storm|Speak with Plants|Summon Fey|Water Breathing|Water Walk|Wind Wall",
+            "Blight|Charm Monster|Confusion|Conjure Minor Elementals|Conjure Woodland Beings|Control Water|Divination|Dominate Beast|Fire Shield|Fount of Moonlight|Freedom of Movement|Giant Insect|Grasping Vine|Hallucinatory Terrain|Ice Storm|Locate Creature|Polymorph|Stone Shape|Stoneskin|Summon Elemental|Wall of Fire",
+            "Antilife Shell|Awaken|Commune with Nature|Cone of Cold|Conjure Elemental|Contagion|Geas|Greater Restoration|Insect Plague|Mass Cure Wounds|Planar Binding|Reincarnate|Scrying|Tree Stride|Wall of Stone",
+            "Conjure Fey|Find the Path|Flesh to Stone|Heal|Heroes' Feast|Move Earth|Sunbeam|Transport via Plants|Wall of Thorns|Wind Walk",
+            "Fire Storm|Mirage Arcane|Plane Shift|Regenerate|Reverse Gravity|Symbol",
+            "Animal Shapes|Antipathy/Sympathy|Befuddlement|Control Weather|Earthquake|Incendiary Cloud|Sunburst|Tsunami",
+            "Foresight|Shapechange|Storm of Vengeance|True Resurrection"
+        ],
+        Ranger: [
+            "",
+            "Alarm|Animal Friendship|Cure Wounds|Detect Magic|Detect Poison and Disease|Ensnaring Strike|Entangle|Fog Cloud|Goodberry|Hail of Thorns|Hunter's Mark|Jump|Longstrider|Speak with Animals",
+            "Aid|Animal Messenger|Barkskin|Beast Sense|Cordon of Arrows|Darkvision|Enhance Ability|Find Traps|Gust of Wind|Lesser Restoration|Locate Animals or Plants|Locate Object|Magic Weapon|Pass without Trace|Protection from Poison|Silence|Spike Growth|Summon Beast",
+            "Conjure Animals|Conjure Barrage|Daylight|Dispel Magic|Elemental Weapon|Lightning Arrow|Meld into Stone|Nondetection|Plant Growth|Protection from Energy|Revivify|Speak with Plants|Summon Fey|Water Breathing|Water Walk|Wind Wall",
+            "Conjure Woodland Beings|Dominate Beast|Freedom of Movement|Grasping Vine|Locate Creature|Stoneskin|Summon Elemental",
+            "Commune with Nature|Conjure Volley|Greater Restoration|Steel Wind Strike|Swift Quiver|Tree Stride",
+            "", "", "", ""
+        ],
+        Sorcerer: [
+            "Acid Splash|Blade Ward|Chill Touch|Dancing Lights|Elementalism|Fire Bolt|Friends|Light|Mage Hand|Mending|Message|Mind Sliver|Minor Illusion|Poison Spray|Prestidigitation|Ray of Frost|Shocking Grasp|Sorcerous Burst|Thunderclap|True Strike",
+            "Burning Hands|Charm Person|Chromatic Orb|Color Spray|Comprehend Languages|Detect Magic|Disguise Self|Expeditious Retreat|False Life|Feather Fall|Fog Cloud|Grease|Ice Knife|Jump|Mage Armor|Magic Missile|Ray of Sickness|Shield|Silent Image|Sleep|Thunderwave|Witch Bolt",
+            "Alter Self|Arcane Vigor|Blindness/Deafness|Blur|Cloud of Daggers|Crown of Madness|Darkness|Darkvision|Detect Thoughts|Dragon's Breath|Enhance Ability|Enlarge/Reduce|Flame Blade|Flaming Sphere|Gust of Wind|Hold Person|Invisibility|Knock|Levitate|Magic Weapon|Mind Spike|Mirror Image|Misty Step|Phantasmal Force|Scorching Ray|See Invisibility|Shatter|Spider Climb|Suggestion|Web",
+            "Blink|Clairvoyance|Counterspell|Daylight|Dispel Magic|Fear|Fireball|Fly|Gaseous Form|Haste|Hypnotic Pattern|Lightning Bolt|Major Image|Protection from Energy|Sleet Storm|Slow|Stinking Cloud|Tongues|Vampiric Touch|Water Breathing|Water Walk",
+            "Banishment|Blight|Charm Monster|Confusion|Dimension Door|Dominate Beast|Fire Shield|Greater Invisibility|Ice Storm|Polymorph|Stoneskin|Vitriolic Sphere|Wall of Fire",
+            "Animate Objects|Arcane Hand|Cloudkill|Cone of Cold|Creation|Dominate Person|Hold Monster|Insect Plague|Seeming|Synaptic Static|Telekinesis|Teleportation Circle|Wall of Stone",
+            "Arcane Gate|Chain Lightning|Circle of Death|Disintegrate|Eyebite|Flesh to Stone|Globe of Invulnerability|Mass Suggestion|Move Earth|Freezing Sphere|Sunbeam|True Seeing",
+            "Delayed Blast Fireball|Etherealness|Finger of Death|Fire Storm|Plane Shift|Prismatic Spray|Reverse Gravity|Teleport",
+            "Demiplane|Dominate Monster|Earthquake|Incendiary Cloud|Power Word Stun|Sunburst",
+            "Gate|Meteor Swarm|Power Word Kill|Time Stop|Wish"
+        ],
         Warlock: [
             "Blade Ward|Chill Touch|Eldritch Blast|Friends|Mage Hand|Mind Sliver|Minor Illusion|Poison Spray|Prestidigitation|Thunderclap|Toll the Dead|True Strike",
             "Armor of Agathys|Arms of Hadar|Bane|Charm Person|Comprehend Languages|Detect Magic|Expeditious Retreat|Hellish Rebuke|Hex|Illusory Script|Protection from Evil and Good|Speak with Animals|Hideous Laughter|Unseen Servant|Witch Bolt",
@@ -109,12 +142,27 @@ test("Built-in database covers every 2024 PHB spell level for the four requested
             "Etherealness|Finger of Death|Forcecage|Plane Shift",
             "Befuddlement|Demiplane|Dominate Monster|Glibness|Power Word Stun",
             "Astral Projection|Foresight|Gate|Imprisonment|Power Word Kill|True Polymorph|Weird"
+        ],
+        Wizard: [
+            "Acid Splash|Blade Ward|Chill Touch|Dancing Lights|Elementalism|Fire Bolt|Friends|Light|Mage Hand|Mending|Message|Mind Sliver|Minor Illusion|Poison Spray|Prestidigitation|Ray of Frost|Shocking Grasp|Thunderclap|Toll the Dead|True Strike",
+            "Alarm|Burning Hands|Charm Person|Chromatic Orb|Color Spray|Comprehend Languages|Detect Magic|Disguise Self|Expeditious Retreat|False Life|Feather Fall|Find Familiar|Fog Cloud|Grease|Ice Knife|Identify|Illusory Script|Jump|Longstrider|Mage Armor|Magic Missile|Protection from Evil and Good|Ray of Sickness|Shield|Silent Image|Sleep|Hideous Laughter|Floating Disk|Thunderwave|Unseen Servant|Witch Bolt",
+            "Alter Self|Arcane Lock|Arcane Vigor|Augury|Blindness/Deafness|Blur|Cloud of Daggers|Continual Flame|Crown of Madness|Darkness|Darkvision|Detect Thoughts|Dragon's Breath|Enhance Ability|Enlarge/Reduce|Flaming Sphere|Gentle Repose|Gust of Wind|Hold Person|Invisibility|Knock|Levitate|Locate Object|Magic Mouth|Magic Weapon|Acid Arrow|Mind Spike|Mirror Image|Misty Step|Arcanist's Magic Aura|Phantasmal Force|Ray of Enfeeblement|Rope Trick|Scorching Ray|See Invisibility|Shatter|Spider Climb|Suggestion|Web",
+            "Animate Dead|Bestow Curse|Blink|Clairvoyance|Counterspell|Dispel Magic|Fear|Feign Death|Fireball|Fly|Gaseous Form|Glyph of Warding|Haste|Hypnotic Pattern|Tiny Hut|Lightning Bolt|Magic Circle|Major Image|Nondetection|Phantom Steed|Protection from Energy|Remove Curse|Sending|Sleet Storm|Slow|Speak with Dead|Stinking Cloud|Summon Fey|Summon Undead|Tongues|Vampiric Touch|Water Breathing",
+            "Arcane Eye|Banishment|Blight|Charm Monster|Confusion|Conjure Minor Elementals|Control Water|Dimension Door|Divination|Black Tentacles|Fabricate|Fire Shield|Greater Invisibility|Hallucinatory Terrain|Ice Storm|Secret Chest|Locate Creature|Faithful Hound|Private Sanctum|Resilient Sphere|Phantasmal Killer|Polymorph|Stone Shape|Stoneskin|Summon Aberration|Summon Construct|Summon Elemental|Vitriolic Sphere|Wall of Fire",
+            "Animate Objects|Arcane Hand|Circle of Power|Cloudkill|Cone of Cold|Conjure Elemental|Contact Other Plane|Creation|Dominate Person|Dream|Geas|Hold Monster|Jallarzi's Storm of Radiance|Legend Lore|Mislead|Modify Memory|Passwall|Planar Binding|Telepathic Bond|Scrying|Seeming|Steel Wind Strike|Summon Dragon|Synaptic Static|Telekinesis|Teleportation Circle|Wall of Force|Wall of Stone|Yolande's Regal Presence",
+            "Arcane Gate|Chain Lightning|Circle of Death|Contingency|Create Undead|Disintegrate|Instant Summons|Eyebite|Flesh to Stone|Globe of Invulnerability|Guards and Wards|Magic Jar|Mass Suggestion|Move Earth|Freezing Sphere|Irresistible Dance|Programmed Illusion|Summon Fiend|Sunbeam|Tasha's Bubbling Cauldron|True Seeing|Wall of Ice",
+            "Delayed Blast Fireball|Etherealness|Finger of Death|Forcecage|Mirage Arcane|Magnificent Mansion|Arcane Sword|Plane Shift|Prismatic Spray|Project Image|Reverse Gravity|Sequester|Simulacrum|Symbol|Teleport",
+            "Antimagic Field|Antipathy/Sympathy|Befuddlement|Clone|Control Weather|Demiplane|Dominate Monster|Incendiary Cloud|Maze|Mind Blank|Power Word Stun|Sunburst|Telepathy",
+            "Astral Projection|Foresight|Gate|Imprisonment|Meteor Swarm|Power Word Kill|Prismatic Wall|Shapechange|Time Stop|True Polymorph|Weird|Wish"
         ]
     };
     const spells = ["spells-2024-srd.json", "spells-2024-phb-supplement.json"]
         .flatMap(file => JSON.parse(readFileSync(join(__dirname, "data", file), "utf8").replace(/^\uFEFF/, "")));
+    assert.equal(spells.length, 391, "Complete 2024 PHB spell catalog");
     assert.equal(new Set(spells.map(spell => spell.key)).size, spells.length, "Unique spell keys");
     assert.equal(new Set(spells.map(spell => spell.name)).size, spells.length, "No duplicate spell names");
+    const expectedNames = new Set(Object.values(expected).flatMap(lists => lists.flatMap(names => names ? names.split("|") : [])));
+    assert.deepEqual(spells.map(spell => spell.name).sort(), [...expectedNames].sort());
     for (const [className, lists] of Object.entries(expected)) {
         assert.equal(lists.length, 10, `${className}: cantrips through level 9`);
         for (const [level, names] of lists.entries()) {
@@ -142,7 +190,7 @@ test("Spell library loader includes both local databases and preserves migrated 
     const supplementKeys = new Set(JSON.parse(readFileSync(
         join(__dirname, "data", "spells-2024-phb-supplement.json"), "utf8")).map(spell => spell.key));
     const supplement = spells.filter(spell => supplementKeys.has(spell.key));
-    assert.equal(supplement.length, 36);
+    assert.equal(supplement.length, 51);
     for (const spell of supplement) {
         assert.ok(spell.desc.length > 0, spell.name);
         assert.ok(spell.classes.length > 0, spell.name);
@@ -171,7 +219,7 @@ test("Spell library loader includes both local databases and preserves migrated 
 test("Higher-level PHB summaries retain 2024 timing, saving throws, materials, and scaling", () => {
     const spells = JSON.parse(readFileSync(join(__dirname, "data", "spells-2024-phb-supplement.json"), "utf8"));
     const byName = name => spells.find(spell => spell.name === name);
-    const expectedCounts = { 2: 2, 3: 8, 4: 4, 5: 7, 6: 3, 7: 1 };
+    const expectedCounts = { 0: 7, 1: 6, 2: 6, 3: 10, 4: 7, 5: 10, 6: 3, 7: 1, 8: 1 };
     for (const [level, count] of Object.entries(expectedCounts)) {
         assert.equal(spells.filter(spell => spell.level === Number(level)).length, count, `Level ${level}`);
     }
@@ -212,7 +260,10 @@ test("Higher-level PHB summaries retain 2024 timing, saving throws, materials, a
         ["Summon Celestial", "500 GP", "Celestial Spirit"],
         ["Summon Fey", "300 GP", "Fey Spirit"],
         ["Summon Fiend", "600 GP", "Fiendish Spirit"],
-        ["Summon Undead", "300 GP", "Undead Spirit"]
+        ["Summon Undead", "300 GP", "Undead Spirit"],
+        ["Summon Beast", "200 GP", "Bestial Spirit"],
+        ["Summon Construct", "400 GP", "Construct Spirit"],
+        ["Summon Elemental", "400 GP", "Elemental Spirit"]
     ]) {
         const spell = byName(name);
         assert.equal(spell.material_cost, cost, name);
@@ -227,21 +278,87 @@ test("Higher-level PHB summaries retain 2024 timing, saving throws, materials, a
     }
 });
 
-test("Higher-level PHB summaries and upgrades survive continuation-card splitting", () => {
-    const spells = JSON.parse(readFileSync(join(__dirname, "data", "spells-2024-phb-supplement.json"), "utf8"))
-        .filter(spell => spell.level >= 2);
+test("Remaining PHB summaries retain 2024 attack types, timing, costs, and special ranges", () => {
+    const spells = JSON.parse(readFileSync(join(__dirname, "data", "spells-2024-phb-supplement.json"), "utf8"));
+    const byName = name => spells.find(spell => spell.name === name);
+    const { spellKeywords, spellArea } = app();
+    for (const [name, damage] of [
+        ["Thorn Whip", "1d6"],
+        ["Grasping Vine", "4d8"],
+        ["Steel Wind Strike", "6d10"]
+    ]) {
+        const spell = byName(name);
+        assert.equal(spell.attack_roll, true, name);
+        assert.equal(spell.custom_attack, "melee", name);
+        assert.equal(spell.damage_roll, damage, name);
+        assert.equal(spellKeywords(spell)["attack-save"].text, "Melee Spell", name);
+        assert.ok(spell.range >= 30, name);
+    }
+    assert.match(byName("Thorn Whip").desc, /Large or smaller.*10 feet/);
+    assert.match(byName("Thorn Whip").higher_level, /2d6.*5.*3d6.*11.*4d6.*17/);
+    assert.equal(byName("Grasping Vine").casting_time, "bonus action");
+    assert.equal(byName("Grasping Vine").concentration, true);
+    assert.match(byName("Grasping Vine").desc, /Huge or smaller.*Grappled/);
+    assert.match(byName("Grasping Vine").higher_level, /grapple capacity/);
+    assert.equal(byName("Steel Wind Strike").target_count, 5);
+    assert.equal(byName("Steel Wind Strike").material_cost, "0.1 GP");
+    assert.equal(byName("Steel Wind Strike").verbal, false);
+    assert.equal(byName("Arcane Vigor").casting_time, "bonus action");
+    assert.match(byName("Arcane Vigor").desc, /one or two.*Hit Point Dice.*expend/);
+    assert.match(byName("Arcane Vigor").higher_level, /one additional/);
+    assert.equal(byName("Beast Sense").ritual, true);
+    assert.equal(byName("Beast Sense").concentration, true);
+    assert.match(byName("Beast Sense").desc, /retaining access to your own senses/);
+    for (const [name, shape, size, damage] of [
+        ["Conjure Barrage", "cone", 60, "5d8"],
+        ["Conjure Volley", "cylinder", 40, "8d8"]
+    ]) {
+        const spell = byName(name);
+        assert.equal(spellArea(spell).type, shape, name);
+        assert.equal(spellArea(spell).size, size, name);
+        assert.equal(spell.damage_roll, damage, name);
+        assert.deepEqual(spell.damage_types, ["force"], name);
+        assert.equal(spell.material_cost, "0.01 GP", name);
+        assert.equal(spell.material_consumed, false, name);
+    }
+    assert.match(byName("Conjure Volley").desc, /20-foot height/);
+    assert.equal(byName("Cordon of Arrows").duration, "8 hours");
+    assert.match(byName("Cordon of Arrows").higher_level, /two more pieces/);
+    for (const name of ["Hail of Thorns", "Lightning Arrow"]) {
+        const spell = byName(name);
+        assert.equal(spell.casting_time, "bonus action", name);
+        assert.equal(spell.concentration, false, name);
+        assert.equal(spell.duration, "instantaneous", name);
+        assert.match(spell.desc, /immediately after/, name);
+    }
+    assert.match(byName("Lightning Arrow").desc, /hits or misses/);
+    assert.match(byName("Lightning Arrow").desc, /Replace all damage and other effects/);
+    assert.match(byName("Lightning Arrow").higher_level, /both the primary and splash/);
+    assert.equal(byName("Swift Quiver").material_cost, "1 GP");
+    assert.equal(byName("Swift Quiver").concentration, true);
+    assert.match(byName("Swift Quiver").desc, /On casting, make two attacks/);
+    assert.equal(byName("Telepathy").level, 8);
+    assert.equal(byName("Telepathy").range_text, "Unlimited");
+    assert.equal(byName("Telepathy").duration, "24 hours");
+    assert.equal(byName("Telepathy").concentration, false);
+    assert.match(byName("Telepathy").desc, /ends if either participant leaves the other's plane/);
+});
+
+test("PHB summaries and upgrades survive continuation-card splitting", () => {
+    const spells = JSON.parse(readFileSync(join(__dirname, "data", "spells-2024-phb-supplement.json"), "utf8"));
     const { getSpellCardParts } = app("half", "none", (spell, part) =>
         part.description.length + (part.upgrade || "").length <= 300);
     const normalize = text => text.replace(/\s+/g, " ").trim();
     for (const spell of spells) {
         const parts = getSpellCardParts(spell);
-        const description = parts.filter(part => !part.description.startsWith("Using a Higher-Level Spell Slot:"))
+        const upgradeLabel = spell.level === 0 ? "Cantrip Upgrade:" : "Using a Higher-Level Spell Slot:";
+        const description = parts.filter(part => !part.description.startsWith(upgradeLabel))
             .map(part => part.description).join(" ");
         assert.equal(normalize(description), normalize(spell.desc), spell.name);
         if (spell.higher_level) {
             const upgrade = parts.map(part => part.upgrade || "").filter(Boolean).join(" ")
-                || parts.filter(part => part.description.startsWith("Using a Higher-Level Spell Slot:"))
-                    .map(part => part.description.replace("Using a Higher-Level Spell Slot:", "")).join(" ");
+                || parts.filter(part => part.description.startsWith(upgradeLabel))
+                    .map(part => part.description.replace(upgradeLabel, "")).join(" ");
             assert.equal(normalize(upgrade), normalize(spell.higher_level), spell.name);
         }
         assert.equal(parts[0].continuation, false, spell.name);
@@ -409,7 +526,7 @@ test("Back target counts respect self and explicit multiple targets", () => {
 });
 
 test("Area diagrams keep a fixed frame and grid spacing while scaling areas by full extent", () => {
-    const { buildAreaDiagram } = app();
+    const { buildAreaDiagram, areaGridUnit } = app();
     const descendants = node => [node, ...node.children.flatMap(descendants)];
     const make = (type, size, length) => buildAreaDiagram({ type, size, length, unit: "feet" });
     for (const type of ["sphere", "emanation", "cylinder", "cone", "cube", "square", "line"]) {
@@ -422,24 +539,26 @@ test("Area diagrams keep a fixed frame and grid spacing while scaling areas by f
             const fill = descendants(diagram).find(node => node.tag === "pattern" && node.attributes.width === String(400 / 7));
             assert.ok(fill, `${type}: fixed grid spacing`);
         }
-        const legend = diagram => descendants(diagram).filter(node => node.tag === "text").at(-1).textContent;
-        assert.match(legend(small), /^Grid: 5 feet/);
-        assert.match(legend(limit), /^Grid: 5 feet/);
-        assert.match(legend(large), /^Grid: 10 feet/);
+        for (const diagram of [small, limit, large]) {
+            assert.ok(!descendants(diagram).some(node => node.textContent?.startsWith("Grid:")));
+        }
+        assert.equal(areaGridUnit({ type, size: circular ? 5 : 10, unit: "feet" }), 5);
+        assert.equal(areaGridUnit({ type, size: circular ? 15 : 30, unit: "feet" }), 5);
+        assert.equal(areaGridUnit({ type, size: circular ? 30 : 60, unit: "feet" }), 10);
     }
     const circle = size => descendants(make("sphere", size)).find(node => node.tag === "circle");
     assert.equal(Number(circle(5).attributes.r) * 3, Number(circle(15).attributes.r));
     assert.equal(circle(30).attributes.r, circle(15).attributes.r);
     assert.ok(Math.abs(260 - Number(circle(15).attributes.r) - 60 - 200 / 7) < 1e-10);
     const longLine = descendants(make("line", 5, 100));
-    assert.match(longLine.filter(node => node.tag === "text").at(-1).textContent, /^Grid: 20 feet/);
+    assert.equal(areaGridUnit({ type: "line", size: 5, length: 100, unit: "feet" }), 20);
     const rectangle = longLine.find(node => node.tag === "rect" && node.attributes.stroke);
     assert.ok(Number(rectangle.attributes.width) <= 2400 / 7);
     for (const name of ["cone", "cube-15", "cube-20", "sphere-10", "sphere-20", "square"]) {
         const source = readFileSync(join(__dirname, "img", `aoe-${name}.svg`), "utf8");
         assert.match(source, /viewBox="0 0 600 540" width="600" height="540"/);
         assert.match(source, /data-grid-unit="5"/);
-        assert.match(source, /Grid: 5 feet \/ square/);
+        assert.doesNotMatch(source, /Grid:/);
     }
 });
 
@@ -461,6 +580,9 @@ test("Area sizes appear in the red back frame and above supplied and generated d
             range_text: "Self", casting_time: "Action", duration: "Instantaneous", desc: ""
         }, {});
         const range = card.querySelector('[data-field="range"]');
+        const legend = card.querySelector('[data-field="grid-legend"]');
+        assert.equal(legend.hidden, false);
+        assert.equal(legend.textContent, `Grid: ${size > 15 && type === "sphere" ? 10 : 5} feet / square`);
         assert.equal(range.children[1].children[0].textContent, "Area");
         assert.equal(range.children[1].children[1].textContent, expected);
         const heading = buildAreaDiagram(area).children.find(node => node.tag === "text" && node.attributes.y === "40");
@@ -471,6 +593,38 @@ test("Area sizes appear in the red back frame and above supplied and generated d
             assert.ok(source.includes(`font-weight="bold">${expected}</text>`));
             assert.match(source, /<text x="300" y="40"/);
         }
+    }
+});
+
+test("HTML grid captions are hidden without an area and preserve cylinder notes", () => {
+    const { buildSpellBack } = app();
+    const spell = {
+        name: "Test Spell", level: 0, range_text: "Self",
+        casting_time: "Action", duration: "Instantaneous", desc: ""
+    };
+    const plain = buildSpellBack(spell, {});
+    assert.equal(plain.querySelector('[data-field="grid-legend"]').hidden, true);
+    const cylinder = buildSpellBack({ ...spell, shape_type: "cylinder", shape_size: 30 }, {});
+    const legend = cylinder.querySelector('[data-field="grid-legend"]');
+    assert.equal(legend.hidden, false);
+    assert.equal(legend.textContent, "Grid: 10 feet / square (radius shown above)");
+    const template = readFileSync(join(__dirname, "index.html"), "utf8");
+    assert.match(template, /<span class="back-grid-legend" data-field="grid-legend" hidden><\/span>/);
+});
+
+test("All supplied area images use fresh URLs and leave grid captions to HTML", () => {
+    const { buildSpellBack, areaImage } = app();
+    for (const [type, size] of [["sphere", 5], ["sphere", 10], ["cube", 15], ["cube", 20], ["cone", 15], ["square", 10]]) {
+        const file = areaImage({ type, size, unit: "feet" });
+        const source = readFileSync(join(__dirname, "img", file), "utf8");
+        assert.doesNotMatch(source, /Grid\s*:/i, file);
+        const card = buildSpellBack({
+            name: "Test Area", level: 0, shape_type: type, shape_size: size,
+            range_text: "Self", casting_time: "Action", duration: "Instantaneous", desc: ""
+        }, {});
+        const image = card.querySelector('[data-field="art"]').children.find(node => node.tag === "img");
+        assert.equal(image.src, `./img/${file}?v=html-grid-legend`);
+        assert.equal(card.querySelector('[data-field="grid-legend"]').textContent, "Grid: 5 feet / square");
     }
 });
 
