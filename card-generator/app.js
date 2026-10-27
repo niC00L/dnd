@@ -1,83 +1,10 @@
-const DATA_URL = "./data/spells-2024-srd.json";
+const SPELL_DATA_URLS = ["./data/spells-2024-srd.json", "./data/spells-2024-phb-supplement.json"];
 const SELECTION_STORAGE_KEY = "card-generator.selected-spells";
 const CUSTOM_CARDS_STORAGE_KEY = "card-generator.custom-cards";
 const CUSTOM_CARDS_DATA_URL = "./data/custom-spells.json";
 const SPELL_CLASSES = ["Artificer", "Bard", "Cleric", "Druid", "Paladin", "Ranger", "Sorcerer", "Warlock", "Wizard"];
 const SPELL_SCHOOLS = ["Abjuration", "Conjuration", "Divination", "Enchantment", "Evocation", "Illusion", "Necromancy", "Transmutation"];
 const CASTING_TIMES = ["Action", "Bonus Action", "Reaction", "1 minute", "10 minutes", "1 hour", "8 hours", "12 hours", "24 hours", "Special"];
-const TEMPLATE_ONLY_SPELLS = [{
-    key: "local-word-of-radiance",
-    name: "Word of Radiance",
-    level: 0,
-    school: { name: "Evocation" },
-    classes: [{ name: "Cleric" }],
-    desc: "Burning radiance erupts from you in a 5-foot Emanation. Each creature of your choice that you can see in it must succeed on a Constitution saving throw or take 1d6 Radiant damage.",
-    higher_level: "The damage increases by 1d6 when you reach levels 5 (2d6), 11 (3d6), and 17 (4d6).",
-    range_text: "Self",
-    range: 0,
-    shape_size: 5,
-    shape_size_unit: "feet",
-    shape_type: "emanation",
-    casting_time: "action",
-    duration: "instantaneous",
-    saving_throw_ability: "constitution",
-    attack_roll: false,
-    damage_roll: "1d6",
-    damage_types: ["radiant"],
-    verbal: true,
-    somatic: false,
-    material: true,
-    material_specified: "",
-    concentration: false,
-    ritual: false
-}, {
-    key: "local-thunderclap",
-    name: "Thunderclap",
-    level: 0,
-    school: { name: "Evocation" },
-    classes: ["Bard", "Druid", "Sorcerer", "Warlock", "Wizard"].map(name => ({ name })),
-    desc: "Create a thunderous burst audible within 100 feet. Each creature other than you within 5 feet must make a Constitution saving throw, taking 1d6 Thunder damage on a failure.",
-    higher_level: "Damage increases by 1d6 at character levels 5, 11, and 17.",
-    range_text: "Self",
-    range: 5,
-    shape_size: 5,
-    shape_size_unit: "feet",
-    shape_type: "sphere",
-    casting_time: "action",
-    duration: "instantaneous",
-    saving_throw_ability: "constitution",
-    attack_roll: false,
-    damage_roll: "1d6",
-    damage_types: ["thunder"],
-    verbal: false,
-    somatic: true,
-    material: false,
-    material_specified: "",
-    concentration: false,
-    ritual: false
-}, {
-    key: "local-toll-the-dead",
-    name: "Toll the Dead",
-    level: 0,
-    school: { name: "Necromancy" },
-    classes: ["Cleric", "Warlock", "Wizard"].map(name => ({ name })),
-    desc: "A distant bell sounds to one creature within range. It must make a Wisdom saving throw, taking 1d8 Necrotic damage on a failure, or 1d12 if it is missing any Hit Points.",
-    higher_level: "The damage increases to 2d8 or 2d12 at level 5, 3d8 or 3d12 at level 11, and 4d8 or 4d12 at level 17.",
-    range_text: "60 feet",
-    range: 60,
-    casting_time: "action",
-    duration: "instantaneous",
-    saving_throw_ability: "wisdom",
-    attack_roll: false,
-    damage_roll: "1d8 or 1d12",
-    damage_types: ["necrotic"],
-    verbal: true,
-    somatic: true,
-    material: false,
-    material_specified: "",
-    concentration: false,
-    ritual: false
-}];
 const ICON_URL = "./img/icons/";
 const DAMAGE_ICONS = new Set([
     "acid", "bludgeoning", "cold", "fire", "force", "lightning", "necrotic",
@@ -1237,15 +1164,20 @@ function renderPrintPages() {
     }
 }
 
+async function loadSpellLibrary() {
+    const libraries = await Promise.all(SPELL_DATA_URLS.map(async url => {
+        const response = await fetch(url);
+        if (!response.ok) throw new Error(`Data request failed (${response.status}): ${url}`);
+        const spells = await response.json();
+        if (!Array.isArray(spells)) throw new Error(`The spell data must be a JSON array: ${url}`);
+        return spells.filter(spell => spell && spell.key && spell.name && Number.isInteger(spell.level));
+    }));
+    return libraries.flat();
+}
+
 async function loadSpells() {
     try {
-        const response = await fetch(DATA_URL);
-        if (!response.ok) throw new Error(`Data request failed (${response.status}).`);
-        const spells = await response.json();
-        if (!Array.isArray(spells)) throw new Error("The spell data must be a JSON array.");
-        state.spells = spells.filter(spell => spell && spell.key && spell.name && Number.isInteger(spell.level));
-        const knownNames = new Set(state.spells.map(spell => spell.name));
-        state.spells.push(...TEMPLATE_ONLY_SPELLS.filter(spell => !knownNames.has(spell.name)));
+        state.spells = await loadSpellLibrary();
         state.spells.push(...await loadEquipment());
         await restoreCustomCards();
         state.spells.sort((a, b) => a.name.localeCompare(b.name));

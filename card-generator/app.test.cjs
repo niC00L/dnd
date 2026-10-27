@@ -19,7 +19,7 @@ class Element {
     getAttribute(name) { return this.attributes[name]; }
 }
 
-function app(size = "half", mode = "none", measureFits = null) {
+function app(size = "half", mode = "none", measureFits = null, fetch = undefined) {
     const printRoot = new Element("div");
     const backTemplate = {
         content: {
@@ -56,9 +56,95 @@ function app(size = "half", mode = "none", measureFits = null) {
         buildBack = (spell, part) => Object.assign(document.createElement("back"), { key: spell.key, part });
         ({ state, printRoot: elements.printRoot, cardSizeSettings, renderPrintPages,
            spellArea, areaImage, areaLabel, buildAreaDiagram, buildSpellBack, backTargetCount, backKeywordText,
-           isCustomEquipment, isEquipment, equipmentStats, equipmentImage, getSpellCardParts, keywordContent });
-    `, { document, crypto: webcrypto, console, measureFits });
+           isCustomEquipment, isEquipment, equipmentStats, equipmentImage, getSpellCardParts, keywordContent,
+           loadSpellLibrary });
+    `, { document, crypto: webcrypto, console, measureFits, fetch });
 }
+
+test("Built-in database covers the 2024 PHB cantrip and level-1 lists for the four requested classes", () => {
+    // Checked against 5etools' XPHB spell and generated class lookup data, October 27, 2026.
+    // Tasha's Hideous Laughter uses its existing SRD name, Hideous Laughter.
+    const expected = {
+        Bard: [
+            "Blade Ward|Dancing Lights|Friends|Light|Mage Hand|Mending|Message|Minor Illusion|Prestidigitation|Starry Wisp|Thunderclap|True Strike|Vicious Mockery",
+            "Animal Friendship|Bane|Charm Person|Color Spray|Command|Comprehend Languages|Cure Wounds|Detect Magic|Disguise Self|Dissonant Whispers|Faerie Fire|Feather Fall|Healing Word|Heroism|Identify|Illusory Script|Longstrider|Silent Image|Sleep|Speak with Animals|Hideous Laughter|Thunderwave|Unseen Servant"
+        ],
+        Cleric: [
+            "Guidance|Light|Mending|Resistance|Sacred Flame|Spare the Dying|Thaumaturgy|Toll the Dead|Word of Radiance",
+            "Bane|Bless|Command|Create or Destroy Water|Cure Wounds|Detect Evil and Good|Detect Magic|Detect Poison and Disease|Guiding Bolt|Healing Word|Inflict Wounds|Protection from Evil and Good|Purify Food and Drink|Sanctuary|Shield of Faith"
+        ],
+        Paladin: [
+            "",
+            "Bless|Command|Compelled Duel|Cure Wounds|Detect Evil and Good|Detect Magic|Detect Poison and Disease|Divine Favor|Divine Smite|Heroism|Protection from Evil and Good|Purify Food and Drink|Searing Smite|Shield of Faith|Thunderous Smite|Wrathful Smite"
+        ],
+        Warlock: [
+            "Blade Ward|Chill Touch|Eldritch Blast|Friends|Mage Hand|Mind Sliver|Minor Illusion|Poison Spray|Prestidigitation|Thunderclap|Toll the Dead|True Strike",
+            "Armor of Agathys|Arms of Hadar|Bane|Charm Person|Comprehend Languages|Detect Magic|Expeditious Retreat|Hellish Rebuke|Hex|Illusory Script|Protection from Evil and Good|Speak with Animals|Hideous Laughter|Unseen Servant|Witch Bolt"
+        ]
+    };
+    const spells = ["spells-2024-srd.json", "spells-2024-phb-supplement.json"]
+        .flatMap(file => JSON.parse(readFileSync(join(__dirname, "data", file), "utf8").replace(/^\uFEFF/, "")));
+    assert.equal(new Set(spells.map(spell => spell.key)).size, spells.length, "Unique spell keys");
+    assert.equal(new Set(spells.map(spell => spell.name)).size, spells.length, "No duplicate spell names");
+    for (const [className, lists] of Object.entries(expected)) {
+        for (const [level, names] of lists.entries()) {
+            const actual = spells.filter(spell => spell.level === level
+                && spell.classes.some(item => item.name === className)).map(spell => spell.name).sort();
+            assert.deepEqual(actual, names ? names.split("|").sort() : [], `${className}, level ${level}`);
+        }
+    }
+});
+
+test("Spell library loader includes both local databases and preserves migrated selection keys", async () => {
+    const requests = [];
+    const { loadSpellLibrary, spellArea, getSpellCardParts } = app("half", "none", () => true, async url => {
+        requests.push(url);
+        return {
+            ok: true,
+            json: async () => JSON.parse(readFileSync(join(__dirname, url), "utf8").replace(/^\uFEFF/, ""))
+        };
+    });
+    const spells = await loadSpellLibrary();
+    assert.deepEqual(requests, ["./data/spells-2024-srd.json", "./data/spells-2024-phb-supplement.json"]);
+    for (const key of ["local-word-of-radiance", "local-thunderclap", "local-toll-the-dead"]) {
+        assert.equal(spells.filter(spell => spell.key === key).length, 1, key);
+    }
+    const supplementKeys = new Set(JSON.parse(readFileSync(
+        join(__dirname, "data", "spells-2024-phb-supplement.json"), "utf8")).map(spell => spell.key));
+    const supplement = spells.filter(spell => supplementKeys.has(spell.key));
+    assert.equal(supplement.length, 11);
+    for (const spell of supplement) {
+        assert.ok(spell.desc.length > 0, spell.name);
+        assert.ok(spell.classes.length > 0, spell.name);
+        assert.match(spell.document.permalink, /^https:\/\/5e\.tools\/spells\.html#/);
+        for (const field of ["verbal", "somatic", "material", "concentration", "ritual", "attack_roll"]) {
+            assert.equal(typeof spell[field], "boolean", `${spell.name}: ${field}`);
+        }
+        assert.equal(getSpellCardParts(spell)[0].description, spell.desc);
+        if (spell.shape_type) assert.equal(spellArea(spell).type, "emanation", spell.name);
+        if (spell.material) assert.ok(spell.material_specified.length > 0, spell.name);
+    }
+    const byName = name => spells.find(spell => spell.name === name);
+    assert.equal(byName("Armor of Agathys").casting_time, "bonus action");
+    assert.equal(byName("Thunderous Smite").concentration, false);
+    assert.equal(byName("Wrathful Smite").concentration, false);
+    assert.deepEqual(Array.from(byName("Wrathful Smite").damage_types), ["necrotic"]);
+    assert.equal(byName("Blade Ward").concentration, true);
+    assert.equal(byName("Friends").saving_throw_ability, "wisdom");
+    assert.equal(byName("Word of Radiance").material_specified, "a sunburst token");
+});
+
+test("Spell library loader rejects unavailable or malformed supplemental data", async () => {
+    for (const response of [
+        { ok: false, status: 404 },
+        { ok: true, json: async () => ({}) },
+        { ok: true, json: async () => { throw new SyntaxError("Invalid JSON"); } }
+    ]) {
+        const { loadSpellLibrary } = app("half", "none", null, async url =>
+            url.includes("supplement") ? response : { ok: true, json: async () => [] });
+        await assert.rejects(loadSpellLibrary, /404.*supplement|JSON array.*supplement|Invalid JSON/);
+    }
+});
 
 test("Descriptions are measured whole before splitting and compact spacing is opt-in", () => {
     const spell = { key: "test-fit", name: "Test", desc: "A complete sentence. ".repeat(50).trim() };

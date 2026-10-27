@@ -37,8 +37,25 @@ images if storage is full.
 ### Data and artwork sources
 
 See [Sources and licenses](./credits.html) for attribution and license links.
-Rules are sourced from Open5e's SRD 2024 data under CC BY 4.0. Equipment data
-and artwork are local files: printing does not depend on live source APIs.
+SRD rules are sourced from Open5e's SRD 2024 data under CC BY 4.0.
+The separate [2024 PHB supplement](./data/spells-2024-phb-supplement.json)
+contains original rules summaries, not copied book text or SRD-licensed entries.
+Together the two spell files cover every cantrip and level-1 spell on the
+2024 Player's Handbook base lists for Bard, Cleric, Paladin, and Warlock.
+Subclass spells, feats, older editions, and other supplements are outside this
+coverage check. Paladins have no cantrips on their base spell list.
+
+Coverage was checked against [5etools](https://5e.tools/spells.html) on October 27,
+2026, using its XPHB spell data and XPHB base-class lookup. Eight missing spells
+were added: Armor of Agathys, Arms of Hadar, Blade Ward, Compelled Duel, Friends,
+Mind Sliver, Thunderous Smite, and Wrathful Smite. Word of Radiance, Thunderclap,
+and Toll the Dead were moved from app code into the supplement, retaining their
+existing keys for saved selections. Thunderclap now uses the 2024 Emanation area.
+Tasha's Hideous Laughter is already included under its SRD name, **Hideous Laughter**.
+No live requests to 5etools are made by the app.
+
+Spell data, equipment data, and artwork are local files: printing does not depend
+on live source APIs.
 Magic-item compact weapon stats show the underlying weapon profile; consult
 the description for magical bonuses and additional rules. Unlisted magic-item
 prices are shown as "Not listed".
