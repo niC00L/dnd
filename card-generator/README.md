@@ -40,10 +40,14 @@ See [Sources and licenses](./credits.html) for attribution and license links.
 SRD rules are sourced from Open5e's SRD 2024 data under CC BY 4.0.
 The separate [2024 PHB supplement](./data/spells-2024-phb-supplement.json)
 contains original rules summaries, not copied book text or SRD-licensed entries.
-Together the two spell files cover every spell, from cantrips through level 9, on the
-2024 Player's Handbook base lists for Bard, Cleric, Paladin, and Warlock.
+Together the two spell files contain all **391 spells** in the 2024 Player's
+Handbook, from cantrips through level 9, covering the base lists for **Bard,
+Cleric, Druid, Paladin, Ranger, Sorcerer, Warlock, and Wizard**.
 Subclass spells, feats, older editions, and other supplements are outside this
-coverage check. Paladins have no cantrips or spells above level 5 on their base list.
+coverage check. Paladins and Rangers have no cantrips or spells above level 5 on
+their base lists. Artificer is not in the 2024 PHB and is not included in this
+coverage claim; classes without base spell lists gain spells through features
+such as subclasses or feats.
 
 Coverage was checked against [5etools](https://5e.tools/spells.html) on October 27,
 2026, using its XPHB spell data and XPHB base-class lookup. Eight missing spells
@@ -53,10 +57,15 @@ and Toll the Dead were moved from app code into the supplement, retaining their
 existing keys for saved selections. Thunderclap now uses the 2024 Emanation area.
 The supplement also adds 25 missing higher-level spells: two at level 2, eight at
 level 3, four at level 4, seven at level 5, three at level 6, and one at level 7.
-The level-8 and level-9 lists were already complete. Summon Aberration, Summon
-Celestial, Summon Fey, Summon Fiend, and Summon Undead reference the required
-2024 spirit stat blocks rather than reproducing them, matching Summon Dragon
-in the existing library.
+The level-8 and level-9 lists for those four classes were already complete.
+Completing the remaining class lists added 15 more spells: Arcane Vigor, Beast
+Sense, Conjure Barrage, Conjure Volley, Cordon of Arrows, Grasping Vine, Hail of
+Thorns, Lightning Arrow, Steel Wind Strike, Summon Beast, Summon Construct,
+Summon Elemental, Swift Quiver, Telepathy, and Thorn Whip. The supplement now
+contains 51 entries. Summoning spells reference the required 2024 spirit stat
+blocks rather than reproducing them, matching Summon Dragon in the existing library.
+Exact class-list coverage at each spell level, unique names and keys, and
+the 391-spell catalog total are checked by the offline tests.
 Named spells already available under SRD aliases are not duplicated; for example,
 Tasha's Hideous Laughter is **Hideous Laughter**, Leomund's Tiny Hut is **Tiny Hut**,
 and Mordenkainen's Sword is **Arcane Sword**.
@@ -124,8 +133,10 @@ to fit the same frame. The cutoff uses full diameter for spheres, emanations,
 and cylinders, or side/length for other shapes. Labels remain visible beyond
 the grid where needed. Missing area diagrams are generated
 as inline SVG for cones, cubes, cylinders, emanations, spheres, squares, and
-lines. Both supplied and generated diagrams include their grid scale and a
-size heading above the grid. The red back-card Area frame uses the same size
+lines. Grid scales are HTML captions in the back-card template, styled with
+`.back-grid-legend` in `app.css`, rather than text embedded in the SVGs.
+Both supplied and generated diagrams include a size heading above the grid.
+The red back-card Area frame uses the same size
 wording, including an explicit radius for spheres. Emanations use generated
 diagrams so their headings identify them as Emanations rather than Spheres.
 Sphere and cylinder sizes represent radii, cube/square sizes represent side
