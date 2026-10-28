@@ -1,0 +1,224 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Class Board Template</title>
+    <link rel="stylesheet" href="../board.css">
+    <style>
+        .back-side {
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            grid-template-rows: minmax(0, 1fr) auto;
+        }
+
+        .back-side .prepared-spells {
+            display: grid;
+            min-height: 0;
+            grid-template-rows: auto minmax(0, 1fr);
+            padding-top: calc(var(--reference-unit) * 40);
+        }
+
+        .back-side .prepared-spells > h2 {
+            --heading-height: calc(var(--reference-unit) * 130 - 4px);
+            display: grid;
+            height: var(--heading-height);
+            place-items: center;
+            margin: 0 0 calc(var(--reference-unit) * 20);
+            border: solid transparent;
+            border-width: calc(var(--heading-height) * 10 / 159) calc(var(--heading-height) * 100 / 159);
+            border-image: url("../assets/ability-heading-frame.png") 10 100 stretch;
+            border-image-width: calc(var(--heading-height) * 10 / 159) calc(var(--heading-height) * 100 / 159);
+            background: #815b25;
+            background-clip: padding-box;
+            color: #fffdf3;
+            font-size: calc(var(--reference-unit) * 39);
+        }
+
+        .back-side .character-columns {
+            grid-column: auto;
+            grid-row: auto;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            column-gap: calc(var(--reference-unit) * 20);
+        }
+
+        .back-side .cards-column {
+            grid-column: 2;
+            grid-row: 1;
+        }
+    </style>
+</head>
+
+<body>
+    <main class="page" aria-label="A4 landscape class board">
+        <article class="board back-side" aria-label="Prepared spells and notes">
+            <section class="prepared-spells" aria-labelledby="prepared-spells-title">
+                <h2 id="prepared-spells-title"><span>Prepared spells</span></h2>
+            <div class="character-columns">
+                <div class="board-column identity-column">
+
+                    <section class="panel" aria-labelledby="cantrips-title">
+                        <h2 id="cantrips-title">Cantrips</h2>
+                        <div class="shared-writing-lines proficiency-writing-lines">
+                            <p>&nbsp;</p>
+                            <p>&nbsp;</p>
+                            <p>&nbsp;</p>
+                            <p>&nbsp;</p>
+                            <p>&nbsp;</p>
+                            <p>&nbsp;</p>
+                            <p>&nbsp;</p>
+                            <p>&nbsp;</p>
+                            <p>&nbsp;</p>
+                            <p>&nbsp;</p>
+                            <p>&nbsp;</p>
+                        </div>
+                    </section>
+                    <section class="hit-points panel proficiency-lines" aria-label="Initiative, speed, and hit points">
+                        <h2>Level 1</h2>
+                        <div class="shared-writing-lines proficiency-writing-lines">
+                            <p>&nbsp;</p>
+                            <p>&nbsp;</p>
+                            <p>&nbsp;</p>
+                            <p>&nbsp;</p>
+                            <p>&nbsp;</p>
+                            <p>&nbsp;</p>
+                            <p>&nbsp;</p>
+                            <p>&nbsp;</p>
+                            <p>&nbsp;</p>
+                            <p>&nbsp;</p>
+                            <p>&nbsp;</p>
+                        </div>
+                    </section>
+                    <section class="hit-points panel proficiency-lines" aria-label="Initiative, speed, and hit points">
+                        <h2>Level 2</h2>
+                        <div class="shared-writing-lines proficiency-writing-lines">
+                            <p>&nbsp;</p>
+                            <p>&nbsp;</p>
+                            <p>&nbsp;</p>
+                            <p>&nbsp;</p>                            
+                            <p>&nbsp;</p>
+                            <p>&nbsp;</p>
+                            <p>&nbsp;</p>
+                            <p>&nbsp;</p>
+                            <p>&nbsp;</p>
+                            <p>&nbsp;</p>
+                            <p>&nbsp;</p>
+                            <p>&nbsp;</p>
+                        </div>
+                    </section>
+                </div>
+
+                <div class="board-column combat-column stats-column">
+
+                    <section class="hit-points panel proficiency-lines" aria-label="Initiative, speed, and hit points">
+                        <h2>Level 3</h2>
+                        <div class="shared-writing-lines proficiency-writing-lines">
+                            <p>&nbsp;</p>
+                            <p>&nbsp;</p>
+                            <p>&nbsp;</p>
+                            <p>&nbsp;</p>
+                            <p>&nbsp;</p>
+                            <p>&nbsp;</p>
+                            <p>&nbsp;</p>
+                            <p>&nbsp;</p>
+                            <p>&nbsp;</p>
+                            <p>&nbsp;</p>
+                            <p>&nbsp;</p>
+                        </div>
+                    </section>
+<section class="hit-points panel proficiency-lines" aria-label="Initiative, speed, and hit points">
+                        <h2>Level 4</h2>
+                        <div class="shared-writing-lines proficiency-writing-lines">
+                            <p>&nbsp;</p>
+                            <p>&nbsp;</p>
+                            <p>&nbsp;</p>
+                            <p>&nbsp;</p>
+                            <p>&nbsp;</p>
+                            <p>&nbsp;</p>
+                            <p>&nbsp;</p>
+                            <p>&nbsp;</p>
+                            <p>&nbsp;</p>
+                            <p>&nbsp;</p>
+                            <p>&nbsp;</p>
+                        </div>
+                    </section>
+
+<section class="hit-points panel proficiency-lines" aria-label="Initiative, speed, and hit points">
+                        <h2>Level 5</h2>
+                        <div class="shared-writing-lines proficiency-writing-lines">
+                            <p>&nbsp;</p>
+                            <p>&nbsp;</p>
+                            <p>&nbsp;</p>
+                            <p>&nbsp;</p>
+                            <p>&nbsp;</p>
+                            <p>&nbsp;</p>
+                            <p>&nbsp;</p>
+                            <p>&nbsp;</p>
+                            <p>&nbsp;</p>
+                            <p>&nbsp;</p>
+                            <p>&nbsp;</p>
+                            <p>&nbsp;</p>
+                        </div>
+                    </section>
+                </div>
+            </div>
+            </section>
+            <div class="board-column cards-column">                
+                <section class="feature-tracker-panel panel" aria-labelledby="features-panel-title">                   
+                    <h2 id="features-panel-title">Notes</h2>
+                    <div class="shared-writing-lines">
+                        <p>&nbsp;</p>
+                        <p>&nbsp;</p>
+                        <p>&nbsp;</p>
+                        <p>&nbsp;</p>
+                        <p>&nbsp;</p>
+                        <p>&nbsp;</p>
+                        <p>&nbsp;</p>
+                        <p>&nbsp;</p>
+                        <p>&nbsp;</p>
+                        <p>&nbsp;</p>
+                        <p>&nbsp;</p>
+                        <p>&nbsp;</p>
+                        <p>&nbsp;</p>
+                        <p>&nbsp;</p>
+                        <p>&nbsp;</p>
+                        <p>&nbsp;</p>
+                        <p>&nbsp;</p>
+                        <p>&nbsp;</p>
+                        <p>&nbsp;</p>
+                        <p>&nbsp;</p>
+                        <p>&nbsp;</p>
+                        <p>&nbsp;</p>
+                        <p>&nbsp;</p>
+                        <p>&nbsp;</p>
+                        <p>&nbsp;</p>
+                        <p>&nbsp;</p>
+                        <p>&nbsp;</p>
+                        <p>&nbsp;</p>
+                        <p>&nbsp;</p>
+                        <p>&nbsp;</p>
+                        <p>&nbsp;</p>
+                        <p>&nbsp;</p>
+                        <p>&nbsp;</p>
+                        <p>&nbsp;</p>
+                        <p>&nbsp;</p>
+                        <p>&nbsp;</p>
+                        <p>&nbsp;</p>
+                        <p>&nbsp;</p>
+                        <p>&nbsp;</p>
+                        <p>&nbsp;</p>
+                        <p>&nbsp;</p>
+                        <p>&nbsp;</p>
+                    </div>
+                </section>
+            </div>
+            <footer class="legal">
+                This is unofficial Fan Content permitted under the Fan Content Policy. Portions of this work are ©
+                Wizards of the Coast LLC and used under the System Reference Document 5.2.1 (CC-BY-4.0). Not endorsed by
+                Wizards of the Coast.
+            </footer>
+        </article>
+    </main>
+</body>
+
+</html>

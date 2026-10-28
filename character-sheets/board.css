@@ -1395,6 +1395,61 @@ p.hp-value {
     line-height: 1.25;
 }
 
+.back-side {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-rows: minmax(0, 1fr) auto;
+}
+
+.back-side .prepared-spells {
+    display: grid;
+    min-height: 0;
+    grid-template-rows: auto minmax(0, 1fr);
+    padding-top: calc(var(--reference-unit) * 40);
+}
+
+.back-side .prepared-spells > h2 {
+    --heading-height: calc(var(--reference-unit) * 130 - 4px);
+    display: grid;
+    height: var(--heading-height);
+    place-items: center;
+    margin: 0 0 calc(var(--reference-unit) * 20);
+    border: solid transparent;
+    border-width: calc(var(--heading-height) * 10 / 159) calc(var(--heading-height) * 100 / 159);
+    border-image: url("assets/ability-heading-frame.png") 10 100 stretch;
+    border-image-width: calc(var(--heading-height) * 10 / 159) calc(var(--heading-height) * 100 / 159);
+    background: #815b25;
+    background-clip: padding-box;
+    color: #fffdf3;
+    font-size: calc(var(--reference-unit) * 39);
+}
+
+.back-side.themed-board .prepared-spells > h2 {
+    border-image-source: url("assets/ability-heading-frame-overlay.png");
+    background-color: var(--board-color);
+    background-image: var(--board-texture);
+    background-size: calc(var(--reference-unit) * 256) calc(var(--reference-unit) * 256);
+}
+
+.back-side .character-columns {
+    grid-column: auto;
+    grid-row: auto;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    column-gap: calc(var(--reference-unit) * 20);
+}
+
+.back-side .cards-column {
+    grid-column: 2;
+    grid-row: 1;
+}
+
+.back-side.full-caster {
+    grid-template-columns: minmax(0, 3fr) minmax(0, 1fr);
+}
+
+.back-side.full-caster .character-columns {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
 @media print {
     html,
     body {
