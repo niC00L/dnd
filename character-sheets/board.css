@@ -163,7 +163,7 @@ body {
 
 .masthead-title {
     display: grid;
-    grid-template-columns: auto minmax(0, 1fr) auto;
+    grid-template-columns: auto auto auto;
     align-items: center;
     justify-content: center;
     gap: calc(var(--reference-unit) * 20);
@@ -196,6 +196,7 @@ body {
 .character-details {
     background-color: white;
     margin-right: calc(var(--reference-unit) * -100);
+    width: calc(var(--reference-unit)*700);
     margin-top: calc(var(--reference-unit) * 41);
     height: calc(var(--reference-unit) * 100);
     border: calc(var(--reference-unit) * 9) solid var(--gold);
@@ -380,7 +381,7 @@ body {
     display: flex;
     align-items: flex-end;
     justify-content: center;
-    margin: 0 0 2mm;
+    margin: 0 0 calc(var(--reference-unit) * 10);
 }
 
 p.modifier {
@@ -898,7 +899,8 @@ p.hp-value {
     display: flex;
     align-items: center;
     justify-content: space-around;
-    margin-top: calc(var(--reference-unit) * 10);
+    margin-top: calc(var(--reference-unit) * 18);
+    margin-bottom: calc(var(--reference-unit) * -10);
     color: #784b00;
     font-size: calc(var(--reference-unit) * 25);
     font-weight: 700;
@@ -920,7 +922,7 @@ p.hp-value {
 }
 
 .death-saves-group strong {
-    font-size: calc(var(--reference-unit) * 20);
+    font-size: calc(var(--reference-unit) * 25);
 }
 
 
