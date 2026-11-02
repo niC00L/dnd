@@ -1,0 +1,78 @@
+description:
+Animate Dead
+Bestow Curse
+Elemental Weapon
+Gaseous Form
+Glyph of Warding
+Magic Circle
+Major Image
+Meld into Stone
+Confusion
+Control Water
+Animate Objects
+Dominate Person
+Dream
+Hallow
+Modify Memory
+Planar Binding
+Scrying
+Teleportation Circle
+Create Undead
+Eyebite
+Forbiddance
+Guards and Wards
+Mass Suggestion
+Planar Ally
+Programmed Illusion
+Etherealness 
+Forcecage
+Magnificent Mansion
+Prismatic Spray
+Symbol
+TeleportAntipathy/Sympathy
+Control Weather
+Dominate Monster
+Earthquake
+Astral Projection
+Gate
+Imprisonment
+Prismatic Wall
+True Polymorph
+
+
+not our:
+Elementalism
+Chromatic Orb
+Find Familiar
+Alter Self
+Flaming Sphere
+Dominate Beast
+Private Sanctum
+Arcane Hand
+Conjure Elemental
+Creation
+Telekinesis
+Wall of Stone
+Contingency
+Freezing Sphere
+Magic Jar
+Move Earth
+Wall of Ice
+Wall of Thorns
+Delayed Blast Fireball
+Tsunami
+Shapechange
+Storm of Vengeance
+Wish
+
+
+
+heading:
+Freedom of Movement
+Greater Restoration
+Power Word Fortify
+Expeditious Retreat
+Ray of Enfeeblement
+Conjure Minor Elementals
+Commune with Nature
+Jallarzi's Storm of Radiance
