@@ -215,30 +215,32 @@
     <template id="equipment-card-template">
         <article class="spell-card equipment-card">
             <div class="equipment-weight" title="Weight"><img src="./img/icons/icon-weight.svg" alt=""><span></span></div>
-            <h2 class="card-title equipment-title"></h2>
+            <h2 class="card-title back-title equipment-title"></h2>
             <div class="equipment-coin"><span class="equipment-coin-amount"></span><span class="equipment-coin-unit"></span></div>
-            <img class="equipment-illustration" alt="">
-            <div class="equipment-front-summary">
-                <div class="equipment-damage"><span></span><strong></strong></div>
-                <div class="equipment-feature"><img src="./img/icons/icon-feature.svg" alt="Properties"><span></span></div>
-                <div class="equipment-range"><img src="./img/icons/icon-thrown.svg" alt="Range"><span></span></div>
+            <div class="back-art"><img class="equipment-illustration" alt=""></div>
+            <div class="back-summary equipment-front-summary">
+                <div class="back-range equipment-damage"><span></span><strong></strong></div>
+                <div class="back-keywords">
+                    <div class="equipment-feature"><img src="./img/icons/icon-feature.svg" alt="Properties"><span></span></div>
+                    <div class="equipment-range"><img src="./img/icons/icon-thrown.svg" alt="Range"><span></span></div>
+                </div>
             </div>
             <p class="card-description" hidden></p>
             <div class="card-upgrade" hidden></div>
-            <footer class="equipment-footer"><strong></strong><span class="equipment-category"></span></footer>
+            <footer class="back-footer equipment-footer"><strong></strong><span class="equipment-category"></span></footer>
         </article>
     </template>
 
     <template id="equipment-back-template">
-        <article class="spell-card card-back equipment-back">
-            <h2 class="card-title equipment-back-title"></h2>
-            <div class="equipment-back-content">
-                <div class="equipment-back-stats"></div>
-                <div class="equipment-back-ornament" aria-hidden="true"></div>
+        <article class="spell-card equipment-back has-no-lower-content">
+            <div class="card-inner equipment-back-content">
+                <header class="card-header"><h2 class="card-title equipment-back-title"></h2></header>
+                <div class="card-keywords equipment-back-stats"></div>
+                <div class="card-ornament equipment-back-ornament" aria-hidden="true"></div>
                 <p class="card-description"></p>
                 <div class="card-upgrade" hidden></div>
+                <footer class="card-footer equipment-back-footer"><strong></strong><span></span></footer>
             </div>
-            <footer class="equipment-back-footer"><strong></strong><span></span></footer>
         </article>
     </template>
 

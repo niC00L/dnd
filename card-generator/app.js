@@ -411,7 +411,7 @@ function descriptionFits(spell, part) {
     cardMeasurementRoot.append(card);
     const description = card.querySelector(".card-description");
     const upgrade = card.querySelector(".card-upgrade");
-    const lowerContent = isEquipment(spell) ? null
+    const lowerContent = isEquipment(spell) ? card.querySelector(".equipment-back-footer")
         : part.upgrade ? upgrade : card.querySelector(spell.material_specified ? ".card-material-note" : ".card-footer");
     const fits = description.scrollHeight <= description.clientHeight
         && (!lowerContent || description.getBoundingClientRect().bottom <= lowerContent.getBoundingClientRect().top)

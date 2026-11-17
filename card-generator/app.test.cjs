@@ -762,6 +762,37 @@ test("Equipment template renders matching rarity fronts and backs with coin, art
     assert.equal(equipmentCategory({ ...source, weapon_type: "Martial", properties: "Ammunition" }), "Martial Ranged");
 });
 
+test("Equipment templates reuse spell typography, divider, illustrated summary, and red-panel layout", () => {
+    const html = readFileSync(join(__dirname, "index.html"), "utf8");
+    const source = readFileSync(join(__dirname, "app.js"), "utf8");
+    const css = readFileSync(join(__dirname, "app.css"), "utf8");
+    assert.match(source, /isEquipment\(spell\) \? card\.querySelector\("\.equipment-back-footer"\)/);
+    const front = html.split('<template id="equipment-card-template">')[1].split('</template>')[0];
+    const back = html.split('<template id="equipment-back-template">')[1].split('</template>')[0];
+    for (const classes of ["card-title back-title equipment-title", "back-summary equipment-front-summary",
+        "back-range equipment-damage", "back-keywords", "back-footer equipment-footer"]) {
+        assert.ok(front.includes(`class="${classes}"`), classes);
+    }
+    for (const classes of ["card-inner equipment-back-content", "card-header",
+        "card-keywords equipment-back-stats", "card-ornament equipment-back-ornament",
+        "card-footer equipment-back-footer"]) {
+        assert.ok(back.includes(`class="${classes}"`), classes);
+    }
+    const { buildEquipmentBack } = app();
+    const card = JSON.parse(readFileSync(join(__dirname, "data", "equipment-2024-srd.json"), "utf8"))
+        .find(card => card.name === "Dagger");
+    const rendered = buildEquipmentBack(card, { description: "A blade.", continuation: false });
+    assert.equal(rendered.querySelector(".equipment-back-title").style.fontSize, "");
+    for (const stat of rendered.querySelector(".equipment-back-stats").children) {
+        assert.match(stat.className, /\bkeyword-item\b/);
+        assert.ok(stat.children[1].dataset.field);
+    }
+    assert.match(css, /\.equipment-title,\s*\.equipment-back-title\s*\{\s*text-align:\s*center;/);
+    assert.match(css, /\.equipment-back \.card-keywords\.equipment-back-stats\s*\{\s*grid-template-columns:\s*minmax\(0, 1\.3fr\) minmax\(0, 1fr\) minmax\(0, \.7fr\);/);
+    assert.match(css, /\.equipment-front-summary \.equipment-damage\s*\{[^}]*width:\s*max-content;[^}]*max-width:\s*44%;/s);
+    assert.match(css, /\.equipment-front-summary \.back-keywords\s*\{[^}]*justify-content:\s*flex-end;[^}]*gap:\s*2\.5cqw;/s);
+});
+
 test("Equipment properties format ranges without breaking parenthesized values", () => {
     const { equipmentProperties, buildEquipmentBack } = app();
     const card = JSON.parse(readFileSync(join(__dirname, "data", "equipment-2024-srd.json"), "utf8"))

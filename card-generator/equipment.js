@@ -96,7 +96,7 @@ function equipmentStats(card) {
 function equipmentTitle(card, part, title) {
     const name = `${card.name}${part.continuation ? " (CONT.)" : ""}`;
     title.textContent = name;
-    title.style.fontSize = `${Math.max(4, Math.min(name.length > 18 ? 7 : 9, 190 / name.length))}cqw`;
+    title.style.fontSize = "";
 }
 
 function equipmentProperties(card, front = false) {
@@ -114,13 +114,15 @@ function equipmentProperties(card, front = false) {
 function appendEquipmentStats(root, card) {
     for (const [label, text] of equipmentStats(card)) {
         const item = document.createElement("div");
+        item.className = "keyword-item";
         const heading = document.createElement("strong");
         heading.textContent = label;
         const value = document.createElement("span");
+        value.dataset.field = label.toLowerCase().replaceAll(" ", "-");
         value.textContent = label === "Properties"
             ? text.length > 110 ? "See description" : equipmentProperties(card) || "None"
             : text;
-        if (label === "Properties") item.className = "equipment-properties-stat";
+        if (label === "Properties") item.className += " equipment-properties-stat";
         item.append(heading, value);
         root.append(item);
     }
@@ -136,6 +138,7 @@ function buildEquipmentCard(card, part) {
     element.dataset.cardKind = card.kind;
     element.dataset.rarity = equipmentRarity(card);
     equipmentTitle(card, part, element.querySelector(".card-title"));
+    element.classList.toggle("is-long-title", card.name.length > 19);
     element.classList.toggle("is-equipment-continuation", part.continuation);
     const image = element.querySelector(".equipment-illustration");
     image.src = equipmentImage(card);
@@ -174,7 +177,11 @@ function buildEquipmentBack(card, part) {
     element.dataset.cardKind = card.kind;
     element.dataset.rarity = equipmentRarity(card);
     equipmentTitle(card, part, element.querySelector(".equipment-back-title"));
+    element.classList.toggle("is-long-title", card.name.length > 19);
     element.classList.toggle("is-equipment-continuation", part.continuation);
+    element.classList.toggle("is-continuation", part.continuation);
+    element.classList.toggle("is-dense", part.description.length > 200);
+    element.classList.toggle("is-very-dense", part.description.length > 340);
     appendEquipmentStats(element.querySelector(".equipment-back-stats"), card);
     renderDescription(element.querySelector(".card-description"), equipmentDescription(card, part));
     element.querySelector(".equipment-back-footer strong").textContent = card.kind === "weapon" ? "Weapon" : "Item";

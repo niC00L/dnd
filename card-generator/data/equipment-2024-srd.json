@@ -4198,7 +4198,7 @@
     "mastery": "Nick",
     "armor_class": "",
     "weapon_type": "Simple",
-    "desc": "A dagger.\n\n**Finesse.** When making an attack with a Finesse weapon, use your choice of your Strength or Dexterity modifier for the attack and damage rolls. You must use the same modifier for both rolls.\n\n**Light.** When you take the Attack action on your turn and attack with a Light weapon, you can make one extra attack as a Bonus Action later on the same turn. That extra attack must be made with a different Light weapon, and you don't add your ability modifier to the extra attack's damage unless that modifier is negative.\n\n**Nick.** When you make the extra attack of the Light property, you can make it as part of the Attack action instead of as a Bonus Action. You can make this extra attack only once per turn.\n\n**Thrown (Range 20/60).** If a weapon has the Thrown property, you can throw the weapon to make a ranged attack, and you can draw that weapon as part of the attack. If the weapon is a Melee weapon, use the same ability modifier for the attack and damage rolls that you use for a melee attack with that weapon.",
+    "desc": "**Mastery: Nick.** When you make the extra attack of the Light property, you can make it as part of the Attack action instead of as a Bonus Action. You can make this extra attack only once per turn.",
     "image": "dagger",
     "source": {
       "name": "SRD 5.2",
@@ -12610,7 +12610,7 @@
     "mastery": "Slow",
     "armor_class": "",
     "weapon_type": "Simple",
-    "desc": "A javelin.\n\n**Slow.** If you hit a creature with this weapon and deal damage to it, you can reduce its Speed by 10 feet until the start of your next turn. If the creature is hit more than once by weapons that have this property, the Speed reduction doesn't exceed 10 feet.\n\n**Thrown (Range 30/120).** If a weapon has the Thrown property, you can throw the weapon to make a ranged attack, and you can draw that weapon as part of the attack. If the weapon is a Melee weapon, use the same ability modifier for the attack and damage rolls that you use for a melee attack with that weapon.",
+    "desc": "**Mastery: Slow.** If you hit a creature with this weapon and deal damage to it, you can reduce its Speed by 10 feet until the start of your next turn. If the creature is hit more than once by weapons that have this property, the Speed reduction doesn't exceed 10 feet.",
     "image": "spear",
     "source": {
       "name": "SRD 5.2",
@@ -13928,7 +13928,7 @@
     "mastery": "Sap",
     "armor_class": "",
     "weapon_type": "Simple",
-    "desc": "A mace.\n\n**Sap.** If you hit a creature with this weapon, that creature has Disadvantage on its next attack roll before the start of your next turn.",
+    "desc": "**Mastery: Sap.** If you hit a creature with this weapon, that creature has Disadvantage on its next attack roll before the start of your next turn.",
     "image": "weapon",
     "source": {
       "name": "SRD 5.2",
@@ -20260,7 +20260,7 @@
     "mastery": "Nick",
     "armor_class": "",
     "weapon_type": "Simple",
-    "desc": "A sickle.\n\n**Light.** When you take the Attack action on your turn and attack with a Light weapon, you can make one extra attack as a Bonus Action later on the same turn. That extra attack must be made with a different Light weapon, and you don't add your ability modifier to the extra attack's damage unless that modifier is negative.\n\n**Nick.** When you make the extra attack of the Light property, you can make it as part of the Attack action instead of as a Bonus Action. You can make this extra attack only once per turn.",
+    "desc": "**Mastery: Nick.** When you make the extra attack of the Light property, you can make it as part of the Attack action instead of as a Bonus Action. You can make this extra attack only once per turn.",
     "image": "weapon",
     "source": {
       "name": "SRD 5.2",
