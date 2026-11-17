@@ -507,6 +507,24 @@ p {
     padding: 2px 2px 20px;
 }
 
+.card-copies {
+    display: flex;
+    grid-column: 1 / -1;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+}
+
+.card-copies strong {
+    flex: 1;
+    min-width: 0;
+}
+
+.card-copies input {
+    width: 75px;
+    padding: 6px;
+}
+
 .selection-empty {
     display: grid;
     width: 100%;
@@ -571,7 +589,7 @@ p {
 
 .back-art {
     position: absolute;
-    inset: 16% 4% 29%;
+    inset: 17% 4% 25%;
     display: grid;
     place-items: center;
 }
@@ -768,12 +786,16 @@ p {
     font-weight: 600;
 }
 
+.equipment-illustration {
+    filter: brightness(1.4) contrast(.9);
+}
+
 .equipment-weight {
     position: absolute;
-    top: 4%;
-    left: 5%;
-    width: 9%;
-    height: 7%;
+    top: 7cqw;
+    left: 5cqw;
+    width: 9cqw;
+    height: 9cqw;
     display: grid;
     place-items: center;
     color: #fff;
@@ -796,8 +818,8 @@ p {
 
 .equipment-coin {
     position: absolute;
-    top: 4%;
-    right: 5%;
+    top: 7cqw;
+    right: 4cqw;
     display: flex;
     width: 11cqw;
     height: 11cqw;
@@ -839,6 +861,15 @@ p {
 .equipment-title,
 .equipment-back-title {
     text-align: center;
+    text-wrap: balance;
+    overflow-wrap: anywhere;
+}
+
+.equipment-title {
+    left: 17%;
+    width: 66%;
+    display: block;
+    align-content: center;
 }
 
 .equipment-back-content .card-header {
@@ -863,6 +894,16 @@ p {
 
 .equipment-front-summary .equipment-damage strong {
     white-space: nowrap;
+}
+
+.equipment-front-summary .equipment-armor-class strong {
+    font-size: 4cqw;
+}
+
+.equipment-armor-class small {
+    display: block;
+    font-size: 2.8cqw;
+    line-height: 1.1;
 }
 
 .equipment-front-summary .back-keywords {

@@ -14,6 +14,11 @@ weapons; Items includes armor, shields, gear, tools, and other magic items.
 Use category, rarity, source, and text filters to narrow equipment results.
 Selections are shared across tabs, so all three types can be printed together.
 
+The Weapons library also includes the homebrew **Sword of Xenu's glory**, an
+Artifact relic with the standard longsword stats and its own glowing artwork.
+It always emits bright light for 10 feet and dim light for an additional 10 feet.
+Search its name or filter the source to **Homebrew (SRD 5.2 base)** to find it.
+
 Use **+ Custom card** on a tab to create that kind of card. Equipment supports
 damage, range, properties/charges, mastery, armor class, rarity, attunement,
 cost, weight, descriptions, and illustrations. **Customize** beside built-in
@@ -27,6 +32,11 @@ Ravenmore artwork and Game-icons.net SVGs as fallbacks. Magic-item variants may
 share their base item's artwork. Upload PNG, JPEG, or WebP illustrations
 (up to 2 MB) in the equipment editor to replace them. Only use artwork you have
 permission to use.
+Chain Mail, Chain Shirt, Leather Armor, and Thieves' Tools use their supplied
+cutouts, including matching armor variants. Items without a supplied cutout
+retain fallback artwork.
+Equipment illustrations are displayed brighter with softened shadows in previews
+and print to keep darker artwork readable; the original image files are unchanged.
 
 Custom cards, uploaded images, and the shared print selection persist in this
 browser. **Save JSON** backs up all custom card types and their images;
@@ -91,6 +101,10 @@ to extract only the illustrations used by this app.
 
 Equipment cards follow the supplied dagger template: artwork, weight, a price
 coin, and compact combat details on the front; stats and rules text on the back.
+Front armor badges abbreviate Dexterity formulas (for example, `13+DEX` with
+a smaller `(MAX 2)` line). Back stats retain the full armor-class wording.
+Long equipment names wrap into balanced lines, with the front title kept clear
+of the weight and price icons.
 Enable **Fold and glue** or **Double-sided** to include the equipment rules text
 when printing. Long descriptions continue on additional matched card pairs.
 Gold prices use gold coins and silver prices use silver coins. Sub-gold prices
@@ -117,6 +131,11 @@ Select cards from any library, choose a card size, and choose **Card backs**:
   columns are reversed, including empty positions on partial pages. Print
   duplex with **flip on long edge**. Each sheet fits 16 half-size or 9 standard
   cards. Continuation cards receive their own corresponding backs.
+
+Set **Copies** above each selected card to print that entry multiple times.
+Each copy includes all continuation cards and the backs chosen above. Counts
+include every copy; previews show each entry once. Copy counts are saved with
+the selection, and removing an entry resets its count to one.
 
 Use **A4 portrait**, **100% / actual size**, background graphics enabled,
 and browser headers/footers disabled. Do not use fit-to-page or multiple pages

@@ -14,14 +14,12 @@ const EQUIPMENT_ARTWORK = {
     "greatclub": "weapons/greatclub", "handaxe": "weapons/hand-axe", "javelin": "weapons/javelin",
     "light hammer": "weapons/light-hammer", "longbow": "weapons/longbow", "mace": "weapons/mace",
     "quarterstaff": "weapons/quarterstaff", "scimitar": "weapons/scimitar", "sickle": "weapons/sickle",
-    "spear": "weapons/spear", "maul": "weapons/maul", "rapier": "weapons/rapier",
-    "longsword": "weapons/longsword", "breastplate": "armor/breastplate", "shield": "armor/shield",
-    "splint armor": "armor/splint-armor", "splint": "armor/splint-armor",
-    "studded leather armor": "armor/studded-leather-armor", "studded leather": "armor/studded-leather-armor",
-    "acid": "adventuring-gear/acid", "antitoxin": "adventuring-gear/antitoxin",
-    "ball bearings": "adventuring-gear/ball-bearings", "healer's kit": "adventuring-gear/healers-kit",
-    "lantern": "adventuring-gear/lantern", "hooded lantern": "adventuring-gear/lantern",
-    "rope": "adventuring-gear/rope", "potion of healing": "adventuring-gear/potion-of-healing",
+    "spear": "weapons/spear",
+    "longsword": "weapons/longsword", "sword of xenu's glory": "weapons/longsword-relic",
+    "chain mail": "armor/chain-mail", "chain shirt": "armor/chain-shirt",
+    "leather armor": "armor/leather-armor", "shield": "armor/shield",
+    "healer's kit": "adventuring-gear/healers-kit", "thieves' tools": "adventuring-gear/thieves-tools",
+    "potion of healing": "adventuring-gear/potion-of-healing",
     "flute": "musical-instruments/flute"
 };
 let equipmentEditorKey = null;
@@ -37,7 +35,7 @@ function equipmentImage(card) {
     if (card.image_data) return card.image_data;
     const name = card.name.toLowerCase().replaceAll("\u2019", "'");
     const artwork = Object.keys(EQUIPMENT_ARTWORK).find(key => name === key
-        || name.startsWith(`${key},`) || name.endsWith(`(${key})`));
+        || name.startsWith(`${key},`) || name.startsWith(`${key} (+`) || name.endsWith(`(${key})`));
     if (artwork) return `./img/equipment/${EQUIPMENT_ARTWORK[artwork]}.png`;
     const key = EQUIPMENT_IMAGES.includes(card.image) ? card.image : "item";
     const fallback = { sword: "longsword", dagger: "dagger", axe: "handaxe", hammer: "light hammer", spear: "spear", bow: "longbow", staff: "quarterstaff" }[key];
@@ -159,6 +157,19 @@ function buildEquipmentCard(card, part) {
     damage.querySelector("strong").textContent = card.kind === "weapon"
         ? card.damage_roll ? `${card.damage_roll} +${equipmentAbility(card)}` : "See text"
         : card.armor_class || (card.attunement ? "Attunement" : card.category);
+    if (card.kind !== "weapon" && card.armor_class) {
+        damage.classList.add("equipment-armor-class");
+        damage.setAttribute("aria-label", `Armor Class: ${card.armor_class}`);
+        const dexterity = /^(\d+)\s*\+\s*Dex modifier(?:\s*\(max\s+(\d+)\))?$/i.exec(card.armor_class);
+        if (dexterity) {
+            damage.querySelector("strong").textContent = `${dexterity[1]}+DEX`;
+            if (dexterity[2]) {
+                const limit = document.createElement("small");
+                limit.textContent = `(MAX ${dexterity[2]})`;
+                damage.append(limit);
+            }
+        }
+    }
     const feature = element.querySelector(".equipment-feature");
     feature.querySelector("span").textContent = equipmentProperties(card, true);
     feature.hidden = !feature.querySelector("span").textContent;
@@ -213,7 +224,17 @@ async function loadEquipment() {
         isCustomEquipment({ ...card, key: `custom-${card.key}` }) && card.source?.license === "CC BY 4.0")) {
         throw new Error("The built-in equipment data is invalid.");
     }
-    return cards;
+    const longsword = cards.find(card => card.key === "equipment-srd-2024_longsword");
+    if (!longsword) throw new Error("The base longsword for Sword of Xenu's glory is missing.");
+    return [...cards, {
+        ...longsword,
+        key: "equipment-homebrew_sword-of-xenus-glory",
+        name: "Sword of Xenu's glory",
+        rarity: "Artifact",
+        magic: true,
+        desc: `${longsword.desc}\n\n**Xenu's Glory.** This relic constantly emits bright light in a 10-foot radius and dim light for an additional 10 feet.`,
+        source: { ...longsword.source, name: "Homebrew (SRD 5.2 base)" }
+    }];
 }
 
 function openEquipmentEditor(card = null) {

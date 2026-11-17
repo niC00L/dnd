@@ -50,6 +50,7 @@ const state = {
     filtered: [],
     customSpells: [],
     selected: new Map(),
+    copies: new Map(),
     activeTab: "spells"
 };
 const customEditor = {
@@ -776,7 +777,8 @@ function buildBack(spell, part) {
 function updateSelectionSummary() {
     const size = cardSizeSettings();
     const spellCount = state.selected.size;
-    const cardCount = [...state.selected.values()].reduce((count, spell) => count + getSpellCardParts(spell).length, 0);
+    const cardCount = [...state.selected.values()].reduce((count, spell) =>
+        count + getSpellCardParts(spell).length * (state.copies.get(spell.key) || 1), 0);
     elements.selectedCount.textContent = String(cardCount);
     elements.printCount.textContent = String(cardCount);
     elements.printButton.disabled = spellCount === 0;
@@ -810,6 +812,34 @@ function renderSelectedCards() {
     } else {
         const fragment = document.createDocumentFragment();
         for (const spell of selected) {
+            const label = document.createElement("label");
+            label.className = "card-copies";
+            const name = document.createElement("strong");
+            name.textContent = spell.name;
+            const caption = document.createElement("span");
+            caption.textContent = "Copies";
+            const input = document.createElement("input");
+            input.type = "number";
+            input.min = "1";
+            input.step = "1";
+            input.required = true;
+            input.value = String(state.copies.get(spell.key) || 1);
+            input.setAttribute("aria-label", `Copies of ${spell.name}`);
+            input.addEventListener("change", () => {
+                const copies = Number(input.value);
+                input.setCustomValidity(Number.isSafeInteger(copies) && copies >= 1
+                    ? "" : "Enter a whole number of copies, at least 1.");
+                if (!input.reportValidity()) {
+                    input.value = String(state.copies.get(spell.key) || 1);
+                    input.setCustomValidity("");
+                    return;
+                }
+                state.copies.set(spell.key, copies);
+                saveSelection();
+                updateSelectionSummary();
+            });
+            label.append(name, caption, input);
+            fragment.append(label);
             for (const part of getSpellCardParts(spell)) {
                 fragment.append(buildCard(spell, part));
                 if (cardSizeSettings().mode !== "none") fragment.append(buildBack(spell, part));
@@ -1002,6 +1032,7 @@ function deleteCustomCard(spell) {
     state.customSpells = remaining;
     state.spells = state.spells.filter(item => item.key !== spell.key);
     state.selected.delete(spell.key);
+    state.copies.delete(spell.key);
     saveSelection();
     refreshCustomLibrary();
 }
@@ -1105,7 +1136,8 @@ async function saveCustomSpellsFile() {
 
 function saveSelection() {
     try {
-        localStorage.setItem(SELECTION_STORAGE_KEY, JSON.stringify([...state.selected.keys()]));
+        localStorage.setItem(SELECTION_STORAGE_KEY, JSON.stringify([...state.selected.keys()].map(key =>
+            ({ key, copies: state.copies.get(key) || 1 }))));
     } catch (error) {
         console.warn("Could not save the spell selection.", error);
     }
@@ -1116,9 +1148,18 @@ function restoreSelection() {
         const keys = JSON.parse(localStorage.getItem(SELECTION_STORAGE_KEY) || "[]");
         if (!Array.isArray(keys)) return;
         const spellsByKey = new Map(state.spells.map(spell => [spell.key, spell]));
-        for (const key of keys) {
+        for (const entry of keys) {
+            const key = typeof entry === "string" ? entry : entry?.key;
+            const copies = typeof entry === "string" ? 1 : entry?.copies;
+            if (!Number.isSafeInteger(copies) || copies < 1) {
+                console.warn("Could not restore a card selection with an invalid copy count.", entry);
+                continue;
+            }
             const spell = spellsByKey.get(key);
-            if (spell) state.selected.set(key, spell);
+            if (spell) {
+                state.selected.set(key, spell);
+                state.copies.set(key, copies);
+            }
         }
     } catch (error) {
         console.warn("Could not restore the spell selection.", error);
@@ -1126,7 +1167,10 @@ function restoreSelection() {
 }
 
 function toggleSpell(spell) {
-    if (state.selected.has(spell.key)) state.selected.delete(spell.key);
+    if (state.selected.has(spell.key)) {
+        state.selected.delete(spell.key);
+        state.copies.delete(spell.key);
+    }
     else state.selected.set(spell.key, spell);
     saveSelection();
     renderSelectedCards();
@@ -1135,8 +1179,11 @@ function toggleSpell(spell) {
 function renderPrintPages() {
     elements.printRoot.replaceChildren();
     const { cardsPerPage, columns, mode, pairsPerRow } = cardSizeSettings();
-    const selected = [...state.selected.values()].flatMap(spell =>
-        getSpellCardParts(spell).map(part => ({ spell, part })));
+    const selected = [...state.selected.values()].flatMap(spell => {
+        const parts = getSpellCardParts(spell);
+        return Array.from({ length: state.copies.get(spell.key) || 1 }, () =>
+            parts.map(part => ({ spell, part }))).flat();
+    });
     for (let start = 0; start < selected.length; start += cardsPerPage) {
         const page = document.createElement("section");
         page.className = "print-page";
@@ -1335,6 +1382,7 @@ elements.selectVisible.addEventListener("click", () => {
 
 elements.clearSelection.addEventListener("click", () => {
     state.selected.clear();
+    state.copies.clear();
     saveSelection();
     renderSelectedCards();
 });
@@ -1357,14 +1405,18 @@ elements.printButton.addEventListener("click", async () => {
     elements.printError.hidden = true;
     try {
         renderPrintPages();
-        await document.fonts.ready;
-        await Promise.all([...elements.printRoot.querySelectorAll("img")].map(async image => {
-            try {
-                await image.decode();
-            } catch (error) {
-                throw new Error(`Could not load the print image: ${image.getAttribute("src")}`, { cause: error });
-            }
-        }));
+        const images = [...elements.printRoot.querySelectorAll("img")];
+        if (images.length > 0) {
+            const timeout = new Promise((_, reject) => setTimeout(() => reject(new Error("Image loading timeout")), 5000));
+            const imageDecodes = Promise.allSettled(images.map(async image => {
+                try {
+                    await image.decode();
+                } catch (error) {
+                    console.warn(`Could not decode image: ${image.getAttribute("src")}`);
+                }
+            }));
+            await Promise.race([imageDecodes, timeout]);
+        }
         window.print();
     } catch (error) {
         console.error("Could not prepare the print sheet.", error);

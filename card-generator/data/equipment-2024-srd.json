@@ -13550,7 +13550,7 @@
     "mastery": "Sap",
     "armor_class": "",
     "weapon_type": "Martial",
-    "desc": "A longsword.\n\n**Sap.** If you hit a creature with this weapon, that creature has Disadvantage on its next attack roll before the start of your next turn.\n\n**Versatile (1d10).** A Versatile weapon can be used with one or two hands. A damage value in parentheses appears with the property. The weapon deals that damage when used with two hands to make a melee attack.",
+    "desc": "**Mastery: Sap.** If you hit a creature with this weapon, that creature has Disadvantage on its next attack roll before the start of your next turn.",
     "image": "sword",
     "source": {
       "name": "SRD 5.2",

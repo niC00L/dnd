@@ -25,7 +25,7 @@ class Element {
     }
 }
 
-function app(size = "half", mode = "none", measureFits = null, fetch = undefined) {
+function app(size = "half", mode = "none", measureFits = null, fetch = undefined, localStorage = undefined) {
     const printRoot = new Element("div");
     const backTemplate = {
         content: {
@@ -61,12 +61,13 @@ function app(size = "half", mode = "none", measureFits = null, fetch = undefined
         buildCard = (spell, part) => Object.assign(document.createElement("front"), { key: spell.key, part });
         const buildSpellBack = buildBack;
         buildBack = (spell, part) => Object.assign(document.createElement("back"), { key: spell.key, part });
-        ({ state, printRoot: elements.printRoot, cardSizeSettings, renderPrintPages,
+        ({ state, elements, printRoot: elements.printRoot, cardSizeSettings, renderPrintPages,
+           saveSelection, restoreSelection, updateSelectionSummary,
            spellArea, areaImage, areaLabel, areaGridUnit, buildAreaDiagram, buildSpellBack, backTargetCount, backKeywordText,
            isCustomEquipment, isEquipment, equipmentStats, equipmentImage, equipmentCoin, equipmentRarity, equipmentAbility, equipmentCategory,
            buildEquipmentCard, buildEquipmentBack, equipmentProperties, getSpellCardParts, keywordContent,
-           loadSpellLibrary, spellKeywords });
-    `, { document, crypto: webcrypto, console, measureFits, fetch });
+           loadSpellLibrary, loadEquipment, spellKeywords });
+    `, { document, crypto: webcrypto, console, measureFits, fetch, localStorage });
 }
 
 test("Built-in database covers every 2024 PHB spell level for all eight spellcasting classes", () => {
@@ -499,6 +500,63 @@ test("Rendering twice replaces pages and empty selections produce no pages", () 
     assert.equal(context.printRoot.children.length, 0);
 });
 
+for (const size of ["half", "standard"]) {
+    for (const mode of ["none", "fold", "duplex"]) {
+        test(`${size} / ${mode}: copies repeat complete entries and preserve matching backs`, () => {
+            const context = app(size, mode);
+            const parts = [{ continuation: false }, { continuation: true }];
+            context.state.selected.set("repeated", { key: "repeated", parts });
+            context.state.copies.set("repeated", 9);
+            context.state.selected.set("single", { key: "single", parts: [parts[0]] });
+            context.updateSelectionSummary();
+            assert.equal(context.elements.printCount.textContent, "19");
+            assert.equal(context.elements.selectedCount.textContent, "19");
+            context.renderPrintPages();
+            const pages = context.printRoot.children;
+            const fronts = [];
+            for (let index = 0; index < pages.length; index += mode === "duplex" ? 2 : 1) {
+                pages[index].children.forEach((card, position) => {
+                    const front = mode === "fold" ? card.children[0] : card;
+                    fronts.push(front);
+                    if (mode !== "none") {
+                        const back = mode === "fold" ? card.children[1] : pages[index + 1].children[position];
+                        assert.equal(back.key, front.key);
+                        assert.equal(back.part, front.part);
+                    }
+                });
+            }
+            assert.equal(fronts.length, 19);
+            for (let index = 0; index < 18; index++) {
+                assert.equal(fronts[index].key, "repeated");
+                assert.equal(fronts[index].part, parts[index % 2]);
+            }
+            assert.equal(fronts[18].key, "single");
+        });
+    }
+}
+
+test("Selection storage restores legacy selections and round-trips per-entry copy counts", () => {
+    let stored = JSON.stringify(["first", "second"]);
+    const storage = {
+        getItem: () => stored,
+        setItem: (key, value) => { stored = value; }
+    };
+    const context = app("half", "none", null, undefined, storage);
+    context.state.spells = [{ key: "first" }, { key: "second" }];
+    context.restoreSelection();
+    assert.equal(context.state.selected.size, 2);
+    assert.equal(context.state.copies.get("first"), 1);
+    context.state.copies.set("first", 3);
+    context.saveSelection();
+    assert.deepEqual(JSON.parse(stored), [{ key: "first", copies: 3 }, { key: "second", copies: 1 }]);
+    context.state.selected.clear();
+    context.state.copies.clear();
+    context.restoreSelection();
+    assert.equal(context.state.selected.size, 2);
+    assert.equal(context.state.copies.get("first"), 3);
+    assert.equal(context.state.copies.get("second"), 1);
+});
+
 test("Area metadata, missing SRD areas, radius, diameter, and line dimensions", () => {
     const { spellArea, areaLabel } = app();
     assert.equal(spellArea({ desc: "Protective spirits flit around you in a 15-foot Emanation for the duration." }).size, 15);
@@ -706,6 +764,44 @@ test("Equipment profiles retain range, properties, mastery, armor, and magic ite
     assert.equal(cards.find(card => card.name === "Spell Scroll").rarity, "Varies");
 });
 
+test("Sword of Xenu's glory loads as a relic with longsword stats, constant light, and its own artwork", async () => {
+    const cards = JSON.parse(readFileSync(join(__dirname, "data", "equipment-2024-srd.json"), "utf8"));
+    const { loadEquipment, equipmentImage, buildEquipmentCard, buildEquipmentBack } = app(
+        "half", "none", null, async () => ({ ok: true, json: async () => cards })
+    );
+    const library = await loadEquipment();
+    const sword = library.find(card => card.name === "Sword of Xenu's glory");
+    const base = cards.find(card => card.name === "Longsword");
+    assert.ok(sword);
+    assert.equal(library.length, cards.length + 1);
+    assert.equal(new Set(library.map(card => card.key)).size, library.length);
+    for (const field of ["kind", "category", "attunement", "cost", "weight", "damage_roll",
+        "damage_types", "range_text", "properties", "mastery", "armor_class", "weapon_type"]) {
+        assert.deepEqual(sword[field], base[field], field);
+    }
+    assert.equal(sword.rarity, "Artifact");
+    assert.equal(sword.magic, true);
+    assert.ok(sword.desc.startsWith(base.desc));
+    assert.match(sword.desc, /constantly emits bright light in a 10-foot radius and dim light for an additional 10 feet/);
+    assert.match(sword.source.name, /Homebrew/);
+    assert.equal(equipmentImage(sword), "./img/equipment/weapons/longsword-relic.png");
+    assert.ok(existsSync(join(__dirname, equipmentImage(sword))));
+    const part = { description: sword.desc, continuation: false };
+    const front = buildEquipmentCard(sword, part);
+    const back = buildEquipmentBack(sword, part);
+    assert.equal(front.dataset.rarity, "artifact");
+    assert.equal(back.dataset.rarity, "artifact");
+    assert.equal(front.querySelector(".equipment-illustration").src, equipmentImage(sword));
+    assert.equal(front.querySelector(".equipment-damage").querySelector("strong").textContent, "1d8 +STR");
+});
+
+test("Equipment loading reports a missing base longsword instead of creating an incomplete relic", async () => {
+    const cards = JSON.parse(readFileSync(join(__dirname, "data", "equipment-2024-srd.json"), "utf8"))
+        .filter(card => card.key !== "equipment-srd-2024_longsword");
+    const { loadEquipment } = app("half", "none", null, async () => ({ ok: true, json: async () => cards }));
+    await assert.rejects(loadEquipment(), /base longsword.*missing/);
+});
+
 test("Equipment coins preserve gold and silver prices and convert other denominations", () => {
     const { equipmentCoin } = app();
     for (const [cost, amount, currency] of [
@@ -732,7 +828,45 @@ test("Equipment presentation selects rarity, weapon ability, and supplied artwor
     assert.equal(equipmentAbility({ properties: "Thrown", weapon_type: "Simple Melee" }), "STR");
     assert.equal(equipmentImage({ name: "Dagger", image: "dagger" }), "./img/equipment/weapons/dagger.png");
     assert.equal(equipmentImage({ name: "Dagger, +1", image: "dagger" }), "./img/equipment/weapons/dagger.png");
-    assert.equal(equipmentImage({ name: "Adamantine Armor (Breastplate)", image: "armor" }), "./img/equipment/armor/breastplate.png");
+    assert.equal(equipmentImage({ name: "Adamantine Armor (Chain Shirt)", image: "armor" }), "./img/equipment/armor/chain-shirt.png");
+    assert.equal(equipmentImage({ name: "Adamantine Armor (Breastplate)", image: "armor" }), "./img/equipment/art-armor.png");
+});
+
+test("New item cutouts cover base items and enchanted armor without overriding uploads", () => {
+    const { equipmentImage } = app();
+    for (const [name, path] of [
+        ["Chain Shirt", "armor/chain-shirt"],
+        ["Chain Shirt (+1)", "armor/chain-shirt"],
+        ["Chain Mail", "armor/chain-mail"],
+        ["Armor of Resistance (Leather Armor)", "armor/leather-armor"],
+        ["Thieves' Tools", "adventuring-gear/thieves-tools"],
+        ["Thieves\u2019 Tools", "adventuring-gear/thieves-tools"]
+    ]) {
+        const card = { name, image: "armor" };
+        assert.equal(equipmentImage(card), `./img/equipment/${path}.png`, name);
+        assert.equal(equipmentImage({ ...card, image_data: "custom-upload" }), "custom-upload");
+    }
+});
+
+test("Front armor badges compact Dexterity and separate caps while back stats stay complete", () => {
+    const { buildEquipmentCard, buildEquipmentBack } = app();
+    const source = JSON.parse(readFileSync(join(__dirname, "data", "equipment-2024-srd.json"), "utf8"))
+        .find(card => card.name === "Chain Shirt");
+    const part = { description: source.desc, continuation: false };
+    for (const [armor_class, main, cap] of [
+        ["13 + Dex modifier (max 2)", "13+DEX", "(MAX 2)"],
+        ["11 + Dex modifier", "11+DEX", undefined],
+        ["16", "16", undefined],
+        ["Special armor rule", "Special armor rule", undefined]
+    ]) {
+        const card = { ...source, armor_class };
+        const badge = buildEquipmentCard(card, part).querySelector(".equipment-damage");
+        assert.equal(badge.querySelector("strong").textContent, main);
+        assert.equal(badge.children[0]?.textContent, cap);
+        assert.equal(badge.getAttribute("aria-label"), `Armor Class: ${armor_class}`);
+        const back = buildEquipmentBack(card, part);
+        assert.equal(back.querySelector(".equipment-back-stats").children[2].children[1].textContent, armor_class);
+    }
 });
 
 test("Equipment template renders matching rarity fronts and backs with coin, artwork, and stats", () => {
