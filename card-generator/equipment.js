@@ -224,17 +224,19 @@ async function loadEquipment() {
         isCustomEquipment({ ...card, key: `custom-${card.key}` }) && card.source?.license === "CC BY 4.0")) {
         throw new Error("The built-in equipment data is invalid.");
     }
-    const longsword = cards.find(card => card.key === "equipment-srd-2024_longsword");
-    if (!longsword) throw new Error("The base longsword for Sword of Xenu's glory is missing.");
-    return [...cards, {
-        ...longsword,
-        key: "equipment-homebrew_sword-of-xenus-glory",
-        name: "Sword of Xenu's glory",
-        rarity: "Artifact",
-        magic: true,
-        desc: `${longsword.desc}\n\n**Xenu's Glory.** This relic constantly emits bright light in a 10-foot radius and dim light for an additional 10 feet.`,
-        source: { ...longsword.source, name: "Homebrew (SRD 5.2 base)" }
-    }];
+    const customResponse = await fetch("./data/custom-equipment.json");
+    if (!customResponse.ok) throw new Error(`Custom equipment data request failed (${customResponse.status}).`);
+    const customCards = await customResponse.json();
+    if (!Array.isArray(customCards) || !customCards.every(card =>
+        card && typeof card.key === "string" && card.key.length > 0
+        && isCustomEquipment({ ...card, key: `custom-${card.key}` }))) {
+        throw new Error("The custom equipment data is invalid.");
+    }
+    const library = [...cards, ...customCards];
+    if (new Set(library.map(card => card.key)).size !== library.length) {
+        throw new Error("Equipment keys must be unique across built-in and custom equipment.");
+    }
+    return library;
 }
 
 function openEquipmentEditor(card = null) {

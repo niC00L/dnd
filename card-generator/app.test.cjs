@@ -767,7 +767,12 @@ test("Equipment profiles retain range, properties, mastery, armor, and magic ite
 test("Sword of Xenu's glory loads as a relic with longsword stats, constant light, and its own artwork", async () => {
     const cards = JSON.parse(readFileSync(join(__dirname, "data", "equipment-2024-srd.json"), "utf8"));
     const { loadEquipment, equipmentImage, buildEquipmentCard, buildEquipmentBack } = app(
-        "half", "none", null, async () => ({ ok: true, json: async () => cards })
+        "half", "none", null, async url => ({
+            ok: true,
+            json: async () => url.endsWith("custom-equipment.json")
+                ? JSON.parse(readFileSync(join(__dirname, "data", "custom-equipment.json"), "utf8"))
+                : cards
+        })
     );
     const library = await loadEquipment();
     const sword = library.find(card => card.name === "Sword of Xenu's glory");
@@ -795,11 +800,30 @@ test("Sword of Xenu's glory loads as a relic with longsword stats, constant ligh
     assert.equal(front.querySelector(".equipment-damage").querySelector("strong").textContent, "1d8 +STR");
 });
 
-test("Equipment loading reports a missing base longsword instead of creating an incomplete relic", async () => {
-    const cards = JSON.parse(readFileSync(join(__dirname, "data", "equipment-2024-srd.json"), "utf8"))
-        .filter(card => card.key !== "equipment-srd-2024_longsword");
-    const { loadEquipment } = app("half", "none", null, async () => ({ ok: true, json: async () => cards }));
-    await assert.rejects(loadEquipment(), /base longsword.*missing/);
+test("Equipment loading rejects invalid custom data and duplicate keys, but accepts an empty custom library", async () => {
+    const cards = JSON.parse(readFileSync(join(__dirname, "data", "equipment-2024-srd.json"), "utf8"));
+    for (const [custom, error] of [
+        [[{ name: "Incomplete" }], /custom equipment data is invalid/],
+        [[cards[0]], /keys must be unique/],
+        [null, /custom equipment data is invalid/]
+    ]) {
+        const { loadEquipment } = app("half", "none", null, async url => ({
+            ok: true, json: async () => url.endsWith("custom-equipment.json") ? custom : cards
+        }));
+        await assert.rejects(loadEquipment(), error);
+    }
+    const { loadEquipment } = app("half", "none", null, async url => ({
+        ok: true, json: async () => url.endsWith("custom-equipment.json") ? [] : cards
+    }));
+    assert.equal((await loadEquipment()).length, cards.length);
+});
+
+test("Equipment loading reports custom file request failures", async () => {
+    const cards = JSON.parse(readFileSync(join(__dirname, "data", "equipment-2024-srd.json"), "utf8"));
+    const { loadEquipment } = app("half", "none", null, async url => ({
+        ok: !url.endsWith("custom-equipment.json"), status: 404, json: async () => cards
+    }));
+    await assert.rejects(loadEquipment(), /Custom equipment data request failed \(404\)/);
 });
 
 test("Equipment coins preserve gold and silver prices and convert other denominations", () => {

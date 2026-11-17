@@ -17,7 +17,10 @@ Selections are shared across tabs, so all three types can be printed together.
 The Weapons library also includes the homebrew **Sword of Xenu's glory**, an
 Artifact relic with the standard longsword stats and its own glowing artwork.
 It always emits bright light for 10 feet and dim light for an additional 10 feet.
-Search its name or filter the source to **Homebrew (SRD 5.2 base)** to find it.
+Search its name to find it. Edit its text and stats in
+[custom-equipment.json](./data/custom-equipment.json), then refresh the page.
+This file is loaded alongside the SRD library and may contain more equipment
+records with unique keys; use an empty array (`[]`) for no additional records.
 
 Use **+ Custom card** on a tab to create that kind of card. Equipment supports
 damage, range, properties/charges, mastery, armor class, rarity, attunement,

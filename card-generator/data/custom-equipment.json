@@ -1,0 +1,27 @@
+[
+  {
+    "key": "equipment-homebrew_sword-of-xenus-glory",
+    "kind": "weapon",
+    "name": "Sword of Xenu's glory",
+    "category": "Weapon",
+    "rarity": "Artifact",
+    "magic": true,
+    "attunement": false,
+    "cost": "999 gp",
+    "weight": "3 lb",
+    "damage_roll": "1d8",
+    "damage_types": ["slashing"],
+    "range_text": "5 ft",
+    "properties": "Versatile (1d10)",
+    "mastery": "Sap",
+    "armor_class": "",
+    "weapon_type": "Martial",
+    "desc": "**Mastery: Sap.** If you hit a creature with this weapon, that creature has Disadvantage on its next attack roll before the start of your next turn.\n\n**Xenu's Glory.** This relic constantly emits bright light in a 10-foot radius and dim light for an additional 10 feet.",
+    "image": "sword",
+    "source": {
+      "name": "Homebrew (SRD 5.2 base)",
+      "url": "https://api.open5e.com/v2/items/srd-2024_longsword/",
+      "license": "CC BY 4.0"
+    }
+  }
+]
