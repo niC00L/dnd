@@ -22,11 +22,11 @@ Descriptions are measured in the card layout before splitting. Near-fit spell
 descriptions use slightly tighter line spacing without reducing the font size;
 longer descriptions are split into continuation cards.
 
-Illustrations use hand-painted artwork by Ravenmore where available and
-Game-icons.net SVGs otherwise. Artwork is representative, not an exact image of
-every weapon or magic-item variant. Upload PNG, JPEG, or WebP illustrations
+Illustrations use the supplied item cutouts where available, with hand-painted
+Ravenmore artwork and Game-icons.net SVGs as fallbacks. Magic-item variants may
+share their base item's artwork. Upload PNG, JPEG, or WebP illustrations
 (up to 2 MB) in the equipment editor to replace them. Only use artwork you have
-permission to use; official rulebook art is not included.
+permission to use.
 
 Custom cards, uploaded images, and the shared print selection persist in this
 browser. **Save JSON** backs up all custom card types and their images;
@@ -89,10 +89,19 @@ to extract only the illustrations used by this app.
 
 ## Printing
 
-Footer colors are configurable in the `:root` section of [app.css](./app.css):
-`--spell-footer-color` (blue), `--weapon-footer-color` (rust), and
-`--item-footer-color` (green). Each applies to both card sides, including the
-curved edge on the back, in previews and printing.
+Equipment cards follow the supplied dagger template: artwork, weight, a price
+coin, and compact combat details on the front; stats and rules text on the back.
+Enable **Fold and glue** or **Double-sided** to include the equipment rules text
+when printing. Long descriptions continue on additional matched card pairs.
+Gold prices use gold coins and silver prices use silver coins. Sub-gold prices
+are expressed in silver; copper is converted to silver, and electrum/platinum
+to gold or silver as appropriate. Unlisted prices use a neutral question mark.
+
+Equipment footer colors follow rarity on both sides: mundane/common/varies
+black, uncommon green, rare blue, very rare purple, legendary orange, and
+artifact copper. These are configured with the `data-rarity` rules in
+[app.css](./app.css). Spell footer color remains configurable with
+`--spell-footer-color` in `:root`, including the curved back edge.
 The three range emblem PNGs are color-matched to the spell footer's `#047EA1`
 blue; recolor these images separately when changing that footer color.
 

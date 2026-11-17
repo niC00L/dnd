@@ -10,13 +10,19 @@ class Element {
         this.tag = tag;
         this.children = [];
         this.attributes = {};
+        this.dataset = {};
         this.style = {};
+        this.fields = new Map();
         this.classList = { toggle() {}, add() {} };
     }
     append(...children) { this.children.push(...children); }
     replaceChildren(...children) { this.children = children; }
     setAttribute(name, value) { this.attributes[name] = value; }
     getAttribute(name) { return this.attributes[name]; }
+    querySelector(selector) {
+        if (!this.fields.has(selector)) this.fields.set(selector, new Element("div"));
+        return this.fields.get(selector);
+    }
 }
 
 function app(size = "half", mode = "none", measureFits = null, fetch = undefined) {
@@ -38,8 +44,9 @@ function app(size = "half", mode = "none", measureFits = null, fetch = undefined
     };
     const document = {
         body: { dataset: { cardSize: size } },
-        querySelector: selector => selector === "#print-root" ? printRoot : selector === "#spell-back-template" ? backTemplate : { value: mode },
+        querySelector: selector => selector === "#print-root" ? printRoot : ["#spell-back-template", "#equipment-card-template", "#equipment-back-template"].includes(selector) ? backTemplate : { value: mode },
         querySelectorAll: () => [],
+        createDocumentFragment: () => new Element("#fragment"),
         createTextNode: text => Object.assign(new Element("#text"), { textContent: text }),
         createElement: tag => new Element(tag),
         createElementNS: (namespaceURI, tag) => Object.assign(new Element(tag), { namespaceURI })
@@ -56,7 +63,8 @@ function app(size = "half", mode = "none", measureFits = null, fetch = undefined
         buildBack = (spell, part) => Object.assign(document.createElement("back"), { key: spell.key, part });
         ({ state, printRoot: elements.printRoot, cardSizeSettings, renderPrintPages,
            spellArea, areaImage, areaLabel, areaGridUnit, buildAreaDiagram, buildSpellBack, backTargetCount, backKeywordText,
-           isCustomEquipment, isEquipment, equipmentStats, equipmentImage, getSpellCardParts, keywordContent,
+           isCustomEquipment, isEquipment, equipmentStats, equipmentImage, equipmentCoin, equipmentRarity, equipmentAbility, equipmentCategory,
+           buildEquipmentCard, buildEquipmentBack, equipmentProperties, getSpellCardParts, keywordContent,
            loadSpellLibrary, spellKeywords });
     `, { document, crypto: webcrypto, console, measureFits, fetch });
 }
@@ -696,6 +704,124 @@ test("Equipment profiles retain range, properties, mastery, armor, and magic ite
     assert.ok(magic.desc.length > 0);
     assert.equal(cards.find(card => card.name === "Potion of Healing").rarity, "Common");
     assert.equal(cards.find(card => card.name === "Spell Scroll").rarity, "Varies");
+});
+
+test("Equipment coins preserve gold and silver prices and convert other denominations", () => {
+    const { equipmentCoin } = app();
+    for (const [cost, amount, currency] of [
+        ["2 gp", "2", "gp"], ["5 SP", "5", "sp"], ["1,000 gp", "1,000", "gp"],
+        ["1 cp", "0.1", "sp"], ["3 ep", "1.5", "gp"], ["2 pp", "20", "gp"], ["0.2 gp", "2", "sp"]
+    ]) {
+        assert.equal(equipmentCoin(cost).amount, amount);
+        assert.equal(equipmentCoin(cost).currency, currency);
+        assert.equal(equipmentCoin(cost).label, `${amount} ${currency.toUpperCase()}`);
+    }
+    assert.equal(equipmentCoin("Not listed").currency, "unknown");
+    assert.equal(equipmentCoin("").amount, "?");
+});
+
+test("Equipment presentation selects rarity, weapon ability, and supplied artwork", () => {
+    const { equipmentRarity, equipmentAbility, equipmentImage } = app();
+    for (const rarity of ["Mundane", "Common", "Uncommon", "Rare", "Very Rare", "Legendary", "Artifact", "Varies"]) {
+        assert.equal(equipmentRarity({ rarity }), rarity.toLowerCase().replaceAll(" ", "-"));
+    }
+    assert.equal(equipmentRarity({ rarity: "Unexpected" }), "mundane");
+    assert.equal(equipmentAbility({ properties: "Finesse, Light", weapon_type: "Simple Melee" }), "STR/DEX");
+    assert.equal(equipmentAbility({ properties: "Ammunition", weapon_type: "Martial Ranged" }), "DEX");
+    assert.equal(equipmentAbility({ properties: "Ammunition (Range 150/600)", weapon_type: "Martial" }), "DEX");
+    assert.equal(equipmentAbility({ properties: "Thrown", weapon_type: "Simple Melee" }), "STR");
+    assert.equal(equipmentImage({ name: "Dagger", image: "dagger" }), "./img/equipment/weapons/dagger.png");
+    assert.equal(equipmentImage({ name: "Dagger, +1", image: "dagger" }), "./img/equipment/weapons/dagger.png");
+    assert.equal(equipmentImage({ name: "Adamantine Armor (Breastplate)", image: "armor" }), "./img/equipment/armor/breastplate.png");
+});
+
+test("Equipment template renders matching rarity fronts and backs with coin, artwork, and stats", () => {
+    const { buildEquipmentCard, buildEquipmentBack, equipmentCategory } = app();
+    const source = JSON.parse(readFileSync(join(__dirname, "data", "equipment-2024-srd.json"), "utf8"))
+        .find(card => card.name === "Dagger");
+    const part = { description: "A sharp blade.", continuation: false };
+    for (const rarity of ["Mundane", "Common", "Uncommon", "Rare", "Very Rare", "Legendary", "Artifact", "Varies"]) {
+        const card = { ...source, rarity, cost: "5 sp" };
+        const front = buildEquipmentCard(card, part);
+        const back = buildEquipmentBack(card, part);
+        assert.equal(front.dataset.rarity, rarity.toLowerCase().replaceAll(" ", "-"));
+        assert.equal(back.dataset.rarity, front.dataset.rarity);
+        assert.equal(front.querySelector(".equipment-coin").dataset.currency, "sp");
+        assert.equal(front.querySelector(".equipment-coin").getAttribute("aria-label"), "Cost: 5 SP");
+        assert.equal(front.querySelector(".equipment-coin-amount").textContent, "5");
+        assert.equal(front.querySelector(".equipment-coin-unit").textContent, "S");
+        assert.equal(front.querySelector(".equipment-weight").querySelector("span").textContent, "1lb");
+        assert.equal(front.querySelector(".equipment-feature").querySelector("span").textContent, "Finesse\nLight");
+        assert.equal(front.querySelector(".equipment-damage").querySelector("strong").textContent, "1d4 +STR/DEX");
+        assert.equal(front.querySelector(".equipment-illustration").src, "./img/equipment/weapons/dagger.png");
+        assert.equal(back.querySelector(".equipment-back-stats").children.length, 6);
+        assert.equal(back.querySelector(".equipment-back-footer span").textContent, "Simple Melee");
+        const description = back.querySelector(".card-description").children[0];
+        assert.equal(description.children[0].textContent, "Mastery: Nick.");
+    }
+    assert.equal(equipmentCategory({ ...source, weapon_type: "Martial", properties: "Ammunition" }), "Martial Ranged");
+});
+
+test("Equipment properties format ranges without breaking parenthesized values", () => {
+    const { equipmentProperties, buildEquipmentBack } = app();
+    const card = JSON.parse(readFileSync(join(__dirname, "data", "equipment-2024-srd.json"), "utf8"))
+        .find(card => card.name === "Dagger");
+    assert.equal(equipmentProperties(card), "Finesse, Light,\nThrown (20/60 ft)");
+    assert.equal(equipmentProperties(card, true), "Finesse\nLight");
+    assert.equal(equipmentProperties({ properties: "Versatile (1d8, special), Thrown (Range 20/60)" }),
+        "Versatile (1d8, special),\nThrown (20/60 ft)");
+    assert.equal(equipmentProperties({ properties: "Ammunition (Range 150/600; Arrow), Heavy, Two-Handed" }),
+        "Ammunition (150/600 ft; Arrow), Heavy, Two-Handed");
+    assert.equal(equipmentProperties({ properties: "Thrown (20/60 ft)" }), "Thrown (20/60 ft)");
+    const back = buildEquipmentBack(card, { description: "A blade.", continuation: false });
+    assert.equal(back.querySelector(".equipment-back-stats").children[3].children[1].textContent,
+        "Finesse, Light,\nThrown (20/60 ft)");
+});
+
+test("Equipment front feature and thrown icons only appear for applicable properties", () => {
+    const { buildEquipmentCard } = app();
+    const source = JSON.parse(readFileSync(join(__dirname, "data", "equipment-2024-srd.json"), "utf8"))
+        .find(card => card.name === "Dagger");
+    for (const [properties, mastery, range, featureVisible, thrownVisible] of [
+        ["", "Sap", "5 ft", false, false],
+        ["None", "", "", false, false],
+        ["N/A", "", "", false, false],
+        ["Thrown", "", "20/60 ft", false, true],
+        ["Thrown (Range 20/60)", "", "", false, true],
+        ["Ammunition (Range 150/600)", "", "150/600 ft", false, false],
+        ["Heavy, Ammunition (Range 150/600)", "Slow", "150/600 ft", true, false],
+        ["Finesse, Light, Thrown (Range 20/60)", "Nick", "20/60 ft", true, true]
+    ]) {
+        const front = buildEquipmentCard({ ...source, properties, mastery, range_text: range }, { description: "Test.", continuation: false });
+        assert.equal(front.querySelector(".equipment-feature").hidden, !featureVisible, properties);
+        assert.equal(front.querySelector(".equipment-range").hidden, !thrownVisible, properties);
+    }
+});
+
+test("Long equipment properties are retained in the measured description instead of clipped stats", () => {
+    const { buildEquipmentBack, getSpellCardParts } = app("half", "fold", () => true);
+    const source = JSON.parse(readFileSync(join(__dirname, "data", "equipment-2024-srd.json"), "utf8"))
+        .find(card => card.name === "Dagger");
+    const properties = "A special property with several important rules. ".repeat(4);
+    const card = { ...source, properties };
+    const parts = getSpellCardParts(card);
+    assert.ok(parts[0].description.includes(properties.trim()));
+    const back = buildEquipmentBack(card, parts[0]);
+    assert.equal(back.querySelector(".equipment-back-stats").children[3].children[1].textContent, "See description");
+});
+
+test("Equipment template assets and rarity footer colors are local and shared by both sides", () => {
+    const html = readFileSync(join(__dirname, "index.html"), "utf8");
+    const css = readFileSync(join(__dirname, "app.css"), "utf8");
+    assert.match(html, /id="equipment-back-template"/);
+    for (const icon of ["icon-feature.svg", "icon-thrown.svg", "icon-weight.svg"]) {
+        assert.ok(html.includes(icon));
+        assert.ok(existsSync(join(__dirname, "img", "icons", icon)));
+    }
+    for (const rarity of ["uncommon", "rare", "very-rare", "legendary", "artifact"]) {
+        assert.ok(css.includes(`.spell-card[data-rarity="${rarity}"] { --card-footer-color:`));
+    }
+    assert.match(css, /\.spell-card\[data-rarity\] \{ --card-footer-color: #000;/);
 });
 
 test("Equipment validation rejects unsafe uploads and malformed custom cards", () => {

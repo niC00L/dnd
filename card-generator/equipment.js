@@ -9,6 +9,21 @@ const PAINTED_EQUIPMENT = new Set([
     "potion", "book", "staff", "pack", "gem", "tools"
 ]);
 const EQUIPMENT_RARITIES = ["Mundane", "Common", "Uncommon", "Rare", "Very Rare", "Legendary", "Artifact", "Varies"];
+const EQUIPMENT_ARTWORK = {
+    "dagger": "weapons/dagger", "club": "weapons/club", "greataxe": "weapons/greataxe",
+    "greatclub": "weapons/greatclub", "handaxe": "weapons/hand-axe", "javelin": "weapons/javelin",
+    "light hammer": "weapons/light-hammer", "longbow": "weapons/longbow", "mace": "weapons/mace",
+    "quarterstaff": "weapons/quarterstaff", "scimitar": "weapons/scimitar", "sickle": "weapons/sickle",
+    "spear": "weapons/spear", "maul": "weapons/maul", "rapier": "weapons/rapier",
+    "longsword": "weapons/longsword", "breastplate": "armor/breastplate", "shield": "armor/shield",
+    "splint armor": "armor/splint-armor", "splint": "armor/splint-armor",
+    "studded leather armor": "armor/studded-leather-armor", "studded leather": "armor/studded-leather-armor",
+    "acid": "adventuring-gear/acid", "antitoxin": "adventuring-gear/antitoxin",
+    "ball bearings": "adventuring-gear/ball-bearings", "healer's kit": "adventuring-gear/healers-kit",
+    "lantern": "adventuring-gear/lantern", "hooded lantern": "adventuring-gear/lantern",
+    "rope": "adventuring-gear/rope", "potion of healing": "adventuring-gear/potion-of-healing",
+    "flute": "musical-instruments/flute"
+};
 let equipmentEditorKey = null;
 let equipmentImageData = "";
 let equipmentImagePending = false;
@@ -20,17 +35,50 @@ function isEquipment(card) {
 
 function equipmentImage(card) {
     if (card.image_data) return card.image_data;
+    const name = card.name.toLowerCase().replaceAll("\u2019", "'");
+    const artwork = Object.keys(EQUIPMENT_ARTWORK).find(key => name === key
+        || name.startsWith(`${key},`) || name.endsWith(`(${key})`));
+    if (artwork) return `./img/equipment/${EQUIPMENT_ARTWORK[artwork]}.png`;
     const key = EQUIPMENT_IMAGES.includes(card.image) ? card.image : "item";
+    const fallback = { sword: "longsword", dagger: "dagger", axe: "handaxe", hammer: "light hammer", spear: "spear", bow: "longbow", staff: "quarterstaff" }[key];
+    if (fallback) return `./img/equipment/${EQUIPMENT_ARTWORK[fallback]}.png`;
     if (/scroll/i.test(card.name) && key === "book") return "./img/equipment/art-scroll.png";
     return `./img/equipment/${PAINTED_EQUIPMENT.has(key) ? `art-${key}.png` : `${key}.svg`}`;
+}
+
+function equipmentCoin(cost) {
+    const match = /^(\d[\d,]*(?:\.\d+)?)\s*(cp|sp|ep|gp|pp)$/i.exec((cost || "").trim());
+    if (!match) return { amount: "?", currency: "unknown", label: cost || "Not listed" };
+    const unit = match[2].toLowerCase();
+    const gold = Number(match[1].replaceAll(",", "")) * ({ cp: 0.01, sp: 0.1, ep: 0.5, gp: 1, pp: 10 })[unit];
+    const currency = ["cp", "sp"].includes(unit) || (gold > 0 && gold < 1) ? "sp" : "gp";
+    const value = currency === "sp" ? gold * 10 : gold;
+    const amount = new Intl.NumberFormat("en-US", { maximumFractionDigits: 4 }).format(value);
+    return { amount, currency, label: `${amount} ${currency.toUpperCase()}` };
+}
+
+function equipmentRarity(card) {
+    return EQUIPMENT_RARITIES.includes(card.rarity) ? card.rarity.toLowerCase().replaceAll(" ", "-") : "mundane";
+}
+
+function equipmentAbility(card) {
+    if (/finesse/i.test(card.properties)) return "STR/DEX";
+    return /ranged/i.test(card.weapon_type) || /\bammunition\b/i.test(card.properties) ? "DEX" : "STR";
+}
+
+function equipmentCategory(card) {
+    if (card.kind === "weapon" && /^(simple|martial)$/i.test(card.weapon_type)) {
+        return `${card.weapon_type} ${/\bammunition\b/i.test(card.properties) ? "Ranged" : "Melee"}`;
+    }
+    return card.weapon_type || card.category;
 }
 
 function equipmentStats(card) {
     return card.kind === "weapon"
         ? [
-            ["Damage", [card.damage_roll, ...card.damage_types.map(titleCase)].filter(Boolean).join(" ") || "See text"],
-            ["Range", card.range_text || "See text"],
-            ["Mastery", card.mastery || "None"],
+            ["DMG Type", card.damage_types.map(titleCase).join(", ") || "See text"],
+            ["Ability", card.damage_roll ? equipmentAbility(card) : "See text"],
+            ["DMG", card.damage_roll || "See text"],
             ["Properties", card.properties || "None"],
             ["Weight", card.weight || "Not listed"],
             ["Cost", card.cost || "Not listed"]
@@ -51,55 +99,86 @@ function equipmentTitle(card, part, title) {
     title.style.fontSize = `${Math.max(4, Math.min(name.length > 18 ? 7 : 9, 190 / name.length))}cqw`;
 }
 
-function appendEquipmentStats(root, card, back = false) {
+function equipmentProperties(card, front = false) {
+    const properties = card.properties.trim();
+    if (/^(?:none|n\/a|-)?$/i.test(properties)) return "";
+    const values = properties.split(/,\s*(?![^()]*\))/);
+    if (front) return values.filter(value => !/^(?:Thrown|Ammunition)\b/i.test(value)).join("\n");
+    return values.map(value => value.replace(/\b(Thrown|Ammunition)\s*\((?:\s*Range\s+)?([^)]*)\)/gi, (_, property, range) => {
+        const details = range.trim().replace(/^(\d+(?:\/\d+)?)(?:\s*(?:ft\.?|feet))?/i, "$1 ft");
+        return `${property} (${details})`;
+    }))
+        .join(", ").replace(/, (?=(?:Thrown|Ammunition)\b)/gi, ",\n");
+}
+
+function appendEquipmentStats(root, card) {
     for (const [label, text] of equipmentStats(card)) {
         const item = document.createElement("div");
         const heading = document.createElement("strong");
         heading.textContent = label;
         const value = document.createElement("span");
-        if (label === "Damage" && card.damage_types.length) {
-            value.setAttribute("aria-label", text);
-            value.append(...card.damage_types.filter(type => DAMAGE_ICONS.has(type)).map(createKeywordIcon));
-            value.append(document.createTextNode(card.damage_roll || "See text"));
-        } else {
-            value.textContent = text;
-        }
-        if (back && label === "Properties" && text.length > 70) value.textContent = "See front";
+        value.textContent = label === "Properties"
+            ? text.length > 110 ? "See description" : equipmentProperties(card) || "None"
+            : text;
+        if (label === "Properties") item.className = "equipment-properties-stat";
         item.append(heading, value);
         root.append(item);
     }
 }
 
+function equipmentDescription(card, part) {
+    if (!card.mastery || part.continuation || part.description.toLowerCase().includes(`mastery`)) return part.description;
+    return `**Mastery: ${card.mastery}.**\n\n${part.description}`;
+}
+
 function buildEquipmentCard(card, part) {
     const element = document.querySelector("#equipment-card-template").content.firstElementChild.cloneNode(true);
     element.dataset.cardKind = card.kind;
+    element.dataset.rarity = equipmentRarity(card);
     equipmentTitle(card, part, element.querySelector(".card-title"));
     element.classList.toggle("is-equipment-continuation", part.continuation);
     const image = element.querySelector(".equipment-illustration");
     image.src = equipmentImage(card);
     image.alt = `${card.name} (representative artwork)`;
-    appendEquipmentStats(element.querySelector(".equipment-stats"), card);
+    const weight = element.querySelector(".equipment-weight");
+    weight.querySelector("span").textContent = (card.weight || "?").replace(/\s+/g, "");
+    weight.setAttribute("aria-label", `Weight: ${card.weight || "Not listed"}`);
+    const coin = equipmentCoin(card.cost);
+    const price = element.querySelector(".equipment-coin");
+    price.dataset.currency = coin.currency;
+    price.dataset.digits = String(coin.amount.length);
+    price.setAttribute("aria-label", `Cost: ${coin.label}`);
+    price.title = coin.label;
+    element.querySelector(".equipment-coin-amount").textContent = coin.amount;
+    element.querySelector(".equipment-coin-unit").textContent = coin.currency === "unknown" ? "" : coin.currency[0].toUpperCase();
+    const damage = element.querySelector(".equipment-damage");
+    damage.querySelector("span").textContent = card.kind === "weapon" ? card.damage_types.map(titleCase).join(" / ") || "Damage" : card.armor_class ? "Armor Class" : card.rarity;
+    damage.querySelector("strong").textContent = card.kind === "weapon"
+        ? card.damage_roll ? `${card.damage_roll} +${equipmentAbility(card)}` : "See text"
+        : card.armor_class || (card.attunement ? "Attunement" : card.category);
+    const feature = element.querySelector(".equipment-feature");
+    feature.querySelector("span").textContent = equipmentProperties(card, true);
+    feature.hidden = !feature.querySelector("span").textContent;
+    const range = element.querySelector(".equipment-range");
+    range.querySelector("span").textContent = card.range_text
+        || /\bThrown\s*\((?:Range\s+)?([^)]*)\)/i.exec(card.properties)?.[1] || "See text";
+    range.hidden = !/\bThrown\b/i.test(card.properties);
     renderDescription(element.querySelector(".card-description"), part.description);
-    element.querySelector(".equipment-category").textContent = [card.category, card.weapon_type, card.magic ? card.rarity : ""].filter(Boolean).join(" / ");
-    element.querySelector(".equipment-source").textContent = card.key.startsWith("custom-") ? "Custom" : "SRD 5.2";
+    element.querySelector(".equipment-footer strong").textContent = card.kind === "weapon" ? "WEAPON" : "ITEM";
+    element.querySelector(".equipment-category").textContent = equipmentCategory(card);
     return element;
 }
 
 function buildEquipmentBack(card, part) {
-    const element = elements.backTemplate.content.firstElementChild.cloneNode(true);
+    const element = document.querySelector("#equipment-back-template").content.firstElementChild.cloneNode(true);
     element.dataset.cardKind = card.kind;
-    element.classList.add("equipment-back");
-    equipmentTitle(card, part, element.querySelector(".back-title"));
-    const image = document.createElement("img");
-    image.src = equipmentImage(card);
-    image.alt = `${card.name} (representative artwork)`;
-    element.querySelector(".back-art").append(image);
-    const summary = element.querySelector(".back-summary");
-    summary.className = "equipment-back-stats";
-    summary.replaceChildren();
-    appendEquipmentStats(summary, card, true);
-    element.querySelector(".back-footer strong").textContent = card.kind === "weapon" ? "WEAPON" : "ITEM";
-    element.querySelector('[data-field="level"]').textContent = [card.rarity, card.attunement ? "Attunement" : ""].filter(Boolean).join(" / ");
+    element.dataset.rarity = equipmentRarity(card);
+    equipmentTitle(card, part, element.querySelector(".equipment-back-title"));
+    element.classList.toggle("is-equipment-continuation", part.continuation);
+    appendEquipmentStats(element.querySelector(".equipment-back-stats"), card);
+    renderDescription(element.querySelector(".card-description"), equipmentDescription(card, part));
+    element.querySelector(".equipment-back-footer strong").textContent = card.kind === "weapon" ? "Weapon" : "Item";
+    element.querySelector(".equipment-back-footer span").textContent = equipmentCategory(card);
     return element;
 }
 

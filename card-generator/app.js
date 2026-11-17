@@ -407,7 +407,7 @@ function descriptionFits(spell, part) {
         cardMeasurementRoot.style.cssText = "position:fixed;left:-10000px;top:0;width:300px;visibility:hidden;pointer-events:none;";
         document.body.append(cardMeasurementRoot);
     }
-    const card = buildCard(spell, part);
+    const card = isEquipment(spell) ? buildEquipmentBack(spell, part) : buildCard(spell, part);
     cardMeasurementRoot.append(card);
     const description = card.querySelector(".card-description");
     const upgrade = card.querySelector(".card-upgrade");
@@ -459,7 +459,7 @@ function getSpellCardParts(spell) {
     const cachedParts = cardPartsCache.get(spell)?.get(sizeKey);
     if (cachedParts) return cachedParts;
 
-    const customProperties = isEquipment(spell) && spell.key.startsWith("custom-") && spell.properties
+    const customProperties = isEquipment(spell) && spell.properties && (spell.key.startsWith("custom-") || spell.properties.length > 110)
         ? `\n\n**Properties / charges.** ${spell.properties}` : "";
     const description = normalizeDescription((spell.desc || "Description unavailable in this data source.") + customProperties);
     const parts = [{
